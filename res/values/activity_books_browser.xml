@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- BooksBrowser activity -->
+	<string name="BooksBrowser_label">Books</string>
+	<string name="BooksBrowser_title">Books in Library</string>
+	
+	<string name="BooksBrowser_LongClickDialog_title">Action</string>
+	<string name="BooksBrowser_LongClickDialog_edit">Edit</string>
+	<string name="BooksBrowser_LongClickDialog_delete">Delete</string>
+	<string name="BooksBrowser_LongClickDialog_lendTo">Lend Book To...</string>
+	
+	<string name="BooksBrowser_NoItems_noBooks">"You don't have any books to display.
+		\nTo add books, press <font fgcolor="#ffffffff"><b>Menu</b></font> and touch:\n
+			\n<li><font fgcolor="#ffffffff"><b>Add Book</b></font> to add a book\n</li>"
+	</string>
+	
+	
+	<string name="BooksBrowser_menu_addBook_text">Add Book</string>
+	
+	<string name="BooksBrowser_toast_bookDeleted">Book deleted.</string>
+	<string name="BooksBrowser_toast_allCopiesLentOut">All copies are already lent out!</string>
+	<string name="BooksBrowser_toast_loanSuccessful">Loan successful.</string>
+</resources>

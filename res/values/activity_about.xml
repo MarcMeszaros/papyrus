@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- About activity -->
+	<string name="About_label">About</string>
+	<string name="About_title">About Papyrus</string>
+	<string name="About_text"><i>Papyrus</i> is an application designed to help you 
+	keep track of all the books you have, and the ones you lend out as well.</string>
+</resources>

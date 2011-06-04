@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="ca.marcmeszaros.papyrus"
+      android:versionCode="1"
+      android:versionName="0.1.0-dev">
+    <application android:icon="@drawable/icon" 
+    			 android:label="@string/app_name">
+        <activity android:name=".Main"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+      
+        <activity android:name=".Settings" 
+        		  android:label="@string/Settings_title">
+        </activity>
+        
+        <activity android:name=".About" 
+        		  android:label="@string/About_title" 
+        		  android:theme="@android:style/Theme.Dialog">
+        </activity>
+        
+        <activity android:name=".browser.BookDetails" 
+        		  android:label="@string/BookDetails_title">
+        </activity>
+        
+        <activity android:name=".browser.TabBrowser"
+        		  android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        
+        <activity android:name=".browser.BooksBrowser" 
+        		  android:label="@string/BooksBrowser_title">
+        </activity>
+        
+        <activity android:name=".browser.LibrariesBrowser" 
+        		  android:label="@string/LibrariesBrowser_title">
+        </activity>
+        
+        <activity android:name=".browser.LoanDetails" 
+        		  android:label="@string/LoanDetails_title">
+        </activity>
+        
+        <activity android:name=".browser.LoansBrowser" 
+        		  android:label="@string/LoansBrowser_title">
+        </activity>
+        
+        <activity android:name=".database.AddBook" 
+        		  android:label="@string/AddBook_title">
+        </activity>
+        
+        <activity android:name=".database.AddLibrary" 
+        		  android:label="@string/AddLibrary_title">
+        </activity>
+
+    </application>
+    
+    <uses-sdk android:minSdkVersion="7" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.READ_CONTACTS" />
+	
+	<supports-screens android:smallScreens="false" 
+					  android:normalScreens="true" 
+					  android:largeScreens="false" 
+					  android:anyDensity="false" />
+</manifest> 

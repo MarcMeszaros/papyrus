@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">Papyrus</string>
+
+<!-- Scan activity -->
+<string name="Scan_label">Scan</string>
+
+<!-- Error message section -->
+<string name="error_bookNotFound">The book could not be found.</string>
+<string name="error_bookTitleNotFound">The book\'s title could not be found.</string>
+<string name="error_bookAuthorNotFound">The book\'s author(s) could not be found.</string>
+<string name="error_connectionServer">Error establishing connection with server.</string>
+<string name="error_server">The server could not process the request. Try again later.</string>
+
+</resources>

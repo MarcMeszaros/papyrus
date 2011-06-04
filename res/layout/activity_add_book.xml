@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:layout_height="fill_parent" 
+  	android:layout_width="fill_parent">
+<LinearLayout
+  android:layout_height="fill_parent" 
+  android:layout_width="fill_parent"
+  android:padding="20dip"
+  android:orientation="vertical">
+
+	<TextView android:id="@+id/AddBook_field_isbn_label"
+			  android:layout_width="wrap_content" 
+			  android:layout_height="wrap_content" 
+			  android:text="@string/AddBook_field_isbn_label"
+			  android:focusable="true" />
+	
+	<EditText android:id="@+id/AddBook_field_isbn"
+			  android:layout_height="wrap_content"  
+			  android:layout_width="fill_parent" 
+			  android:digits="0123456789" 
+			  android:maxLength="13" 
+			  android:inputType="phone" />
+	
+	<CheckBox android:id="@+id/AddBook_checkbox_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/AddBook_checkbox_scan_label" />
+	
+	<TextView android:layout_width="wrap_content" 
+			  android:layout_height="wrap_content" 
+			  android:text="@string/AddBook_field_library_label" />
+	
+	<Spinner android:id="@+id/AddBook_spinner_library" 
+			 android:layout_width="fill_parent" 
+			 android:layout_height="wrap_content" />
+	
+	<TextView android:layout_width="wrap_content" 
+			  android:layout_height="wrap_content" 
+			  android:text="@string/AddBook_field_quantity_label" />
+	
+	<EditText android:layout_height="wrap_content" 
+			  android:id="@+id/AddBook_field_quantity" 
+			  android:layout_width="fill_parent" 
+			  android:digits="0123456789" 
+			  android:maxLength="2"
+			  android:text="1"
+			  android:inputType="phone" />
+	
+	<Button android:id="@+id/AddBook_button_addBook" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:text="@string/AddBook_button_addBook_text" />
+
+</LinearLayout>
+</ScrollView>

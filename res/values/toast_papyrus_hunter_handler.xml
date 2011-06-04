@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="PapyrusHunterHandler_toast_bookSaved">Book \"%1$s\" was saved.</string>
+	<string name="PapyrusHunterHandler_toast_errorGetBookInfo">An error occurred while trying to get the book information.</string>
+	<string name="PapyrusHunterHandler_toast_noBookInfo">No book information found.</string>
+</resources>

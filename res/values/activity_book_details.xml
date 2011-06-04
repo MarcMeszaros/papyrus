@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="BookDetails_title">Book Details</string>
+	<string name="BookDetails_book_publisher_label">Publisher:</string>
+	<string name="BookDetails_book_isbn10_label">ISBN10:</string>
+	<string name="BookDetails_book_isbn13_label">ISBN13:</string>
+	<string name="BookDetails_book_quantity_label"># of copies:</string>
+	<string name="BookDetails_book_library_label">Library:</string>
+	<string name="BookDetails_book_update_button">Update</string>
+	
+	<string name="BookDetails_book_update_toast">Book details have been updated.</string>
+</resources>

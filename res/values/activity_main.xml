@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="Main_BooksBrowser_button_text">Book Library</string>
+	<string name="Main_LibrariesBrowser_button_text">Library Locations</string>
+	<string name="Main_LoansBrowser_button_text">Books on Loan</string>
+	<string name="Main_TabBrowser_button_text">Book Management</string>
+</resources>

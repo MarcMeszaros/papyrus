@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item android:id="@+id/BooksBrowser_menu_addBook" 
+		  android:title="@string/BooksBrowser_menu_addBook_text"
+		  android:icon="@android:drawable/ic_menu_add">
+	</item>
+
+</menu>

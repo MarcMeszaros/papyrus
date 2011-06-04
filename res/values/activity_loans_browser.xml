@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- LoansBrowser activity -->
+	<string name="LoansBrowser_label">Loans</string>
+	<string name="LoansBrowser_title">Books on Loan</string>
+	
+	<string name="LoansBrowser_LongClickDialog_title">Action</string>
+	<string name="LoansBrowser_LongClickDialog_returnBook">Return Book</string>
+	
+	<string name="LoansBrowser_NoItems_noLoans">"You don't have any loans to display.
+		\nTo lend out a book, select the <font fgcolor="#ffffffff"><b>Books</b></font> tab and <font fgcolor="#ffffffff"><b>Long Press</b></font> the book you want to lend out.\n"
+	</string>
+	
+	<string name="LoansBrowser_toast_bookReturned">Book returned.</string>
+</resources>

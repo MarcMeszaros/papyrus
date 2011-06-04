@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_height="fill_parent" 
+  android:layout_width="fill_parent" 
+  android:padding="30dip" 
+  android:orientation="vertical">
+
+	<TextView android:layout_width="wrap_content" 
+			  android:layout_height="wrap_content" 
+			  android:text="@string/AddLibrary_field_name_label">
+	</TextView>
+	
+	<EditText android:layout_height="wrap_content" 
+			  android:id="@+id/AddLibrary_field_name"
+			  android:layout_width="fill_parent">
+	</EditText>
+		
+	<Button android:id="@+id/AddLibrary_button_addLibrary" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:text="@string/AddLibrary_button_addLibrary_text">
+	</Button>
+
+</LinearLayout>

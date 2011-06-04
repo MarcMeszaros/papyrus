@@ -1,0 +1,10 @@
+# use regexp syntax
+syntax: regexp
+
+# ignore automatically generated files
+^bin/
+^gen/
+
+# ignore temp files
+\.DS_Store
+.*~

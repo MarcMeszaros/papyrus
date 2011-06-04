@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory 
+		android:title="@string/Settings_Library">
+		<ListPreference 
+			android:title="@string/Settings_Library_defaultLibrary_title"
+            android:summary="@string/Settings_Library_defaultLibrary_summary"
+            android:key="defaultLibrary"
+            android:persistent="true" />
+	</PreferenceCategory>
+	<PreferenceCategory 
+		android:title="@string/Settings_Book">
+		<CheckBoxPreference
+	        	android:title="@string/Settings_Book_defaultScan_title"
+	        	android:summary="@string/Settings_Book_defaultScan_summary"
+	        	android:key="defaultScan"
+	        	android:persistent="true" />
+	</PreferenceCategory>
+
+</PreferenceScreen>
