@@ -5,6 +5,11 @@ syntax: regexp
 ^bin/
 ^gen/
 
+# ignore IDE project files
+\.project
+\.settings\/.*
+\.classpath
+
 # ignore temp files
 \.DS_Store
 .*~
