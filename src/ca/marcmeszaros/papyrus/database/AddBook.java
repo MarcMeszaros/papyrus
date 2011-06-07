@@ -62,8 +62,9 @@ public class AddBook extends Activity implements OnClickListener, OnItemSelected
 		this.handler = new PapyrusHunterHandler(this);
 		
 		// Set up click listeners for all the buttons
+		findViewById(R.id.AddBook_button_scan).setOnClickListener(this);
 		findViewById(R.id.AddBook_button_addBook).setOnClickListener(this);
-		findViewById(R.id.AddBook_field_isbn).setOnClickListener(this);
+		//findViewById(R.id.AddBook_field_isbn).setOnClickListener(this);
 		
 		// create the spinner and db connection
 		Spinner spinner = (Spinner)findViewById(R.id.AddBook_spinner_library);
@@ -84,9 +85,6 @@ public class AddBook extends Activity implements OnClickListener, OnItemSelected
 		
 		// get the preferences
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		
-		// set the scan checkbox choice default based on settings 
-		((CheckBox)findViewById(R.id.AddBook_checkbox_scan)).setChecked(prefs.getBoolean("defaultScan", true));
 		
 		// try and get the id
 		String libraryId = prefs.getString("defaultLibrary", "");
@@ -135,9 +133,8 @@ public class AddBook extends Activity implements OnClickListener, OnItemSelected
 				imm.hideSoftInputFromWindow(isbnField.getWindowToken(), 0);
 				
 			break;
-		case R.id.AddBook_field_isbn:
-				CheckBox useScan = (CheckBox) findViewById(R.id.AddBook_checkbox_scan);
-				if(isbnField.getText().toString().equals("") && useScan.isChecked()){
+		case R.id.AddBook_button_scan:
+				if(isbnField.getText().toString().equals("")){
 					IntentIntegrator.initiateScan(this);
 				}
 			break;

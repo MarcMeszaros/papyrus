@@ -22,14 +22,10 @@
 			  android:maxLength="13" 
 			  android:inputType="phone" />
 	
-	<CheckBox android:id="@+id/AddBook_checkbox_scan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/AddBook_checkbox_scan_label" />
-	
-	<TextView android:layout_width="wrap_content" 
-			  android:layout_height="wrap_content" 
-			  android:text="@string/AddBook_field_library_label" />
+	<Button android:id="@+id/AddBook_button_scan" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:text="@string/AddBook_button_scan_text" />
 	
 	<Spinner android:id="@+id/AddBook_spinner_library" 
 			 android:layout_width="fill_parent" 

@@ -6,6 +6,7 @@
 	
 	<string name="AddBook_field_isbn_label">ISBN</string>
 	<string name="AddBook_checkbox_scan_label">Use bar code scanner for ISBN</string>
+	<string name="AddBook_button_scan_text">Scan ISBN barcode</string>
 	<string name="AddBook_field_library_label">Library</string>
 	<string name="AddBook_field_quantity_label">Number of copies</string>
 
