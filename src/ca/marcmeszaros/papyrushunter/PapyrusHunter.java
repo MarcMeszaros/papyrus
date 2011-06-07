@@ -94,88 +94,77 @@ public class PapyrusHunter extends Thread {
 		    Log.i("network", "url: "+url.toString());
 			BookFeed feed = BookFeed.executeGet(transport, url);
 		    
-			Log.i("network", "totalResults: " + feed.totalResults);
+			Log.i("network", "totalResults ar: " + feed.totalResults);
 			
-			for (Entry entry : feed.entries) {
-				Log.i("network", "book:"+ entry.title + " " + entry.identifiers.get(1));
-			}
-
 			Log.i("network", "Finished getting JSON.");
 			
-			/*
-			 * add logic for multiple book results (prompt user to select the correct one)
-			 */
-			// ===========================
+			if(feed.totalResults > 0) {
+				for (Entry entry : feed.entries) {
+					Log.i("network", "book:"+ entry.title + " " + entry.identifiers.get(1));
+				}
 			
 			
-			String isbn10 = ((feed.entries.get(0)).identifiers.get(1)).substring(5);
-			String isbn13 = ((feed.entries.get(0)).identifiers.get(2)).substring(5);
-			String title = feed.entries.get(0).title;
-			String authors = (feed.entries.get(0)).dcCreator.get(0);
-			String publishers = feed.entries.get(0).dcPublisher;
-			String date = feed.entries.get(0).dcDate;
+				String isbn10 = ((feed.entries.get(0)).identifiers.get(1)).substring(5);
+				String isbn13 = ((feed.entries.get(0)).identifiers.get(2)).substring(5);
+				String title = feed.entries.get(0).title;
+				String authors = (feed.entries.get(0)).dcCreator.get(0);
+				String publishers = feed.entries.get(0).dcPublisher;
+				String date = feed.entries.get(0).dcDate;
+				
+				URL thumbnail = new URL(feed.entries.get(0).getThumbnailUrl());
+				
+				Log.i("network", "saving book");
+				DBHelper helper = new DBHelper(context);
+				SQLiteDatabase db = helper.getWritableDatabase();
+				
+				// create the query
+				ContentValues values = new ContentValues();
+				values.put(DBHelper.BOOK_FIELD_TITLE, title);
+				values.put(DBHelper.BOOK_FIELD_AUTHOR, authors);
+				values.put(DBHelper.BOOK_FIELD_ISBN10, isbn10);
+				values.put(DBHelper.BOOK_FIELD_ISBN13, isbn13);
+				values.put(DBHelper.BOOK_FIELD_PUBLISHER, publishers);
+				values.put(DBHelper.BOOK_FIELD_PUBLICATION_DATE, date);
+				values.put(DBHelper.BOOK_FIELD_LIBRARY_ID, libraryID);
+				values.put(DBHelper.BOOK_FIELD_QUANTITY, quantity);
+				
+				// insert the book
+				db.insert(DBHelper.BOOK_TABLE_NAME, "", values);
+				Log.i("network", "saved the book");
+				
+				// get the thumbnail and save it
+				// check if we got an isbn10 number from query and file exists
+				if(isbn10 != null && isbn13.length() == 10){
+					TNManager.saveThumbnail(thumbnail, isbn10);
+				}
+				// check if we got an isbn13 number from query and file exists
+				else if(isbn13 != null && isbn13.length() == 13){
+					TNManager.saveThumbnail(thumbnail, isbn13);
+				}
+				
+				Log.i("network", "got thumbnail");
 			
-			URL thumbnail = new URL(feed.entries.get(0).getThumbnailUrl());
+				/*
+				 * add logic for multiple book results (prompt user to select the correct one)
+				 */
+				// ===========================
+				
+				
+				// send message that we saved the book
+				msg.what = -1;
+				msg.obj = feed.entries.get(0).title;
+				
+				//Log.i("network", "titleBookStr: "+book.getTitle());
+				
+				messageHandler.sendMessage(msg);
 			
-			/*
-			String stringAuthors = "";
-			String stringPublishers = "";
-			
-			// build author string
-			for(int i=authors.length(); i>0; i--){
-				if (i>1)
-					stringAuthors = stringAuthors.concat(authors.get(authors.length()-i).toString() + ", ");
-				else
-					stringAuthors = stringAuthors.concat(authors.get(authors.length()-i).toString());
+			} else {
+				msg.what = 1; // no book info
+				messageHandler.sendMessage(msg); // send message to handler
 			}
 			
-			// build publisher string
-			for(int i=publishers.length(); i>0; i--){
-				if (i>1)
-					stringPublishers = stringPublishers.concat(publishers.get(publishers.length()-i).toString() + ", ");
-				else
-					stringPublishers = stringPublishers.concat(publishers.get(publishers.length()-i).toString());
-			}
-			*/
 			
-			Log.i("network", "saving book");
-			DBHelper helper = new DBHelper(context);
-			SQLiteDatabase db = helper.getWritableDatabase();
 			
-			// create the query
-			ContentValues values = new ContentValues();
-			values.put(DBHelper.BOOK_FIELD_TITLE, title);
-			values.put(DBHelper.BOOK_FIELD_AUTHOR, authors);
-			values.put(DBHelper.BOOK_FIELD_ISBN10, isbn10);
-			values.put(DBHelper.BOOK_FIELD_ISBN13, isbn13);
-			values.put(DBHelper.BOOK_FIELD_PUBLISHER, publishers);
-			values.put(DBHelper.BOOK_FIELD_PUBLICATION_DATE, date);
-			values.put(DBHelper.BOOK_FIELD_LIBRARY_ID, libraryID);
-			values.put(DBHelper.BOOK_FIELD_QUANTITY, quantity);
-			
-			// insert the book
-			db.insert(DBHelper.BOOK_TABLE_NAME, "", values);
-			Log.i("network", "saved the book");
-			
-			// get the thumbnail and save it
-			// check if we got an isbn10 number from query and file exists
-			if(isbn10 != null && isbn13.length() == 10){
-				TNManager.saveThumbnail(thumbnail, isbn10);
-			}
-			// check if we got an isbn13 number from query and file exists
-			else if(isbn13 != null && isbn13.length() == 13){
-				TNManager.saveThumbnail(thumbnail, isbn13);
-			}
-			
-			Log.i("network", "got thumbnail");
-			
-			// send message that we saved the book
-			msg.what = -1;
-			msg.obj = feed.entries.get(0).title;
-			
-			//Log.i("network", "titleBookStr: "+book.getTitle());
-			
-			messageHandler.sendMessage(msg);
 		}
 		
 		catch (MalformedURLException e) {

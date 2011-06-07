@@ -8,13 +8,5 @@
             android:key="defaultLibrary"
             android:persistent="true" />
 	</PreferenceCategory>
-	<PreferenceCategory 
-		android:title="@string/Settings_Book">
-		<CheckBoxPreference
-	        	android:title="@string/Settings_Book_defaultScan_title"
-	        	android:summary="@string/Settings_Book_defaultScan_summary"
-	        	android:key="defaultScan"
-	        	android:persistent="true" />
-	</PreferenceCategory>
 
 </PreferenceScreen>

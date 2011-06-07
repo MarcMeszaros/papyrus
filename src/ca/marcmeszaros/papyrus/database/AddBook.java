@@ -31,6 +31,7 @@ import ca.marcmeszaros.papyrushunter.PapyrusHunterHandler;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -42,6 +43,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
@@ -120,12 +122,29 @@ public class AddBook extends Activity implements OnClickListener, OnItemSelected
 		case R.id.AddBook_button_addBook:
 				
 				// create a progress dialog
-				ProgressDialog progress = ProgressDialog.show(this, "", getString(R.string.AddBook_toast_searchingForBook), true);
+				ProgressDialog progress = new ProgressDialog(this);
+				progress.setTitle("");
+				progress.setMessage(getString(R.string.AddBook_toast_searchingForBook));
+				progress.setIndeterminate(true);
+			
+				// dirty hack: set an annonymous inner dismiss listener to
+				// clear the isbn input
+				progress.setOnDismissListener(new DialogInterface.OnDismissListener() {
+					
+					@Override
+					public void onDismiss(DialogInterface dialog) {
+						((EditText)findViewById(R.id.AddBook_field_isbn)).setText("");
+						
+					}
+				});
+	
+				// start the dialog
+				progress.show();
 				handler.setDialog(progress);
 			
 				// get the data from the activity to start the request
 				int copies = Integer.valueOf((((EditText)findViewById(R.id.AddBook_field_quantity)).getText()).toString());
-				PapyrusHunter result = new PapyrusHunter(getApplicationContext(), handler, isbnField.getText().toString(), libraryId, copies);
+				PapyrusHunter result = new PapyrusHunter(this, handler, isbnField.getText().toString(), libraryId, copies);
 				result.start();
 				
 				// hide the soft keyboard
