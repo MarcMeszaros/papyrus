@@ -40,6 +40,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import ca.marcmeszaros.papyrus.R;
+import ca.marcmeszaros.papyrus.Settings;
 import ca.marcmeszaros.papyrus.database.AddLibrary;
 import ca.marcmeszaros.papyrus.database.DBHelper;
 
@@ -222,6 +223,9 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 		switch (item.getItemId()) {
 		case R.id.LibrariesBrowser_menu_addLibrary:
 			startActivity(new Intent(this, AddLibrary.class));
+			break;
+		case R.id.LibrariesBrowser_Settings_menu:
+			startActivity(new Intent(this, Settings.class));		
 			break;
 		}
 		return false;

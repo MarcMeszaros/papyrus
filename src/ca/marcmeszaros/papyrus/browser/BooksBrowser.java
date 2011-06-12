@@ -50,6 +50,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import ca.marcmeszaros.papyrus.R;
+import ca.marcmeszaros.papyrus.Settings;
 import ca.marcmeszaros.papyrus.database.AddBook;
 import ca.marcmeszaros.papyrus.database.AddLibrary;
 import ca.marcmeszaros.papyrus.database.Book;
@@ -283,6 +284,9 @@ public class BooksBrowser extends ListActivity implements
 				startActivity(new Intent(this, AddLibrary.class));
 			}
 			db.close();
+			break;
+		case R.id.BooksBrowser_Settings_menu:
+			startActivity(new Intent(this, Settings.class));		
 			break;
 		}
 		return false;

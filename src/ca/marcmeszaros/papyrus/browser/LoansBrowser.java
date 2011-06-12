@@ -29,12 +29,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import ca.marcmeszaros.papyrus.R;
+import ca.marcmeszaros.papyrus.Settings;
+import ca.marcmeszaros.papyrus.database.AddLibrary;
 import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.database.Loan;
 import ca.marcmeszaros.papyrus.database.DBHelper;
@@ -192,6 +196,29 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 					Toast.LENGTH_SHORT).show();
 			break;
 		}
+	}
+	
+	/**
+	 * Creates the menu when the "menu" button is pressed.
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.loans_browser , menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.LibrariesBrowser_menu_addLibrary:
+			startActivity(new Intent(this, AddLibrary.class));
+			break;
+		case R.id.BooksBrowser_Settings_menu:
+			startActivity(new Intent(this, Settings.class));		
+			break;
+		}
+		return false;
 	}
 
 }

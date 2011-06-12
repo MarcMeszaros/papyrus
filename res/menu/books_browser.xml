@@ -6,5 +6,17 @@
 		  android:title="@string/BooksBrowser_menu_addBook_text"
 		  android:icon="@android:drawable/ic_menu_add">
 	</item>
+	
+	<item android:id="@+id/BooksBrowser_Settings_menu" 
+		  android:title="@string/Settings_label" 
+		  android:icon="@android:drawable/ic_menu_preferences">
+	</item>
+	
+	<!--
+	<item android:id="@+id/BooksBrowser_About_menu" 
+		  android:title="@string/About_label" 
+		  android:icon="@android:drawable/ic_menu_info_details">
+	</item>
+	-->
 
 </menu>
