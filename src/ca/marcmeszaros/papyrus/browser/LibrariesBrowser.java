@@ -27,9 +27,11 @@ import android.app.ListActivity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -181,7 +183,15 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 							db.update(DBHelper.BOOK_TABLE_NAME, values, whereClause, whereValues);
 						}
 						
-						// delete the entry in the database
+						// set the new default library if the one to be deleted is the default
+						SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()); 
+						if(Long.parseLong(pref.getString(Settings.KEY_DEFAULT_LIBRARY, "")) == selectedLibraryID){
+							SharedPreferences.Editor prefEditor = pref.edit();
+							prefEditor.putString(Settings.KEY_DEFAULT_LIBRARY, Long.toString(newLibraryId));
+							prefEditor.commit();	
+						}	
+						
+						// delete the old library entry in the database
 						db.delete(DBHelper.LIBRARY_TABLE_NAME, DBHelper.LIBRARY_FIELD_ID+"="+selectedLibraryID, null);
 						db.close();	    	
 						
