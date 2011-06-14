@@ -23,10 +23,14 @@
 package ca.marcmeszaros.papyrus.database;
 
 import ca.marcmeszaros.papyrus.R;
+import ca.marcmeszaros.papyrus.Settings;
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -58,11 +62,22 @@ public class AddLibrary extends Activity implements OnClickListener {
 	 * Adds the library to the database.
 	 */
 	private void addLibrary(){
+		
+		boolean isFirstLibrary = false;
+		
 		// get the text field that has the name
 		EditText libraryName = (EditText)findViewById(R.id.AddLibrary_field_name);
 		
 		// get the connection to the database
 		SQLiteDatabase db = new DBHelper(getApplicationContext()).getWritableDatabase();
+		
+		// get all the libraries
+		Cursor result = db.query(DBHelper.LIBRARY_TABLE_NAME, null, null, null, null, null, null, null);
+		
+		// check if it's the first one
+		if(result.getCount() == 0) {
+			isFirstLibrary = true;
+		}
 		
 		// create the query
 		ContentValues values = new ContentValues();
@@ -71,7 +86,19 @@ public class AddLibrary extends Activity implements OnClickListener {
 		// insert the values
 		db.insert(DBHelper.LIBRARY_TABLE_NAME, "unknown", values);
 		
+		// requery
+		if(isFirstLibrary) {
+			result = db.query(DBHelper.LIBRARY_TABLE_NAME, null, null, null, null, null, null, null);
+			result.moveToFirst();
+
+			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()); 
+			SharedPreferences.Editor prefEditor = pref.edit();
+			prefEditor.putString(Settings.KEY_DEFAULT_LIBRARY, Long.toString(result.getLong(result.getColumnIndex(DBHelper.LIBRARY_FIELD_ID))));
+			prefEditor.commit();
+		}
 		
+		// we don't need the cursor anymore
+		result.close();
 		
 		// close the connection
 		db.close();
