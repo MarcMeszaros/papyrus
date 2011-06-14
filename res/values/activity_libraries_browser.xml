@@ -11,7 +11,7 @@
 	<string name="LibrariesBrowser_menu_addLibrary_text">Add Library</string>
 	
 	<string name="LibrariesBrowser_NoItems_noLibraries">"You don't have any libraries to display.
-		\nTo add libraries, press <font fgcolor="#ffffffff"><b>Menu</b></font> and touch:\n
+		\nTo add libraries, press <font fgcolor="#ffffffff"><b>Menu</b></font> and select:\n
 		\n<li><font fgcolor="#ffffffff"><b>Add Library</b></font> to add a library\n</li>"
 	</string>
 	

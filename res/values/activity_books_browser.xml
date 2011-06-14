@@ -10,7 +10,7 @@
 	<string name="BooksBrowser_LongClickDialog_lendTo">Lend Book To...</string>
 	
 	<string name="BooksBrowser_NoItems_noBooks">"You don't have any books to display.
-		\nTo add books, press <font fgcolor="#ffffffff"><b>Menu</b></font> and touch:\n
+		\nTo add books, press <font fgcolor="#ffffffff"><b>Menu</b></font> and select:\n
 			\n<li><font fgcolor="#ffffffff"><b>Add Book</b></font> to add a book\n</li>"
 	</string>
 	

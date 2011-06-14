@@ -8,7 +8,8 @@
 	<string name="LoansBrowser_LongClickDialog_returnBook">Return Book</string>
 	
 	<string name="LoansBrowser_NoItems_noLoans">"You don't have any loans to display.
-		\nTo lend out a book, select the <font fgcolor="#ffffffff"><b>Books</b></font> tab and <font fgcolor="#ffffffff"><b>Long Press</b></font> the book you want to lend out.\n"
+		\nTo lend out a book, select the <font fgcolor="#ffffffff"><b>Books</b></font> tab and <font fgcolor="#ffffffff"><b>Long Press</b></font> the book you want to lend out.
+		\n\nTo return a book, <font fgcolor="#ffffffff"><b>Long Press</b></font> a book in the <font fgcolor="#ffffffff"><b>Loans</b></font> tab and select <font fgcolor="#ffffffff"><i>Return Book</i></font>."
 	</string>
 	
 	<string name="LoansBrowser_toast_bookReturned">Book returned.</string>
