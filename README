@@ -31,6 +31,8 @@ INSTALLATION
 ------------
 
 1. Create a project inside Eclipse with the source code and build the .apk
+   If building with ANT, make sure to run 'android update project --path .'
+   inside the root of your project.
 
 2. Load the .apk onto the phone.
 
@@ -44,9 +46,6 @@ CAVEATS
 ------------
 
 Some gotchas:
-
- * There is no ANT build file to allow the project to be built via the command
-   line. This is a planned feature for a future release.
 
  * An external library to access the Google Books data is used and doesn't yet
    have a stable release.
