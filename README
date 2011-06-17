@@ -1,0 +1,53 @@
+CONTENTS OF THIS FILE
+---------------------
+
+ * Introduction
+ * Features
+ * Installation
+ * Caveats
+
+
+INTRODUCTION
+------------
+
+This applications enables users to create a virtual library of all the books
+they own. Users can also keep track of loans they make to other people.
+
+FEATURES
+------------
+
+Papyrus enables the user to track all the physical books they own. They can add
+books in a variety of ways. The easiest way is to use the barcode scanning
+functionality to scan the ISBN barcode.
+
+To prevent largge amounts of data entry, Papyrus attempts to get the book
+information from the Google Books service.
+
+Multiple libraries are supported by Papyrus and so are multiple copies of books.
+This feature gives the user finer grained control over how they manage their
+books.
+
+INSTALLATION
+------------
+
+1. Create a project inside Eclipse with the source code and build the .apk
+
+2. Load the .apk onto the phone.
+
+3. Initiate the .apk install ("Unknow sources" needs to be enabled in settings).
+
+Note: The install instructions a sparce because it is assumed the developper
+knows how to build and install the .apk from source. More information about
+building packages can be found at http://developer.android.com/
+
+CAVEATS
+------------
+
+Some gotchas:
+
+ * There is no ANT build file to allow the project to be built via the command
+   line. This is a planned feature for a future release.
+
+ * An external library to access the Google Books data is used and doesn't yet
+   have a stable release.
+   (http://code.google.com/p/google-api-java-client/)
