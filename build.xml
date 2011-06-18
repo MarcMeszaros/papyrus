@@ -25,6 +25,14 @@
 
          -->
     <property file="build.properties" />
+	
+	<!-- The build.keystore is a custom build file that stores the location of
+		 the keystore and alias to use when building the application for release.
+		 
+		 Because of the sensitive nature of the keystore, it should *NOT* be checked into
+		 Version Control Systems.
+		 -->
+	<property file="build.keystore" />
 
     <!-- The default.properties file is created and updated by the 'android'
          tool, as well as ADT.
