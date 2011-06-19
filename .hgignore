@@ -4,6 +4,7 @@ syntax: regexp
 # ignore automatically generated files
 ^bin/
 ^gen/
+^build/
 
 # ingnore local build files
 ^build\.keystore # specific to Papyrus
