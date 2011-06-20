@@ -60,7 +60,7 @@ public class BooksBrowser extends ListActivity implements
 		OnItemSelectedListener, OnItemClickListener, OnItemLongClickListener,
 		DialogInterface.OnClickListener, OnDateSetListener {
 
-	private static final String TAG = "BookBrowser";
+	private static final String TAG = "BooksBrowser";
 	
 	// class variables
 	private long selectedBookID;
