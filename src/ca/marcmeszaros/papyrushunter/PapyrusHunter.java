@@ -27,6 +27,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+import ca.marcmeszaros.papyrus.Papyrus;
 import ca.marcmeszaros.papyrus.database.DBHelper;
 import ca.marcmeszaros.papyrus.database.TNManager;
 
@@ -58,7 +59,6 @@ public class PapyrusHunter extends Thread {
 		this.bar_code = bar_code;
 		this.libraryID = libraryID;
 		this.quantity = quantity;
-		
 	}
 		
 	@Override
@@ -67,13 +67,14 @@ public class PapyrusHunter extends Thread {
 		Message msg = new Message();
 		
 		try {
-			Log.i("network", "Start getting JSON.");
-			
 			// setup the connection and create a buffered reader
 			HttpTransport transport = GoogleTransport.create();
 		    GoogleHeaders headers = (GoogleHeaders) transport.defaultHeaders;
-		    headers.setApplicationName("Papyrus/0.1.0");
-		    headers.gdataVersion = "2";
+		    
+		    String appName = "Papyrus/"+Papyrus.getVersionName(context, this.getClass());
+		    Log.i("PapyrusHunter", "Set application name to: " + appName);
+		    headers.setApplicationName(appName);
+		    headers.gdataVersion = "2"; 
 
 		    XmlNamespaceDictionary NAMESPACE_DICTIONARY = new XmlNamespaceDictionary();
 		    Map<String, String> map = NAMESPACE_DICTIONARY.namespaceAliasToUriMap;
@@ -91,16 +92,14 @@ public class PapyrusHunter extends Thread {
 		    BookUrl url = BookUrl.root();
 
 		    url.set("q", "isbn:"+bar_code);
-		    Log.i("network", "url: "+url.toString());
+		    Log.i("PapyrusHunter", "Request url: " + url.toString());
 			BookFeed feed = BookFeed.executeGet(transport, url);
 		    
-			Log.i("network", "totalResults ar: " + feed.totalResults);
-			
-			Log.i("network", "Finished getting JSON.");
-			
+			Log.i("PapyrusHunter", "Number of results: " + feed.totalResults);
+						
 			if(feed.totalResults > 0) {
 				for (Entry entry : feed.entries) {
-					Log.i("network", "book:"+ entry.title + " " + entry.identifiers.get(1));
+					Log.i("PapyrusHunter", "Got book: " + entry.title + " " + entry.identifiers.get(1));
 				}
 			
 			
@@ -113,7 +112,7 @@ public class PapyrusHunter extends Thread {
 				
 				URL thumbnail = new URL(feed.entries.get(0).getThumbnailUrl());
 				
-				Log.i("network", "saving book");
+				Log.i("PapyrusHunter", "Start saving book");
 				DBHelper helper = new DBHelper(context);
 				SQLiteDatabase db = helper.getWritableDatabase();
 				
@@ -130,7 +129,7 @@ public class PapyrusHunter extends Thread {
 				
 				// insert the book
 				db.insert(DBHelper.BOOK_TABLE_NAME, "", values);
-				Log.i("network", "saved the book");
+				Log.i("PapyrusHunter", "Saving book complete");
 				
 				// get the thumbnail and save it
 				// check if we got an isbn10 number from query and file exists
@@ -141,20 +140,11 @@ public class PapyrusHunter extends Thread {
 				else if(isbn13 != null && isbn13.length() == 13){
 					TNManager.saveThumbnail(thumbnail, isbn13);
 				}
-				
-				Log.i("network", "got thumbnail");
-			
-				/*
-				 * add logic for multiple book results (prompt user to select the correct one)
-				 */
-				// ===========================
-				
+				Log.i("PapyrusHunter", "Got thumbnail");
 				
 				// send message that we saved the book
 				msg.what = -1;
 				msg.obj = feed.entries.get(0).title;
-				
-				//Log.i("network", "titleBookStr: "+book.getTitle());
 				
 				messageHandler.sendMessage(msg);
 			
@@ -163,16 +153,14 @@ public class PapyrusHunter extends Thread {
 				messageHandler.sendMessage(msg); // send message to handler
 			}
 			
-			
-			
 		}
 		
 		catch (MalformedURLException e) {
-			Log.e("network", "Malformed URL Exception.");
+			Log.e("PapyrusHunter", "Malformed URL Exception.");
 		}
 		catch (IOException e){
 			messageHandler.sendEmptyMessage(0);
-			Log.e("network", "Couldn't connect to the server.");
+			Log.e("PapyrusHunter", "Couldn't connect to the server.");
 		}
 		
 	}
