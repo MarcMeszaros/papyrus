@@ -60,6 +60,8 @@ public class BooksBrowser extends ListActivity implements
 		OnItemSelectedListener, OnItemClickListener, OnItemLongClickListener,
 		DialogInterface.OnClickListener, OnDateSetListener {
 
+	private static final String TAG = "BookBrowser";
+	
 	// class variables
 	private long selectedBookID;
 
@@ -298,7 +300,7 @@ public class BooksBrowser extends ListActivity implements
 		DBHelper helper = new DBHelper(getApplicationContext());
 		SQLiteDatabase db = helper.getReadableDatabase();
 
-		Log.i("library selector", "id: " + id);
+		Log.i(TAG, "Item select ID: " + id);
 
 		String selection = DBHelper.BOOK_TABLE_NAME + "."
 				+ DBHelper.BOOK_FIELD_LIBRARY_ID + "=" + id;

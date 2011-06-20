@@ -48,6 +48,8 @@ import ca.marcmeszaros.papyrus.database.DBHelper;
 
 public class LibrariesBrowser extends ListActivity implements OnItemClickListener, OnItemLongClickListener, DialogInterface.OnClickListener {
 	
+	private static final String TAG = "LibrariesBrowser";
+	
 	// class variables
 	private SimpleCursorAdapter adapter;
 	private Cursor result;
@@ -161,19 +163,19 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 						Cursor books = db.query(DBHelper.BOOK_TABLE_NAME, columns, selection, null, null, null, null);
 						startManagingCursor(books);
 						
-						Log.i("database", "move to the new library in the cursor");
+						Log.i(TAG, "Move to the new library in the cursor");
 						// get the library id to move books to
 						otherLibraries.move(item);
-						Log.i("database", "get the new library id");
+						Log.i(TAG, "Get the new library ID");
 						int newLibraryId = otherLibraries.getInt(otherLibraries.getColumnIndex(DBHelper.LIBRARY_FIELD_ID));
 						
-						Log.i("database", "setup update query");
+						Log.i(TAG, "Setup update query");
 						// setup the update query
 						ContentValues values;
 						String whereClause = DBHelper.BOOK_TABLE_NAME+"."+DBHelper.BOOK_FIELD_ID+"=?";
 						String[] whereValues = new String[1];
 						
-						Log.i("database", "start looping through the books");
+						Log.i(TAG, "Start looping through the books");
 						// loop through and update all books
 						for(int i=0; i<books.getCount(); i++){
 							books.moveToNext();

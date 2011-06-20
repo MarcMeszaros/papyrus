@@ -42,6 +42,9 @@ import android.os.Environment;
 import android.util.Log;
 
 public class TNManager {
+	
+	private static final String TAG = "TNManager";
+	
 	/**
 	 * method: saveThumbnail
 	 * 
@@ -72,8 +75,7 @@ public class TNManager {
 				if (!thumbnail.exists()) {
 					thumbnail.createNewFile();
 
-					Log.i("sdcard",
-							"can we write to sdcard: " + thumbnail.canWrite());
+					Log.i(TAG, "Can write to sdcard: " + thumbnail.canWrite());
 
 					HttpGet httpRequest;
 					try {

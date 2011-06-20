@@ -46,6 +46,8 @@ import android.util.Log;
 
 public class PapyrusHunter extends Thread {
 	
+	private static final String TAG = "PapyrusHunter";
+	
 	// class variables
 	private Context context;
 	private int libraryID;
@@ -72,7 +74,7 @@ public class PapyrusHunter extends Thread {
 		    GoogleHeaders headers = (GoogleHeaders) transport.defaultHeaders;
 		    
 		    String appName = "Papyrus/"+Papyrus.getVersionName(context, this.getClass());
-		    Log.i("PapyrusHunter", "Set application name to: " + appName);
+		    Log.i(TAG, "Set application name to: " + appName);
 		    headers.setApplicationName(appName);
 		    headers.gdataVersion = "2"; 
 
@@ -92,10 +94,10 @@ public class PapyrusHunter extends Thread {
 		    BookUrl url = BookUrl.root();
 
 		    url.set("q", "isbn:"+bar_code);
-		    Log.i("PapyrusHunter", "Request url: " + url.toString());
+		    Log.i(TAG, "Request url: " + url.toString());
 			BookFeed feed = BookFeed.executeGet(transport, url);
 		    
-			Log.i("PapyrusHunter", "Number of results: " + feed.totalResults);
+			Log.i(TAG, "Number of results: " + feed.totalResults);
 						
 			if(feed.totalResults > 0) {
 				for (Entry entry : feed.entries) {
@@ -112,7 +114,7 @@ public class PapyrusHunter extends Thread {
 				
 				URL thumbnail = new URL(feed.entries.get(0).getThumbnailUrl());
 				
-				Log.i("PapyrusHunter", "Start saving book");
+				Log.i(TAG, "Start saving book");
 				DBHelper helper = new DBHelper(context);
 				SQLiteDatabase db = helper.getWritableDatabase();
 				
@@ -129,7 +131,7 @@ public class PapyrusHunter extends Thread {
 				
 				// insert the book
 				db.insert(DBHelper.BOOK_TABLE_NAME, "", values);
-				Log.i("PapyrusHunter", "Saving book complete");
+				Log.i(TAG, "Saving book complete");
 				
 				// get the thumbnail and save it
 				// check if we got an isbn10 number from query and file exists
@@ -140,7 +142,7 @@ public class PapyrusHunter extends Thread {
 				else if(isbn13 != null && isbn13.length() == 13){
 					TNManager.saveThumbnail(thumbnail, isbn13);
 				}
-				Log.i("PapyrusHunter", "Got thumbnail");
+				Log.i(TAG, "Got thumbnail");
 				
 				// send message that we saved the book
 				msg.what = -1;
@@ -156,11 +158,11 @@ public class PapyrusHunter extends Thread {
 		}
 		
 		catch (MalformedURLException e) {
-			Log.e("PapyrusHunter", "Malformed URL Exception.");
+			Log.e(TAG, "Malformed URL Exception.");
 		}
 		catch (IOException e){
 			messageHandler.sendEmptyMessage(0);
-			Log.e("PapyrusHunter", "Couldn't connect to the server.");
+			Log.e(TAG, "Couldn't connect to the server.");
 		}
 		
 	}
