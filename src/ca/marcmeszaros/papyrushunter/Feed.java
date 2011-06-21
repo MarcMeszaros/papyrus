@@ -31,17 +31,18 @@ import com.google.api.client.util.Key;
 import java.io.IOException;
 
 public class Feed {
-  @Key("openSearch:startIndex")
-  public int startIndex;
+	
+	private static final String TAG = "Feed";
+	
+	@Key("openSearch:startIndex")
+	public int startIndex;
   
-  @Key("openSearch:totalResults")
-  public int totalResults;
+	@Key("openSearch:totalResults")
+	public int totalResults;
    
-  static Feed executeGet(HttpTransport transport, BookUrl url, Class<? extends Feed> feedClass) throws IOException {
-	  Log.i("network", "in Feed.class");
+	static Feed executeGet(HttpTransport transport, BookUrl url, Class<? extends Feed> feedClass, HttpRequest request) throws IOException {
+		Log.i(TAG, "in Feed.class");
 
-	  HttpRequest request = transport.buildGetRequest();
-	  request.url = url;
-	  return request.execute().parseAs(feedClass);
-  }
+		return request.execute().parseAs(feedClass);
+	}
 }

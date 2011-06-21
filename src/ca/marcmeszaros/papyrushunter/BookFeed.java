@@ -24,6 +24,7 @@ package ca.marcmeszaros.papyrushunter;
 
 import android.util.Log;
 
+import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.util.Key;
 
@@ -31,11 +32,14 @@ import java.io.IOException;
 import java.util.List;
 
 public class BookFeed extends Feed {
-  @Key("entry")
-  public List<Entry> entries;
+	
+	private static final String TAG = "BookFeed";
+	
+	@Key("entry")
+	public List<Entry> entries;
 
-  public static BookFeed executeGet(HttpTransport transport, BookUrl url) throws IOException {
-	  Log.i("network", "in BookFeed.class");
-	  return (BookFeed) Feed.executeGet(transport, url, BookFeed.class);
-  }
+	public static BookFeed executeGet(HttpTransport transport, BookUrl url, HttpRequest request) throws IOException {
+		Log.i(TAG, "in BookFeed.class");
+		return (BookFeed) Feed.executeGet(transport, url, BookFeed.class, request);
+	}
 }
