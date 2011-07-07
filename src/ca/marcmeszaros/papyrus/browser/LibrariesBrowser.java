@@ -165,7 +165,7 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 						
 						Log.i(TAG, "Move to the new library in the cursor");
 						// get the library id to move books to
-						otherLibraries.move(item);
+						otherLibraries.moveToPosition(item);
 						Log.i(TAG, "Get the new library ID");
 						int newLibraryId = otherLibraries.getInt(otherLibraries.getColumnIndex(DBHelper.LIBRARY_FIELD_ID));
 						
