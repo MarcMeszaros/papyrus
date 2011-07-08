@@ -112,6 +112,9 @@ public class BookDetails extends Activity implements OnClickListener {
 		else if(book.getISBN13() != null && TNManager.getThumbnail(book.getISBN13()).exists()){
 			cover.setImageURI(Uri.parse(TNManager.getThumbnail(book.getISBN13()).getAbsolutePath()));
 		}
+		
+		// close db connection
+		db.close();
 	}
 
 	@Override
