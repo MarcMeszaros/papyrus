@@ -5,6 +5,9 @@ syntax: regexp
 ^bin/
 ^gen/
 ^build/
+# ignore automatically generated files (JUnit testing)
+^tests/bin/
+^tests/gen/
 
 # ingnore local build files
 ^build\.keystore # specific to Papyrus
