@@ -38,7 +38,7 @@ INSTALLATION
 
 3. Initiate the .apk install ("Unknow sources" needs to be enabled in settings).
 
-Note: The install instructions a sparce because it is assumed the developper
+Note: The install instructions a sparse because it is assumed the developper
 knows how to build and install the .apk from source. More information about
 building packages can be found at http://developer.android.com/
 
