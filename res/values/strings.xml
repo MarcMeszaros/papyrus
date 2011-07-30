@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="app_name">Papyrus</string>
+<string name="version_code">6</string>
+<string name="version_name">0.1.5-dev</string>
 
 <!-- Scan activity -->
 <string name="Scan_label">Scan</string>
