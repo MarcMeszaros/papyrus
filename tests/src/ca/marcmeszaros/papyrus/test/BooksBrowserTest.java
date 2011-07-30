@@ -22,17 +22,21 @@
 
 package ca.marcmeszaros.papyrus.test;
 
-import junit.framework.Assert;
-import android.test.AndroidTestCase;
+import ca.marcmeszaros.papyrus.browser.BooksBrowser;
+import android.test.ActivityInstrumentationTestCase2;
 
+public class BooksBrowserTest extends ActivityInstrumentationTestCase2<BooksBrowser> {
+    private BooksBrowser mActivity;  // the activity under test
 
-public class SomeTest extends AndroidTestCase {
-
-    public void testSomething() throws Throwable {
-       Assert.assertTrue(1 + 1 == 2);
+    public BooksBrowserTest() {
+    	super("ca.marcmeszaros.papyrus.browser", BooksBrowser.class);
     }
-
-    public void testSomethingElse() throws Throwable {
-       Assert.assertTrue(1 + 1 == 2);
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        mActivity = this.getActivity();
+    }
+    public void testPreconditions() {
+    	assertNotNull(mActivity);
     }
 }
