@@ -8,6 +8,8 @@ syntax: regexp
 # ignore automatically generated files (JUnit testing)
 ^tests/bin/
 ^tests/gen/
+^tests/build/
+^tests/local\.properties
 
 # ingnore local build files
 ^build\.keystore # specific to Papyrus
