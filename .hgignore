@@ -9,17 +9,18 @@ syntax: regexp
 ^tests/bin/
 ^tests/gen/
 ^tests/build/
-^tests/local\.properties
 
 # ingnore local build files
 ^build\.keystore # specific to Papyrus
 ^local\.properties # local android enviroment file
+^tests/local\.properties # local android environment for JUnit tests
 
 # ignore IDE project files
 \.project
 \.settings\/.*
 \.classpath
 
-# ignore temp files
+# ignore temp files from various editors
 \.DS_Store
 .*~
+.*\.swp
