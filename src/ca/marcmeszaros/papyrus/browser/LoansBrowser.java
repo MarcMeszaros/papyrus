@@ -131,7 +131,7 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 		result.moveToFirst();
 		
 		Book book = new Book(result.getString(0), result.getString(1), result.getString(2), result.getString(3));
-		Loan loan = new Loan(result.getString(5), result.getString(6));
+		Loan loan = new Loan(result.getLong(5), result.getLong(6));
 		String cID = result.getString(4);
 		
 		Intent intent = new Intent(this, LoanDetails.class);

@@ -116,16 +116,16 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 		Button lendDate = (Button) findViewById(R.id.LoanDetails_lendDate_button);
 		dueDate = (Button) findViewById(R.id.LoanDetails_dueDate_button);
 		Calendar c = Calendar.getInstance();
-		dDate = Long.parseLong(loan.getdueDate()); // Used in editing the due
+		dDate = loan.getdueDate(); // Used in editing the due
 													// date
 
 		// Set the Lend Date Button
-		c.setTimeInMillis(Long.parseLong(loan.getlendDate()));
+		c.setTimeInMillis(loan.getlendDate());
 		lendDate.setText(MONTH_ENUM[c.get(Calendar.MONTH)] + " "
 				+ c.get(Calendar.DAY_OF_MONTH) + ", " + c.get(Calendar.YEAR));
 
 		// Set the Due Date button
-		c.setTimeInMillis(Long.parseLong(loan.getdueDate()));
+		c.setTimeInMillis(loan.getdueDate());
 		dueDate.setText(MONTH_ENUM[c.get(Calendar.MONTH)] + " "
 				+ c.get(Calendar.DAY_OF_MONTH) + ", " + c.get(Calendar.YEAR));
 		dueDate.setOnClickListener(this);

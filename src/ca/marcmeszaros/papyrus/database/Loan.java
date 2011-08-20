@@ -36,8 +36,8 @@ public class Loan implements Parcelable {
 	/* 
 	 * Class Variables
 	 */
-	private String dueDate;
-	private String lendDate;
+	private long dueDate;
+	private long lendDate;
 
 	/*
 	 * Constructors
@@ -45,7 +45,7 @@ public class Loan implements Parcelable {
 	public Loan() {
 	}
 
-	public Loan(String lendDate, String dueDate) {
+	public Loan(long lendDate, long dueDate) {
 		super();
 		this.dueDate = dueDate;
 		this.lendDate = lendDate;
@@ -54,11 +54,11 @@ public class Loan implements Parcelable {
 	/* 
 	 * Getters
 	 */	
-	public String getlendDate() {
+	public long getlendDate() {
 		return lendDate;
 	}
 	
-	public String getdueDate() {
+	public long getdueDate() {
 		return dueDate;
 	}
 	/*
@@ -71,8 +71,8 @@ public class Loan implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(lendDate);
-		dest.writeString(dueDate);
+		dest.writeLong(lendDate);
+		dest.writeLong(dueDate);
 	}
 
 	public static final Parcelable.Creator<Loan> CREATOR = new Parcelable.Creator<Loan>() {
@@ -86,7 +86,7 @@ public class Loan implements Parcelable {
 	};
 
 	private Loan(Parcel in) {
-		this.lendDate = in.readString();
-		this.dueDate = in.readString();
+		this.lendDate = in.readLong();
+		this.dueDate = in.readLong();
 	}
 }
