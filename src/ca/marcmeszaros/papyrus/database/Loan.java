@@ -36,6 +36,9 @@ public class Loan implements Parcelable {
 	/* 
 	 * Class Variables
 	 */
+	private int loanID;
+	private int bookID;
+	private int contactID;
 	private long dueDate;
 	private long lendDate;
 
@@ -51,16 +54,38 @@ public class Loan implements Parcelable {
 		this.lendDate = lendDate;
 	}
 	
+	public Loan(int loanID, int bookID, int contactID, long lendDate, long dueDate) {
+		super();
+		this.dueDate = dueDate;
+		this.lendDate = lendDate;
+		this.loanID = loanID;
+		this.bookID = bookID;
+		this.contactID =contactID;
+	}
+	
 	/* 
 	 * Getters
 	 */	
-	public long getlendDate() {
+	public long getLendDate() {
 		return lendDate;
 	}
 	
-	public long getdueDate() {
+	public long getDueDate() {
 		return dueDate;
 	}
+	
+	public int getLoanID() {
+		return loanID;
+	}
+	
+	public int getBookID() {
+		return bookID;
+	}
+	
+	public int getContactID() {
+		return contactID;
+	}
+	
 	/*
 	 *  Parcelable
 	 */
@@ -73,6 +98,9 @@ public class Loan implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeLong(lendDate);
 		dest.writeLong(dueDate);
+		dest.writeInt(loanID);
+		dest.writeInt(bookID);
+		dest.writeInt(contactID);
 	}
 
 	public static final Parcelable.Creator<Loan> CREATOR = new Parcelable.Creator<Loan>() {
@@ -88,5 +116,8 @@ public class Loan implements Parcelable {
 	private Loan(Parcel in) {
 		this.lendDate = in.readLong();
 		this.dueDate = in.readLong();
+		this.loanID = in.readInt();
+		this.bookID = in.readInt();
+		this.contactID = in.readInt();
 	}
 }

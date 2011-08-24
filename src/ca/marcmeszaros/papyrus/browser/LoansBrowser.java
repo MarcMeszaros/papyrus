@@ -120,6 +120,8 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 			DBHelper.BOOK_FIELD_ISBN13,
 			DBHelper.BOOK_FIELD_TITLE,
 			DBHelper.BOOK_FIELD_AUTHOR,
+			DBHelper.LOAN_TABLE_NAME+"."+DBHelper.LOAN_FIELD_ID,
+			DBHelper.LOAN_FIELD_BOOK_ID,
 			DBHelper.LOAN_FIELD_CONTACT_ID,
 			DBHelper.LOAN_FIELD_LEND_DATE,
 			DBHelper.LOAN_FIELD_DUE_DATE
@@ -131,15 +133,12 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 		result.moveToFirst();
 		
 		Book book = new Book(result.getString(0), result.getString(1), result.getString(2), result.getString(3));
-		Loan loan = new Loan(result.getLong(5), result.getLong(6));
-		String cID = result.getString(4);
+		Loan loan = new Loan(result.getInt(4), result.getInt(5), result.getInt(6), result.getLong(7), result.getLong(8));
 		
 		Intent intent = new Intent(this, LoanDetails.class);
 		
 		intent.putExtra("book", book);
 		intent.putExtra("loan", loan);
-		intent.putExtra("cID", cID);
-		intent.putExtra("loanID", id);
 		db.close();
 		
 		startActivity(intent);

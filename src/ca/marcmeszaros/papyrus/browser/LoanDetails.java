@@ -54,8 +54,7 @@ import java.util.Calendar;
 
 public class LoanDetails extends Activity implements OnClickListener, OnDateSetListener {
 
-	private long loanID;
-	private long loanContactID;
+	private Loan loan;
 	private int mYear;
 	private int mMonth;
 	private int mDay;
@@ -81,20 +80,17 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 		 */
 		Bundle bundle = getIntent().getExtras();
 		Book book = bundle.getParcelable("book");
-		Loan loan = bundle.getParcelable("loan");
-		String cID = bundle.getString("cID");
+		loan = bundle.getParcelable("loan");
 		String name = "";
-		loanContactID = Long.parseLong(cID);
-		loanID = bundle.getLong("loanID");
-
+		
 		// retrieve contact information
 		ContentResolver cr = getContentResolver();
 		Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 		if (cur.getCount() > 0) {
 			while (cur.moveToNext()) {
-				String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+				int id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
 				// we have a match, get the name, phone, and email
-				if (cID.equals(id)) {
+				if (loan.getContactID() == id) {
 					// get name
 					name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 				}
@@ -116,16 +112,16 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 		Button lendDate = (Button) findViewById(R.id.LoanDetails_lendDate_button);
 		dueDate = (Button) findViewById(R.id.LoanDetails_dueDate_button);
 		Calendar c = Calendar.getInstance();
-		dDate = loan.getdueDate(); // Used in editing the due
+		dDate = loan.getDueDate(); // Used in editing the due
 													// date
 
 		// Set the Lend Date Button
-		c.setTimeInMillis(loan.getlendDate());
+		c.setTimeInMillis(loan.getLendDate());
 		lendDate.setText(MONTH_ENUM[c.get(Calendar.MONTH)] + " "
 				+ c.get(Calendar.DAY_OF_MONTH) + ", " + c.get(Calendar.YEAR));
 
 		// Set the Due Date button
-		c.setTimeInMillis(loan.getdueDate());
+		c.setTimeInMillis(loan.getDueDate());
 		dueDate.setText(MONTH_ENUM[c.get(Calendar.MONTH)] + " "
 				+ c.get(Calendar.DAY_OF_MONTH) + ", " + c.get(Calendar.YEAR));
 		dueDate.setOnClickListener(this);
@@ -156,7 +152,7 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 
 			// append the contact id to the end of the contact CONTENT_URI
 			Uri uri = ContentUris.withAppendedId(
-					ContactsContract.Contacts.CONTENT_URI, loanContactID);
+					ContactsContract.Contacts.CONTENT_URI, loan.getContactID());
 
 			// create a new intent to view this 'content'
 			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -228,7 +224,7 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 
 				// select the right book
 				String whereClause = DBHelper.LOAN_TABLE_NAME + "."
-						+ DBHelper.LOAN_FIELD_ID + "=" + loanID;
+						+ DBHelper.LOAN_FIELD_ID + "=" + loan.getLoanID();
 
 				// update and close the db
 				db.update(DBHelper.LOAN_TABLE_NAME, values, whereClause, null);
