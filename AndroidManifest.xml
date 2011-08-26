@@ -45,6 +45,8 @@
         <activity android:name=".database.AddLibrary" 
         		  android:label="@string/AddLibrary_title">
         </activity>
+        
+        <receiver android:name=".AlarmReceiver" />
 
     </application>
     

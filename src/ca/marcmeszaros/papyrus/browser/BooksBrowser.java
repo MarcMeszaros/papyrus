@@ -24,12 +24,15 @@ package ca.marcmeszaros.papyrus.browser;
 
 import java.util.Calendar;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -49,12 +52,14 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
+import ca.marcmeszaros.papyrus.AlarmReceiver;
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.Settings;
 import ca.marcmeszaros.papyrus.database.AddBook;
 import ca.marcmeszaros.papyrus.database.AddLibrary;
 import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.database.DBHelper;
+import ca.marcmeszaros.papyrus.database.Loan;
 
 public class BooksBrowser extends ListActivity implements
 		OnItemSelectedListener, OnItemClickListener, OnItemLongClickListener,
@@ -369,7 +374,7 @@ public class BooksBrowser extends ListActivity implements
 		// get a reference to the database
 		DBHelper helper = new DBHelper(getApplicationContext());
 		SQLiteDatabase db = helper.getWritableDatabase();
-
+		
 		// prepare the query
 		ContentValues values = new ContentValues();
 		values.put(DBHelper.LOAN_FIELD_BOOK_ID, selectedBookID);
@@ -379,11 +384,47 @@ public class BooksBrowser extends ListActivity implements
 
 		// insert the entry in the database
 		db.insert(DBHelper.LOAN_TABLE_NAME, "", values);
+		
+		// loan the new id
+		String tables = DBHelper.LOAN_TABLE_NAME;
+		String selection = DBHelper.LOAN_TABLE_NAME + "."
+				+ DBHelper.LOAN_FIELD_BOOK_ID + " = " + selectedBookID
+				+ " AND " +
+				DBHelper.LOAN_TABLE_NAME + "." + DBHelper.LOAN_FIELD_CONTACT_ID + " = " + id;
+		String[] columns = {
+			DBHelper.LOAN_FIELD_ID
+		};
+		Cursor cursor = db.query(tables, columns, selection, null, null, null, DBHelper.LOAN_FIELD_ID+" DESC");
+		cursor.moveToFirst();
+		int loanID = cursor.getInt(0);
+		cursor.close();
+		
+		// close the db
 		db.close();
+		
+		//Book book = new Book(isbn10, title, author);
+		Loan loan = new Loan(
+				loanID,
+				values.getAsInteger(DBHelper.LOAN_FIELD_BOOK_ID),
+				values.getAsInteger(DBHelper.LOAN_FIELD_CONTACT_ID),
+				values.getAsLong(DBHelper.LOAN_FIELD_LEND_DATE), 
+				values.getAsLong(DBHelper.LOAN_FIELD_DUE_DATE)
+		);
 
-		Toast.makeText(this,
-				getString(R.string.BooksBrowser_toast_loanSuccessful),
-				Toast.LENGTH_LONG).show();
+		// get an alarm manager
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        // create the intent for the alarm
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        
+        // put the loan object into the alarm receiver
+        intent.putExtra("loan", loan);
+        
+        // create the pendingIntent to run when the alarm goes off and be handled by a receiver
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        // set the repeating alarm
+        am.set(AlarmManager.RTC, c.getTimeInMillis(), pendingIntent);
+		
+		Toast.makeText(this, getString(R.string.BooksBrowser_toast_loanSuccessful), Toast.LENGTH_LONG).show();
 	}
 
 	/**

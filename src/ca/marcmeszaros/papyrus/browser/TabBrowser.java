@@ -34,7 +34,13 @@ public class TabBrowser extends TabActivity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_tab_browser);
-
+	    
+	    // get the extras
+	    Bundle bundle = getIntent().getExtras();
+	    // if the tab browser was started from a notification, set the
+	    // default tab to the one specified by the intent
+	    int tab = (bundle == null) ? 0 : bundle.getInt("tab", 0);
+	    
 	    //Resources res = getResources(); // Resource object to get Drawables
 	    TabHost tabHost = getTabHost();  // The activity TabHost
 	    TabHost.TabSpec spec;  // Resusable TabSpec for each tab
@@ -56,7 +62,7 @@ public class TabBrowser extends TabActivity {
 	    spec = tabHost.newTabSpec("libraries").setIndicator(getString(R.string.LibrariesBrowser_label)).setContent(intent);
 	    tabHost.addTab(spec);
 
-	    tabHost.setCurrentTab(0);
+	    tabHost.setCurrentTab(tab);
 	}
 	
 }

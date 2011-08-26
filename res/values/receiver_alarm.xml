@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- AlarmReceiver string -->
+	<string name="Notification_teaser">Book to receive</string>
+	<string name="Notification_title">Book Due</string>
+	<string name="Notification_content">Book is due from %1$s.</string>
+    
+</resources>
