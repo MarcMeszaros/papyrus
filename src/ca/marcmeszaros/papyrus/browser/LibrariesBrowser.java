@@ -187,7 +187,8 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 						
 						// set the new default library if the one to be deleted is the default
 						SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()); 
-						if(Long.parseLong(pref.getString(Settings.KEY_DEFAULT_LIBRARY, "")) == selectedLibraryID){
+						String libID = pref.getString(Settings.KEY_DEFAULT_LIBRARY, "");
+						if(!libID.equals("") && Long.parseLong(libID) == selectedLibraryID){
 							SharedPreferences.Editor prefEditor = pref.edit();
 							prefEditor.putString(Settings.KEY_DEFAULT_LIBRARY, Long.toString(newLibraryId));
 							prefEditor.commit();	
