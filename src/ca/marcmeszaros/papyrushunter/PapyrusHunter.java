@@ -123,7 +123,7 @@ public class PapyrusHunter extends Thread {
 				String isbn10 = ((feed.entries.get(0)).identifiers.get(1)).substring(5);
 				String isbn13 = ((feed.entries.get(0)).identifiers.size() > 2) ? ((feed.entries.get(0)).identifiers.get(2)).substring(5) : "";
 				String title = feed.entries.get(0).title;
-				String authors = (feed.entries.get(0)).dcCreator.get(0);
+				String authors = ((feed.entries.get(0)).dcCreator.size() > 0) ? (feed.entries.get(0)).dcCreator.get(0) : "";
 				String publishers = feed.entries.get(0).dcPublisher;
 				String date = feed.entries.get(0).dcDate;
 				
