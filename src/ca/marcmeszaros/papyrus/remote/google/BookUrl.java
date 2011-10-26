@@ -20,31 +20,20 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
-package ca.marcmeszaros.papyrushunter;
+package ca.marcmeszaros.papyrus.remote.google;
 
-import com.google.api.client.util.Key;
+import com.google.api.client.googleapis.GoogleUrl;
 
-import java.util.List;
+public class BookUrl extends GoogleUrl {
 
-/**
- * @author Yaniv Inbar
- */
-public class Link {
+  public static final String ROOT_URL = "http://books.google.com/books/feeds/volumes";
 
-  @Key("@href")
-  public String href;
-
-  @Key("@rel")
-  public String rel;
-
-  public static String find(List<Link> links, String rel) {
-	if (links != null) {
-      for (Link link : links) {
-        if (rel.equals(link.rel)) {
-          return link.href;
-        }
-      }
-    }
-    return null;
+  public BookUrl(String encodedUrl) {
+    super(encodedUrl);
   }
+
+  public static BookUrl root() {
+    return new BookUrl(ROOT_URL);
+  }
+
 }

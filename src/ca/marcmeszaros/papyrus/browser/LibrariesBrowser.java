@@ -44,7 +44,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.Settings;
 import ca.marcmeszaros.papyrus.database.AddLibrary;
-import ca.marcmeszaros.papyrus.database.DBHelper;
+import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 
 public class LibrariesBrowser extends ListActivity implements OnItemClickListener, OnItemLongClickListener, DialogInterface.OnClickListener {
 	

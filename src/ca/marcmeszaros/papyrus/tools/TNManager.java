@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
-package ca.marcmeszaros.papyrus.database;
+package ca.marcmeszaros.papyrus.tools;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,6 +35,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

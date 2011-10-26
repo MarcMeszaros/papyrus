@@ -24,9 +24,9 @@ package ca.marcmeszaros.papyrus.browser;
 
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.database.Book;
-import ca.marcmeszaros.papyrus.database.DBHelper;
 import ca.marcmeszaros.papyrus.database.Loan;
-import ca.marcmeszaros.papyrus.database.TNManager;
+import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.tools.TNManager;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;

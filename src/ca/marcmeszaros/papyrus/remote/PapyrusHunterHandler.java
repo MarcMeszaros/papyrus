@@ -20,20 +20,46 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
-package ca.marcmeszaros.papyrushunter;
+package ca.marcmeszaros.papyrus.remote;
 
-import com.google.api.client.googleapis.GoogleUrl;
+import ca.marcmeszaros.papyrus.R;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.widget.Toast;
 
-public class BookUrl extends GoogleUrl {
-
-  public static final String ROOT_URL = "http://books.google.com/books/feeds/volumes";
-
-  public BookUrl(String encodedUrl) {
-    super(encodedUrl);
-  }
-
-  public static BookUrl root() {
-    return new BookUrl(ROOT_URL);
-  }
-
+public class PapyrusHunterHandler extends Handler {
+		
+	Context context;
+	ProgressDialog dialog;
+	
+	public PapyrusHunterHandler(Context context){
+		this.context = context;
+	}
+	
+	public void handleMessage(Message msg){
+		switch (msg.what) {
+		case -1:
+			Log.i("network", "we got the message");
+			dialog.cancel();		
+			Toast.makeText(context, String.format(context.getString(R.string.PapyrusHunterHandler_toast_bookSaved), msg.obj.toString()), Toast.LENGTH_LONG).show();
+			break;
+		case 0:
+			dialog.cancel();
+			Toast.makeText(context, context.getString(R.string.PapyrusHunterHandler_toast_errorGetBookInfo), Toast.LENGTH_LONG).show();
+			break;
+		case 1:
+			dialog.cancel();
+			Toast.makeText(context, context.getString(R.string.PapyrusHunterHandler_toast_noBookInfo), Toast.LENGTH_LONG).show();
+			break;
+		}
+		
+	}
+	
+	public void setDialog(ProgressDialog dialog){
+		this.dialog = dialog;
+	}
+	
 }

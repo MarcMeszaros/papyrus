@@ -20,26 +20,31 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
-package ca.marcmeszaros.papyrushunter;
+package ca.marcmeszaros.papyrus.remote.google;
 
-import android.util.Log;
-
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpTransport;
 import com.google.api.client.util.Key;
 
-import java.io.IOException;
 import java.util.List;
 
-public class BookFeed extends Feed {
-	
-	private static final String TAG = "BookFeed";
-	
-	@Key("entry")
-	public List<Entry> entries;
+/**
+ * @author Yaniv Inbar
+ */
+public class Link {
 
-	public static BookFeed executeGet(HttpTransport transport, BookUrl url, HttpRequest request) throws IOException {
-		Log.i(TAG, "in BookFeed.class");
-		return (BookFeed) Feed.executeGet(transport, url, BookFeed.class, request);
-	}
+  @Key("@href")
+  public String href;
+
+  @Key("@rel")
+  public String rel;
+
+  public static String find(List<Link> links, String rel) {
+	if (links != null) {
+      for (Link link : links) {
+        if (rel.equals(link.rel)) {
+          return link.href;
+        }
+      }
+    }
+    return null;
+  }
 }

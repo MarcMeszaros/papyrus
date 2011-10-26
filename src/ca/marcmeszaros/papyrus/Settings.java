@@ -22,7 +22,7 @@
 
 package ca.marcmeszaros.papyrus;
 
-import ca.marcmeszaros.papyrus.database.DBHelper;
+import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;

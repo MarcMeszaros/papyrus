@@ -26,8 +26,9 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import ca.marcmeszaros.papyrus.R;
-import ca.marcmeszaros.papyrushunter.PapyrusHunter;
-import ca.marcmeszaros.papyrushunter.PapyrusHunterHandler;
+import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.remote.PapyrusHunter;
+import ca.marcmeszaros.papyrus.remote.PapyrusHunterHandler;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;

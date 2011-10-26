@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
-package ca.marcmeszaros.papyrus.database;
+package ca.marcmeszaros.papyrus.database.sqlite;
 
 import java.io.File;
 

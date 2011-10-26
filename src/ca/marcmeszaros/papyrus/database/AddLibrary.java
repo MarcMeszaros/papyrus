@@ -24,6 +24,7 @@ package ca.marcmeszaros.papyrus.database;
 
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.Settings;
+import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.SharedPreferences;

@@ -20,46 +20,26 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
-package ca.marcmeszaros.papyrushunter;
+package ca.marcmeszaros.papyrus.remote.google;
 
-import ca.marcmeszaros.papyrus.R;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
-public class PapyrusHunterHandler extends Handler {
-		
-	Context context;
-	ProgressDialog dialog;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.util.Key;
+
+import java.io.IOException;
+import java.util.List;
+
+public class BookFeed extends Feed {
 	
-	public PapyrusHunterHandler(Context context){
-		this.context = context;
+	private static final String TAG = "BookFeed";
+	
+	@Key("entry")
+	public List<Entry> entries;
+
+	public static BookFeed executeGet(HttpTransport transport, BookUrl url, HttpRequest request) throws IOException {
+		Log.i(TAG, "in BookFeed.class");
+		return (BookFeed) Feed.executeGet(transport, url, BookFeed.class, request);
 	}
-	
-	public void handleMessage(Message msg){
-		switch (msg.what) {
-		case -1:
-			Log.i("network", "we got the message");
-			dialog.cancel();		
-			Toast.makeText(context, String.format(context.getString(R.string.PapyrusHunterHandler_toast_bookSaved), msg.obj.toString()), Toast.LENGTH_LONG).show();
-			break;
-		case 0:
-			dialog.cancel();
-			Toast.makeText(context, context.getString(R.string.PapyrusHunterHandler_toast_errorGetBookInfo), Toast.LENGTH_LONG).show();
-			break;
-		case 1:
-			dialog.cancel();
-			Toast.makeText(context, context.getString(R.string.PapyrusHunterHandler_toast_noBookInfo), Toast.LENGTH_LONG).show();
-			break;
-		}
-		
-	}
-	
-	public void setDialog(ProgressDialog dialog){
-		this.dialog = dialog;
-	}
-	
 }

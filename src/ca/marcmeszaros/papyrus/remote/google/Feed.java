@@ -20,39 +20,29 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
-package ca.marcmeszaros.papyrushunter;
+package ca.marcmeszaros.papyrus.remote.google;
 
-import java.util.List;
+import android.util.Log;
 
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpTransport;
 import com.google.api.client.util.Key;
 
-public class Entry {
-  @Key("title")
-  public String title;
+import java.io.IOException;
+
+public class Feed {
+	
+	private static final String TAG = "Feed";
+	
+	@Key("openSearch:startIndex")
+	public int startIndex;
   
-  @Key("dc:identifier")
-  public List<String> identifiers;
-  
-  @Key("dc:title")
-  public List<String> dcTitle;
-  
-  @Key("dc:creator")
-  public List<String> dcCreator;
-  
-  @Key("dc:description")
-  public String dcDescription;
-  
-  @Key("dc:publisher")
-  public String dcPublisher;
-  
-  @Key("dc:date")
-  public String dcDate;
-  
-  @Key("link")
-  public List<Link> links;
-  
-  public String getThumbnailUrl(){
-	  return Link.find(links, "http://schemas.google.com/books/2008/thumbnail");
-  }
-  
+	@Key("openSearch:totalResults")
+	public int totalResults;
+   
+	static Feed executeGet(HttpTransport transport, BookUrl url, Class<? extends Feed> feedClass, HttpRequest request) throws IOException {
+		Log.i(TAG, "in Feed.class");
+
+		return request.execute().parseAs(feedClass);
+	}
 }

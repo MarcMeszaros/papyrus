@@ -20,15 +20,18 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
-package ca.marcmeszaros.papyrushunter;
+package ca.marcmeszaros.papyrus.remote;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import ca.marcmeszaros.papyrus.Papyrus;
-import ca.marcmeszaros.papyrus.database.DBHelper;
-import ca.marcmeszaros.papyrus.database.TNManager;
+import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.remote.google.BookFeed;
+import ca.marcmeszaros.papyrus.remote.google.BookUrl;
+import ca.marcmeszaros.papyrus.remote.google.Entry;
+import ca.marcmeszaros.papyrus.tools.TNManager;
 
 import com.google.api.client.extensions.android2.AndroidHttp;
 import com.google.api.client.googleapis.GoogleHeaders;

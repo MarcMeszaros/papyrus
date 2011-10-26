@@ -58,8 +58,8 @@ import ca.marcmeszaros.papyrus.Settings;
 import ca.marcmeszaros.papyrus.database.AddBook;
 import ca.marcmeszaros.papyrus.database.AddLibrary;
 import ca.marcmeszaros.papyrus.database.Book;
-import ca.marcmeszaros.papyrus.database.DBHelper;
 import ca.marcmeszaros.papyrus.database.Loan;
+import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 
 public class BooksBrowser extends ListActivity implements
 		OnItemSelectedListener, OnItemClickListener, OnItemLongClickListener,
