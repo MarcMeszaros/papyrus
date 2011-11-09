@@ -5,6 +5,8 @@ syntax: regexp
 ^bin/
 ^gen/
 ^build/
+^target/
+
 # ignore automatically generated files (JUnit testing)
 ^tests/bin/
 ^tests/gen/
