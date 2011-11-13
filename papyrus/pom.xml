@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<!-- get the reference to the parent POM -->
+	<parent>
+		<groupId>ca.marcmeszaros.papyrus</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.1.5-dev</version>
+	</parent>
+
+	<!-- define the applications -->
+	<artifactId>papyrus</artifactId>
+	<packaging>apk</packaging>
+	<name>Papyrus</name>
+
+	<!-- include required dependencies declared available in the parent POM -->
+	<dependencies>
+
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.api.client</groupId>
+			<artifactId>google-api-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.api.client</groupId>
+			<artifactId>google-api-client-googleapis</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.api.client</groupId>
+			<artifactId>google-api-client-extensions-android2</artifactId>
+		</dependency>
+
+	</dependencies>
+
+	<!-- override some defaults with module specific parameters -->
+	<build>
+		<finalName>${project.artifactId}-${project.version}</finalName>
+		<sourceDirectory>src</sourceDirectory>
+
+			<plugins>
+				<plugin>
+					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+					<artifactId>android-maven-plugin</artifactId>
+				</plugin>
+			</plugins>
+
+	</build>
+</project>
