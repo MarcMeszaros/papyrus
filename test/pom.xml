@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<!-- get the reference to the parent POM -->
+	<parent>
+		<groupId>ca.marcmeszaros.papyrus</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.1.5-SNAPSHOT</version>
+	</parent>
+
+	<!-- define the applications -->
+	<artifactId>test</artifactId>
+	<packaging>apk</packaging>
+	<name>Papyrus - test</name>
+
+	<!-- include required dependencies declared available in the parent POM -->
+	<dependencies>
+
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android-test</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.api.client</groupId>
+			<artifactId>google-api-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.api.client</groupId>
+			<artifactId>google-api-client-googleapis</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.api.client</groupId>
+			<artifactId>google-api-client-extensions-android2</artifactId>
+		</dependency>
+
+		<!-- the target apk, which we will test -->
+		<dependency>
+			<groupId>ca.marcmeszaros.papyrus</groupId>
+			<artifactId>papyrus</artifactId>
+			<version>${project.version}</version>
+			<type>apk</type>
+		</dependency>
+
+		<!-- optional: compile time dependency, so that we can read	from R.java -->
+		<dependency>
+			<groupId>ca.marcmeszaros.papyrus</groupId>
+			<artifactId>papyrus</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+			<type>jar</type>
+		</dependency>
+	</dependencies>
+
+	<!-- override some defaults with module specific parameters -->
+	<build>
+		<finalName>${project.version}</finalName>
+		<sourceDirectory>src</sourceDirectory>
+
+		<plugins>
+
+			<!-- license header check plugin -->
+			<plugin>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<configuration>
+					<header>${project.parent.basedir}/LICENSE_HEADER</header>
+					<excludes>
+						<exclude>*.properties</exclude>
+						<exclude>proguard.cfg</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<!-- android maven plugin -->
+			<plugin>
+				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<artifactId>android-maven-plugin</artifactId>
+			</plugin>
+
+		</plugins>
+
+	</build>
+</project>
