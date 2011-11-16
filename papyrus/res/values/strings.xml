@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Papyrus</string>
-	<item name="version_code" type="integer">6</item>
-	<string name="version_name">0.1.5-dev</string>
 
 	<!-- Error messages -->
 	<string name="error_bookNotFound">The book could not be found.</string>
