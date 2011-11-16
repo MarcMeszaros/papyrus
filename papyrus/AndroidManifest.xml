@@ -1,63 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2011 Marc Meszaros
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="ca.marcmeszaros.papyrus"
-      android:versionCode="@integer/version_code"
-      android:versionName="@string/version_name">
-    <application android:icon="@drawable/icon" 
-    			 android:label="@string/app_name">
+    package="ca.marcmeszaros.papyrus"
+    android:versionCode="@integer/version_code"
+    android:versionName="@string/version_name" >
 
-        <activity android:name=".Settings" 
-        		  android:label="@string/Settings_title">
+    <application
+        android:icon="@drawable/icon"
+        android:label="@string/app_name" >
+        <activity
+            android:label="@string/Settings_title"
+            android:name=".Settings" >
         </activity>
-                
-        <activity android:name=".browser.BookDetails" 
-        		  android:label="@string/BookDetails_title">
+        <activity
+            android:label="@string/BookDetails_title"
+            android:name=".browser.BookDetails" >
         </activity>
-        
-        <activity android:name=".browser.TabBrowser"
-        		  android:theme="@android:style/Theme.NoTitleBar">
-        		  <intent-filter>
-        		  	<action android:name="android.intent.action.MAIN" />
-        		  	<category android:name="android.intent.category.LAUNCHER" />
-        		  </intent-filter>
+        <activity
+            android:name=".browser.TabBrowser"
+            android:theme="@android:style/Theme.NoTitleBar" >
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        
-        <activity android:name=".browser.BooksBrowser" 
-        		  android:label="@string/BooksBrowser_title">
+        <activity
+            android:label="@string/BooksBrowser_title"
+            android:name=".browser.BooksBrowser" >
         </activity>
-        
-        <activity android:name=".browser.LibrariesBrowser" 
-        		  android:label="@string/LibrariesBrowser_title">
+        <activity
+            android:label="@string/LibrariesBrowser_title"
+            android:name=".browser.LibrariesBrowser" >
         </activity>
-        
-        <activity android:name=".browser.LoanDetails" 
-        		  android:label="@string/LoanDetails_title">
+        <activity
+            android:label="@string/LoanDetails_title"
+            android:name=".browser.LoanDetails" >
         </activity>
-        
-        <activity android:name=".browser.LoansBrowser" 
-        		  android:label="@string/LoansBrowser_title">
+        <activity
+            android:label="@string/LoansBrowser_title"
+            android:name=".browser.LoansBrowser" >
         </activity>
-        
-        <activity android:name=".database.AddBook" 
-        		  android:label="@string/AddBook_title">
+        <activity
+            android:label="@string/AddBook_title"
+            android:name=".database.AddBook" >
         </activity>
-        
-        <activity android:name=".database.AddLibrary" 
-        		  android:label="@string/AddLibrary_title">
+        <activity
+            android:label="@string/AddLibrary_title"
+            android:name=".database.AddLibrary" >
         </activity>
-        
+
         <receiver android:name=".AlarmReceiver" />
-
     </application>
-    
+
     <uses-sdk android:minSdkVersion="7" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.READ_CONTACTS" />
-	
-	<supports-screens android:smallScreens="false" 
-					  android:normalScreens="true" 
-					  android:largeScreens="false" 
-					  android:anyDensity="false" />
-</manifest> 
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <supports-screens
+        android:anyDensity="false"
+        android:largeScreens="false"
+        android:normalScreens="true"
+        android:smallScreens="false" />
+
+</manifest>

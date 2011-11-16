@@ -13,7 +13,7 @@
 	<!-- define the applications -->
 	<artifactId>papyrus</artifactId>
 	<packaging>apk</packaging>
-	<name>Papyrus</name>
+	<name>Papyrus - app</name>
 
 	<!-- include required dependencies declared available in the parent POM -->
 	<dependencies>
@@ -55,19 +55,19 @@
 				<configuration>
 					<header>${project.parent.basedir}/LICENSE_HEADER</header>
 					<excludes>
-						<exclude>res/**</exclude>
 						<exclude>src/com/google/zxing/**</exclude>
-						<exclude>*.xml</exclude>
 						<exclude>*.properties</exclude>
 						<exclude>proguard.cfg</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
 
+			<!-- android maven plugin -->
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 				<artifactId>android-maven-plugin</artifactId>
 				<configuration>
+					<!-- update the AndroidManifest.xml version numbers -->
 					<manifest>
 						<versionName>${project.version}</versionName>
 						<versionCodeUpdateFromVersion>true</versionCodeUpdateFromVersion>

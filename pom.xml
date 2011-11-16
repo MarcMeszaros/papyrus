@@ -96,23 +96,40 @@
 					<artifactId>maven-license-plugin</artifactId>
 					<version>1.9.0</version>
 					<configuration>
+						<!-- various plugin options -->
+						<aggregate>true</aggregate>
+						<concurrencyFactor>1</concurrencyFactor>
 						<header>${basedir}/LICENSE_HEADER</header>
 						<strictCheck>true</strictCheck>
 						<useDefaultExcludes>true</useDefaultExcludes>
-						<excludes>
-							<exclude>papyrus/**</exclude>
-							<exclude>papyrus-test/**</exclude>
-							<exclude>**/.hg*</exclude>
-							<exclude>**/LICENSE*</exclude>
-							<exclude>**/AUTHORS*</exclude>
-							<exclude>**/README*</exclude>
-						</excludes>
+						
+						<!-- the properties to replace in the license headers -->
 						<properties>
 							<name>${project.name}</name>
 							<year>${project.inceptionYear}</year>
 							<holder>Marc Meszaros</holder>
 						</properties>
 						<encoding>UTF-8</encoding>
+						
+						<!-- some custom header file definitions -->
+						<headerDefinitions>
+							<headerDefinition>LICENSE_FORMAT.xml</headerDefinition>
+						</headerDefinitions>
+						<!-- mapp the custom formats to file extensions -->
+						<mapping>
+							<xml>ANDROID_XML</xml>
+						</mapping>
+						
+						<!-- files to exclude -->
+						<excludes>
+							<exclude>papyrus/**</exclude>
+							<exclude>papyrus-test/**</exclude>
+							<exclude>**/.hg*</exclude>
+							<exclude>**/.xml</exclude>
+							<exclude>**/LICENSE*</exclude>
+							<exclude>**/AUTHORS*</exclude>
+							<exclude>**/README*</exclude>
+						</excludes>
 					</configuration>
 					<!-- the headers should be checks when the 'validate' phase is called -->
 					<executions>
