@@ -4,9 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ca.marcmeszaros.papyrus</groupId>
 	<artifactId>parent</artifactId>
-	<version>0.1.5-dev</version>
+	<version>0.1.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+	<name>Papyrus</name>
+
+	<inceptionYear>2011</inceptionYear>
+
 	<!-- minimum Maven version (based on plugins) -->
 	<prerequisites>
 		<maven>3.0.3</maven>
@@ -87,11 +90,46 @@
 					</configuration>
 				</plugin>
 
+				<!-- Plugin to automatically add license headers -->
+				<plugin>
+					<groupId>com.mycila.maven-license-plugin</groupId>
+					<artifactId>maven-license-plugin</artifactId>
+					<version>1.9.0</version>
+					<configuration>
+						<header>${basedir}/LICENSE_HEADER</header>
+						<strictCheck>true</strictCheck>
+						<useDefaultExcludes>true</useDefaultExcludes>
+						<excludes>
+							<exclude>papyrus/**</exclude>
+							<exclude>papyrus-test/**</exclude>
+							<exclude>**/.hg*</exclude>
+							<exclude>**/LICENSE*</exclude>
+							<exclude>**/AUTHORS*</exclude>
+							<exclude>**/README*</exclude>
+						</excludes>
+						<properties>
+							<name>${project.name}</name>
+							<year>${project.inceptionYear}</year>
+							<holder>Marc Meszaros</holder>
+						</properties>
+						<encoding>UTF-8</encoding>
+					</configuration>
+					<!-- the headers should be checks when the 'validate' phase is called -->
+					<executions>
+						<execution>
+							<goals>
+								<goal>check</goal>
+							</goals>
+							<phase>validate</phase>
+						</execution>
+					</executions>
+				</plugin>
+
 				<!-- the Android Maven plugin -->
 				<plugin>
 					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 					<artifactId>android-maven-plugin</artifactId>
-					<version>3.0.0-alpha-13</version>
+					<version>3.0.0-alpha-14</version>
 					<extensions>true</extensions>
 					<configuration>
 						<sdk>
@@ -109,9 +147,6 @@
 		<!-- this is the actual application -->
 		<module>papyrus</module>
 		<!-- this is the unit test application -->
-		<!-- 
-		TODO add test application module
-		ie. <module>papyrus-test</module>
-		 -->
+		<!-- TODO add test application module ie. <module>papyrus-test</module> -->
 	</modules>
 </project>

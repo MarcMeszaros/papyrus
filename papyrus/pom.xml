@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>ca.marcmeszaros.papyrus</groupId>
 		<artifactId>parent</artifactId>
-		<version>0.1.5-dev</version>
+		<version>0.1.5-SNAPSHOT</version>
 	</parent>
 
 	<!-- define the applications -->
@@ -46,12 +46,29 @@
 		<finalName>${project.artifactId}-${project.version}</finalName>
 		<sourceDirectory>src</sourceDirectory>
 
-			<plugins>
-				<plugin>
-					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
-					<artifactId>android-maven-plugin</artifactId>
-				</plugin>
-			</plugins>
+		<plugins>
+			
+			<!-- license header check plugin -->
+			<plugin>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<configuration>
+					<header>${project.parent.basedir}/LICENSE_HEADER</header>
+					<excludes>
+						<exclude>res/**</exclude>
+						<exclude>src/com/google/zxing/**</exclude>
+						<exclude>*.xml</exclude>
+						<exclude>*.properties</exclude>
+						<exclude>proguard.cfg</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<artifactId>android-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
 
 	</build>
 </project>
