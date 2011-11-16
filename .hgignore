@@ -6,10 +6,10 @@ syntax: regexp
 ^papyrus/gen/
 ^papyrus/build/
 ^papyrus/target/
-^papyrus-test/bin/
-^papyrus-test/gen/
-^papyrus-test/build/
-^papyrus-test/target/
+^test/bin/
+^test/gen/
+^test/build/
+^test/target/
 
 # ignore automatically generated files (JUnit testing)
 
@@ -18,9 +18,9 @@ build\.keystore # specific to Papyrus
 local\.properties # local android enviroment file
 
 # ignore IDE project files
-.project
-.settings\/.*
-.classpath
+^(.*\/)?\.project
+\.settings\/.*
+\.classpath
 
 # ignore temp files from various editors
 \.DS_Store

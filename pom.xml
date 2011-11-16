@@ -31,6 +31,12 @@
 				<version>2.1.2</version>
 			</dependency>
 
+			<dependency>
+				<groupId>com.google.android</groupId>
+				<artifactId>android-test</artifactId>
+				<version>2.1.2</version>
+			</dependency>
+
 			<!-- the Google API Java Client library -->
 			<dependency>
 				<groupId>com.google.api.client</groupId>
@@ -38,12 +44,16 @@
 				<version>1.4.1-beta</version>
 				<exclusions>
 					<exclusion>
-						<artifactId>httpclient</artifactId>
 						<groupId>org.apache.httpcomponents</groupId>
+						<artifactId>httpclient</artifactId>
 					</exclusion>
 					<exclusion>
-						<artifactId>xpp3</artifactId>
 						<groupId>xpp3</groupId>
+						<artifactId>xpp3</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>junit</groupId>
+						<artifactId>junit</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -54,8 +64,8 @@
 				<version>1.4.1-beta</version>
 				<exclusions>
 					<exclusion>
-						<artifactId>google-api-client</artifactId>
 						<groupId>com.google.api.client</groupId>
+						<artifactId>google-api-client</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -66,8 +76,8 @@
 				<version>1.4.1-beta</version>
 				<exclusions>
 					<exclusion>
-						<artifactId>google-api-client</artifactId>
 						<groupId>com.google.api.client</groupId>
+						<artifactId>google-api-client</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -102,7 +112,7 @@
 						<header>${basedir}/LICENSE_HEADER</header>
 						<strictCheck>true</strictCheck>
 						<useDefaultExcludes>true</useDefaultExcludes>
-						
+
 						<!-- the properties to replace in the license headers -->
 						<properties>
 							<name>${project.name}</name>
@@ -110,7 +120,7 @@
 							<holder>Marc Meszaros</holder>
 						</properties>
 						<encoding>UTF-8</encoding>
-						
+
 						<!-- some custom header file definitions -->
 						<headerDefinitions>
 							<headerDefinition>LICENSE_FORMAT.xml</headerDefinition>
@@ -119,11 +129,11 @@
 						<mapping>
 							<xml>ANDROID_XML</xml>
 						</mapping>
-						
+
 						<!-- files to exclude -->
 						<excludes>
 							<exclude>papyrus/**</exclude>
-							<exclude>papyrus-test/**</exclude>
+							<exclude>test/**</exclude>
 							<exclude>**/.hg*</exclude>
 							<exclude>**/.xml</exclude>
 							<exclude>**/LICENSE*</exclude>
@@ -164,6 +174,6 @@
 		<!-- this is the actual application -->
 		<module>papyrus</module>
 		<!-- this is the unit test application -->
-		<!-- TODO add test application module ie. <module>papyrus-test</module> -->
+		<module>test</module>
 	</modules>
 </project>
