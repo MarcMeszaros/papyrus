@@ -14,6 +14,12 @@
 	<prerequisites>
 		<maven>3.0.3</maven>
 	</prerequisites>
+	
+	<!-- remote repo info -->
+	<scm>
+		<connection>scm:hg:https://bitbucket.org/marcmeszaros/papyrus</connection>
+		<url>https://bitbucket.org/marcmeszaros/papyrus/src</url>
+	</scm>
 
 	<!-- define some project-wide properties -->
 	<properties>
