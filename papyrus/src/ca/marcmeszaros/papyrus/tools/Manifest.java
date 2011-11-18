@@ -13,38 +13,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.marcmeszaros.papyrus;
+package ca.marcmeszaros.papyrus.tools;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 
-public class Papyrus {
+public class Manifest {
 
-	public static String getPackageName(Context context, Class<?> cls) {
+	/**
+	 * Return the package name of the current context.
+	 * 
+	 * @param context a context from the application
+	 * @return the package name
+	 */
+	public static String getPackageName(Context context) {
 		try {
-			ComponentName comp = new ComponentName(context, cls);
-			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(comp.getPackageName(), 0);
+			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 			return packageInfo.packageName;
 		} catch (android.content.pm.PackageManager.NameNotFoundException e) {
 			return null;
 		}
 	}
 	
-	public static int getVersionCode(Context context, Class<?> cls) {
+	/**
+	 * Return the application's version code defined in the manifest file.
+	 * 
+	 * @param context a context from the application
+	 * @return int of the android application version code
+	 */
+	public static int getVersionCode(Context context) {
 		try {
-			ComponentName comp = new ComponentName(context, cls);
-			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(comp.getPackageName(), 0);
+			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 			return packageInfo.versionCode;
 		} catch (android.content.pm.PackageManager.NameNotFoundException e) {
 			return -1;
 		}
 	}
 
-	public static String getVersionName(Context context, Class<?> cls) {
+	/**
+	 * Return the applications version name defined in the manifest file.
+	 * 
+	 * @param context a context from the application
+	 * @return a string representing the version name
+	 */
+	public static String getVersionName(Context context) {
 		try {
-			ComponentName comp = new ComponentName(context, cls);
-			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(comp.getPackageName(), 0);
+			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 			return packageInfo.versionName;
 		} catch (android.content.pm.PackageManager.NameNotFoundException e) {
 			return null;

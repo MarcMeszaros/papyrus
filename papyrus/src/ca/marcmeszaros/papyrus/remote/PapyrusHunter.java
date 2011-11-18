@@ -19,11 +19,11 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import ca.marcmeszaros.papyrus.Papyrus;
 import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 import ca.marcmeszaros.papyrus.remote.google.BookFeed;
 import ca.marcmeszaros.papyrus.remote.google.BookUrl;
 import ca.marcmeszaros.papyrus.remote.google.Entry;
+import ca.marcmeszaros.papyrus.tools.Manifest;
 import ca.marcmeszaros.papyrus.tools.TNManager;
 
 import com.google.api.client.extensions.android2.AndroidHttp;
@@ -78,7 +78,7 @@ public class PapyrusHunter extends Thread {
 			GoogleHeaders headers = new GoogleHeaders();
 		    
 			// setup the request headers
-		    String appName = "Papyrus/"+Papyrus.getVersionName(context, this.getClass());
+		    String appName = "Papyrus/"+Manifest.getVersionName(context);
 		    Log.i(TAG, "Set application name to: " + appName);
 		    headers.setApplicationName(appName);
 		    headers.gdataVersion = "2"; 
