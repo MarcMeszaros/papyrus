@@ -14,14 +14,20 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory 
-		android:title="@string/Settings_Library">
-		<ListPreference 
-			android:title="@string/Settings_Library_defaultLibrary_title"
-            android:summary="@string/Settings_Library_defaultLibrary_summary"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/Settings_Library" >
+
+        <ListPreference
             android:key="defaultLibrary"
-            android:persistent="true" />
-	</PreferenceCategory>
+            android:persistent="true"
+            android:summary="@string/Settings_Library_defaultLibrary_summary"
+            android:title="@string/Settings_Library_defaultLibrary_title" />
+    </PreferenceCategory>
+
+    <Preference
+        android:enabled="false"
+        android:key="versionName"
+        android:title="@string/Settings_versionName_title" />
 
 </PreferenceScreen>

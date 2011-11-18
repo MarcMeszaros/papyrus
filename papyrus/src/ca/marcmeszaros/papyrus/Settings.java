@@ -16,6 +16,7 @@
 package ca.marcmeszaros.papyrus;
 
 import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.tools.Manifest;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -61,6 +62,9 @@ public class Settings extends PreferenceActivity {
 		
 		// set the list and associated values
 		defaultLibrary.setEntries(entries);
-		defaultLibrary.setEntryValues(entryValues);		
+		defaultLibrary.setEntryValues(entryValues);
+		
+		// set the versionName
+		(this.getPreferenceScreen().findPreference("versionName")).setSummary(Manifest.getVersionName(this));
 	}
 }
