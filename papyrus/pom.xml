@@ -56,6 +56,8 @@
 					<header>${project.parent.basedir}/LICENSE_HEADER</header>
 					<excludes>
 						<exclude>src/com/google/zxing/**</exclude>
+						<exclude>bin/**</exclude>
+						<exclude>gen/**</exclude>
 						<exclude>*.properties</exclude>
 						<exclude>proguard.cfg</exclude>
 					</excludes>
