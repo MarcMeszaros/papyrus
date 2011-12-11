@@ -171,11 +171,12 @@ public class PapyrusHunter extends Thread {
 		}
 		
 		catch (MalformedURLException e) {
-			Log.e(TAG, "Malformed URL Exception.");
+			messageHandler.sendEmptyMessage(0);
+			Log.e(TAG, "Malformed URL Exception.", e);
 		}
 		catch (IOException e) {
 			messageHandler.sendEmptyMessage(0);
-			Log.e(TAG, "Couldn't connect to the server.");
+			Log.e(TAG, "Couldn't connect to the server.", e);
 		}
 		
 	}
