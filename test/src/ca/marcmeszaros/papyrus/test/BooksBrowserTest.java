@@ -30,6 +30,11 @@ public class BooksBrowserTest extends ActivityInstrumentationTestCase2<BooksBrow
         mActivity = this.getActivity();
     }
  
+    @Override
+    protected void tearDown() throws Exception {
+    	super.tearDown();
+    }
+    
     public void testPreconditions() {
         assertNotNull(mActivity);
     }
