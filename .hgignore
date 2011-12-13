@@ -11,16 +11,18 @@ syntax: regexp
 ^test/build/
 ^test/target/
 
-# ignore automatically generated files (JUnit testing)
+# ignore certain files
+^test/proguard.cfg
 
 # ingnore local build files
 build\.keystore # specific to Papyrus
 local\.properties # local android enviroment file
 
 # ignore IDE project files
-^(.*\/)?\.project
+\.project
 \.settings\/.*
 \.classpath
+\.metadata
 
 # ignore temp files from various editors
 \.DS_Store
