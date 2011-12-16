@@ -31,18 +31,13 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.api.client</groupId>
+			<groupId>com.google.api-client</groupId>
 			<artifactId>google-api-client</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.api.client</groupId>
-			<artifactId>google-api-client-googleapis</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.api.client</groupId>
-			<artifactId>google-api-client-extensions-android2</artifactId>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-books</artifactId>
 		</dependency>
 
 		<!-- the target apk, which we will test -->
@@ -53,7 +48,7 @@
 			<type>apk</type>
 		</dependency>
 
-		<!-- optional: compile time dependency, so that we can read	from R.java -->
+		<!-- optional: compile time dependency, so that we can read from R.java -->
 		<dependency>
 			<groupId>ca.marcmeszaros.papyrus</groupId>
 			<artifactId>papyrus</artifactId>

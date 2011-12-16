@@ -25,18 +25,13 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.api.client</groupId>
+			<groupId>com.google.api-client</groupId>
 			<artifactId>google-api-client</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.api.client</groupId>
-			<artifactId>google-api-client-googleapis</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.api.client</groupId>
-			<artifactId>google-api-client-extensions-android2</artifactId>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-books</artifactId>
 		</dependency>
 
 	</dependencies>
