@@ -99,9 +99,6 @@ public class BooksBrowser extends ListActivity implements
 		Cursor library = db.query(DBHelper.LIBRARY_TABLE_NAME, null, null,
 			null, null, null, DBHelper.LIBRARY_FIELD_NAME);
 		startManagingCursor(library);
-		
-		// close the db connection
-		db.close();
 
 		// specify what fields to map to what views
 		String[] from = { DBHelper.LIBRARY_FIELD_NAME };
