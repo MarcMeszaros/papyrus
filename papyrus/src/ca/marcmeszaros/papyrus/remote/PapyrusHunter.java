@@ -107,7 +107,7 @@ public class PapyrusHunter extends Thread {
 		    // send the request on it's way...
 		    BookFeed feed = BookFeed.executeGet(transport, url, request);
 		    
-			Log.i(TAG, "Number of results: " + feed.totalResults);
+			Log.d(TAG, "Number of results: " + feed.totalResults);
 			
 			// parse some results... if we have some of course...
 			if(feed.totalResults > 0) {
@@ -115,15 +115,45 @@ public class PapyrusHunter extends Thread {
 					Log.i("PapyrusHunter", "Got book: " + entry.title + " " + entry.identifiers.get(1));
 				}
 			
-				// build the fields from the data
-				String isbn10 = ((feed.entries.get(0)).identifiers.get(1)).substring(5);
-				String isbn13 = ((feed.entries.get(0)).identifiers.size() > 2) ? ((feed.entries.get(0)).identifiers.get(2)).substring(5) : "";
-				String title = feed.entries.get(0).title;
-				String authors = ((feed.entries.get(0)).dcCreator.size() > 0) ? (feed.entries.get(0)).dcCreator.get(0) : "";
-				String publishers = feed.entries.get(0).dcPublisher;
-				String date = feed.entries.get(0).dcDate;
+				// get the first entry
+				Entry entry = feed.entries.get(0);
 				
-				URL thumbnail = new URL(feed.entries.get(0).getThumbnailUrl());
+				// get the isbn numbers
+				String isbn10 = "";
+				String isbn13 = "";
+				// iterate through the identifiers
+				for (String identifier : entry.identifiers) {
+					if(identifier.startsWith("ISBN:") && identifier.substring(5).length() == 10) {
+						isbn10 = identifier.substring(5);
+					} else if(identifier.startsWith("ISBN:") && identifier.substring(5).length() == 13) {
+						isbn13 = identifier.substring(5);
+					}
+				}
+				
+				// get the title
+				String title = entry.title;
+				
+				// get the authors
+				String authors = "";
+				for(String author : entry.dcCreator) {
+					authors += author+", ";
+				}
+				// fix the last ', '
+				if(authors.length() > 0) {
+					authors = authors.substring(0, authors.length()-2);
+				}
+				
+				// get other data
+				String publishers = entry.dcPublisher;
+				String date = entry.dcDate;
+				
+				// the thumbnail url
+				String rawThumbnailUrl = entry.getThumbnailUrl();
+				URL thumbnail = null;
+				if (rawThumbnailUrl != null) {
+					thumbnail = new URL(rawThumbnailUrl.replace("&amp;", "&"));
+					Log.d(TAG, "thumbnail url: "+thumbnail);
+				}
 				
 				Log.i(TAG, "Start saving book");
 				// get the local SQL db connection
@@ -144,23 +174,23 @@ public class PapyrusHunter extends Thread {
 				// insert the book
 				db.insert(DBHelper.BOOK_TABLE_NAME, "", values);
 				db.close();
-				Log.i(TAG, "Saving book complete");
+				Log.d(TAG, "Saving book complete");
 				
 				// get the thumbnail and save it
 				// check if we got an isbn10 number from query and file exists
-				if(isbn10 != null && isbn13.length() == 10) {
+				if(isbn10 != null && isbn10 != "" && isbn13.length() == 10 && thumbnail != null) {
 					TNManager.saveThumbnail(thumbnail, isbn10);
+					Log.d(TAG, "Got thumbnail");
 				}
 				// check if we got an isbn13 number from query and file exists
-				else if(isbn13 != null && isbn13.length() == 13) {
+				else if(isbn13 != null && isbn13 != "" && isbn13.length() == 13 && thumbnail != null) {
 					TNManager.saveThumbnail(thumbnail, isbn13);
+					Log.d(TAG, "Got thumbnail");
 				}
-				Log.i(TAG, "Got thumbnail");
 				
 				// send message that we saved the book
 				msg.what = -1;
-				msg.obj = feed.entries.get(0).title;
-				
+				msg.obj = title;
 				messageHandler.sendMessage(msg);
 			
 			} else {
