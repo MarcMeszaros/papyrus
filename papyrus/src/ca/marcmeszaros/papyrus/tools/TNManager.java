@@ -37,17 +37,15 @@ import android.os.Environment;
 import android.util.Log;
 
 public class TNManager {
-	
+
 	private static final String TAG = "TNManager";
-	
+
 	/**
-	 * method: saveThumbnail
+	 * Downloads and saves the thumbnail of a book to the SD card.
 	 * 
-	 * description: stores the thumbnail to the SD card
-	 * 
-	 * @param thumbnailURL
-	 * @param isbn
-	 * @return true/false
+	 * @param thumbnailURL the URL to the thumbnail
+	 * @param isbn the ISBN number of the book
+	 * @return {@code true} on success or {@code false} on failure
 	 */
 	public static boolean saveThumbnail(URL thumbnailURL, String isbn) {
 		// make sure we have access to the SD card
@@ -56,15 +54,12 @@ public class TNManager {
 				// if the folder on the SD carld doesn't exist, create it
 				if (!DBHelper.PAPYRUS_SDCARD_ROOT.exists()) {
 					DBHelper.PAPYRUS_SDCARD_ROOT.mkdir();
-					// creates the ".nomedia" file to hide content from
-					// "Gallery"
-					new File(DBHelper.PAPYRUS_SDCARD_ROOT, ".nomedia")
-							.createNewFile();
+					// creates the ".nomedia" file to hide content from "Gallery"
+					new File(DBHelper.PAPYRUS_SDCARD_ROOT, ".nomedia").createNewFile();
 				}
 
 				// create the thumbnail
-				File thumbnail = new File(DBHelper.PAPYRUS_SDCARD_ROOT, isbn
-						+ ".jpg");
+				File thumbnail = new File(DBHelper.PAPYRUS_SDCARD_ROOT, isbn + ".jpg");
 
 				// if the file doesn't exist, create it and get the data
 				if (!thumbnail.exists()) {
@@ -73,30 +68,25 @@ public class TNManager {
 					Log.i(TAG, "Can write to sdcard: " + thumbnail.canWrite());
 
 					HttpGet httpRequest;
-					try {
-						httpRequest = new HttpGet(thumbnailURL.toURI());
+					httpRequest = new HttpGet(thumbnailURL.toURI());
 
-						HttpClient httpclient = new DefaultHttpClient();
-						HttpResponse response = (HttpResponse) httpclient
-								.execute(httpRequest);
+					HttpClient httpclient = new DefaultHttpClient();
+					HttpResponse response = (HttpResponse) httpclient.execute(httpRequest);
 
-						HttpEntity entity = response.getEntity();
-						BufferedHttpEntity bufHttpEntity = new BufferedHttpEntity(
-								entity);
-						InputStream instream = bufHttpEntity.getContent();
-						Bitmap bm = BitmapFactory.decodeStream(instream);
+					HttpEntity entity = response.getEntity();
+					BufferedHttpEntity bufHttpEntity = new BufferedHttpEntity(entity);
+					InputStream instream = bufHttpEntity.getContent();
+					Bitmap bm = BitmapFactory.decodeStream(instream);
 
-						FileOutputStream out = new FileOutputStream(thumbnail);
+					FileOutputStream out = new FileOutputStream(thumbnail);
 
-						bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
-
-					} catch (URISyntaxException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
 				}
+
+			} catch (URISyntaxException e) {
+				Log.e(TAG, "URISyntaxException", e);
 			} catch (IOException e) {
-				// error
+				Log.e(TAG, "IOException", e);
 			}
 		} else {
 			return false;
@@ -105,22 +95,23 @@ public class TNManager {
 	}
 
 	/**
-	 * method: getThumbnail
+	 * Return a File handler to the book thumbnail.
 	 * 
-	 * @param isbn
-	 * @return
+	 * @param isbn the ISBN number to the book to get
+	 * @return a {@code File} handle to the thumbnail image
 	 */
 	public static File getThumbnail(String isbn) {
 		return new File(DBHelper.PAPYRUS_SDCARD_ROOT, isbn + ".jpg");
 	}
 
 	/**
-	 * method: deleteThumbnail
+	 * Delete a book thumbnail using it's ISBN number.
 	 * 
-	 * @param isbn
-	 * @return
+	 * @param isbn the ISBN number to delete
+	 * @return {@code true} on operation success or {@code false} on failure
 	 */
 	public static boolean deleteThumbnail(String isbn) {
 		return new File(DBHelper.PAPYRUS_SDCARD_ROOT, isbn + ".jpg").delete();
 	}
+
 }
