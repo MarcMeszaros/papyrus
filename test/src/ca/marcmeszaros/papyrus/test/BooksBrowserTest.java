@@ -22,19 +22,19 @@ public class BooksBrowserTest extends ActivityInstrumentationTestCase2<BooksBrow
     private BooksBrowser mActivity;  // the activity under test
 
     public BooksBrowserTest() {
-        super("ca.marcmeszaros.papyrus.browser", BooksBrowser.class);
+        super("ca.marcmeszaros.papyrus", BooksBrowser.class);
     }
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         mActivity = this.getActivity();
     }
- 
+
     @Override
     protected void tearDown() throws Exception {
     	super.tearDown();
     }
-    
+   
     public void testPreconditions() {
         assertNotNull(mActivity);
     }
