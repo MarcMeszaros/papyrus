@@ -19,9 +19,12 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutionException;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.test.ActivityUnitTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
@@ -48,13 +51,25 @@ public class DownloadThumbnailsTest extends ActivityUnitTestCase<MockActivity> {
     }
     
     /**
+     * Used to test the network connection inside tests.
+     */
+    private void checkNetworkConnection() {
+		// check network connection
+    	assertNotNull(getActivity().getSystemService(Context.CONNECTIVITY_SERVICE));
+    	ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+    	assertNotNull(connectivityManager.getActiveNetworkInfo());
+    	NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+    	assertTrue(activeNetworkInfo.getState() == NetworkInfo.State.CONNECTED);
+	}
+    
+    /**
      * The name 'test preconditions' is a convention to signal that if this
      * test doesn't pass, the test case was not set up properly and it might
      * explain any and all failures in other tests.  This is not guaranteed
      * to run before other tests, as junit uses reflection to find the tests.
      */
     @MediumTest
-    public void testPreconditions(){
+    public void testPreconditions() {
     	// start the activity
     	startActivity(startIntent, null, null);
     	
@@ -62,13 +77,22 @@ public class DownloadThumbnailsTest extends ActivityUnitTestCase<MockActivity> {
     	assertNotNull(download);
     	assertNotNull(testUrl);
     	assertNotNull(getActivity());
+    	
+    	// make sure we have a network connection
+    	checkNetworkConnection();
     }
     
     /**
      * Make sure a download can start.
      */
     @MediumTest
-    public void testStartDownload(){
+    public void testStartDownload() {
+    	// start the activity
+    	startActivity(startIntent, null, null);
+    	
+    	// make sure we have a network connection
+    	checkNetworkConnection();
+    	
     	// make sure it's pending (not started)
     	assertEquals(AsyncTask.Status.PENDING, download.getStatus());
     	
@@ -87,6 +111,12 @@ public class DownloadThumbnailsTest extends ActivityUnitTestCase<MockActivity> {
      */
     @MediumTest
     public void testDownloadImage() throws InterruptedException, ExecutionException {
+    	// start the activity
+    	MockActivity activity = startActivity(startIntent, null, null);
+    	
+    	// make sure we have a network connection
+    	checkNetworkConnection();
+    	
     	// use the background header logo in the Android Documentation as a sample image
     	download.execute(testUrl);
     	LinkedList<Bitmap> images = download.get();
@@ -94,12 +124,9 @@ public class DownloadThumbnailsTest extends ActivityUnitTestCase<MockActivity> {
     	// make sure there are image
     	assertNotNull(images);
     	
-    	MockActivity activity = startActivity(startIntent, null, null);
-    	
     	// need a "real" activity to get a context (to get resources)	
     	// load up an image from the app
     	Bitmap bm = BitmapFactory.decodeResource(activity.getResources(), R.drawable.bg_logo);
-    	
    	
     	// check images are the same
     	// TODO this test fails; figure out why (theory: the resource image and the
