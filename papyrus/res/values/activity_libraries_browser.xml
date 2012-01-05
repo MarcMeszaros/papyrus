@@ -30,7 +30,7 @@
 		\n<li><font fgcolor="#ffffffff"><b>Add Library</b></font> to add a library\n</li>"
 	</string>
 	
-	<string name="LibrariesBrowser_alert_moveBooks_title">Move books to...</string>
+	<string name="LibrariesBrowser_alert_moveBooks_title">Move books to…</string>
 	
 	<string name="LibrariesBrowser_toast_libraryDeleted">Library deleted.</string>
 	<string name="LibrariesBrowser_toast_cantDeleteOnlyLibrary">Cannot delete the only library.</string>

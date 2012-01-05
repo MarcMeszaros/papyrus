@@ -27,5 +27,5 @@
 
 	<string name="AddBook_button_addBook_text">Add Book</string>
 	
-	<string name="AddBook_toast_searchingForBook">Getting book information...</string>
+	<string name="AddBook_toast_searchingForBook">Getting book information…</string>
 </resources>
