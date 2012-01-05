@@ -34,12 +34,10 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class DownloadThumbnails
-		extends
-			AsyncTask<URL, Void, LinkedList<Bitmap>> {
+public class DownloadThumbnails extends AsyncTask<URL, Void, LinkedList<Bitmap>> {
 
 	private static final String TAG = "DownloadThumbnails";
-		
+
 	@Override
 	protected LinkedList<Bitmap> doInBackground(URL... urls) {
 
@@ -57,13 +55,11 @@ public class DownloadThumbnails
 
 				// create an HTTP client and get the response
 				HttpClient httpclient = new DefaultHttpClient();
-				HttpResponse response = (HttpResponse) httpclient
-						.execute(httpRequest);
+				HttpResponse response = (HttpResponse) httpclient.execute(httpRequest);
 
 				// get a handle on the http entity
 				HttpEntity entity = response.getEntity();
-				BufferedHttpEntity bufHttpEntity = new BufferedHttpEntity(
-						entity);
+				BufferedHttpEntity bufHttpEntity = new BufferedHttpEntity(entity);
 				InputStream instream = bufHttpEntity.getContent();
 
 				// read the entity from the stream into a bitmap object
@@ -71,7 +67,7 @@ public class DownloadThumbnails
 
 				// add the bitmap to the list
 				bitmaps.add(bm);
-				
+
 			}
 
 		} catch (URISyntaxException e) {
