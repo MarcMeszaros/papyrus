@@ -15,13 +15,13 @@
  */
 package ca.marcmeszaros.papyrus.database.sqlite;
 
-import java.io.File;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.provider.BaseColumns;
+
+import java.io.File;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -46,13 +46,13 @@ public class DBHelper extends SQLiteOpenHelper {
 	public static final String BOOK_FIELD_PUBLISHER = "publisher";
 	public static final String BOOK_FIELD_PAGES = "pages";
 	public static final String BOOK_FIELD_QUANTITY = "quantity";
-		
+
 	public static final String LIBRARY_FIELD_ID = BaseColumns._ID;
 	public static final String LIBRARY_FIELD_ADDRESS = "address";
 	public static final String LIBRARY_FIELD_GEO_LONGITUDE = "geo_tag_longitude";
 	public static final String LIBRARY_FIELD_GEO_LATITUDE = "geo_tag_latitude";
 	public static final String LIBRARY_FIELD_NAME = "name";
-		
+
 	public static final String LOAN_FIELD_ID = BaseColumns._ID;
 	public static final String LOAN_FIELD_BOOK_ID = "book_ID";
 	public static final String LOAN_FIELD_CONTACT_ID = "contact_ID";
@@ -81,55 +81,55 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	/*
 	 * method: createBookTable
-	 * 
+	 *
 	 * description: Creates the Book table in the database
 	 */
 	private void createBookTable(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE " + BOOK_TABLE_NAME + " ("
 				+ BOOK_FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-				+ BOOK_FIELD_LIBRARY_ID + " INTEGER," 
+				+ BOOK_FIELD_LIBRARY_ID + " INTEGER,"
 				+ BOOK_FIELD_ISBN10 + " TEXT(10),"
-				+ BOOK_FIELD_ISBN13 + " TEXT(13)," 
+				+ BOOK_FIELD_ISBN13 + " TEXT(13),"
 				+ BOOK_FIELD_BAR_CODE + " TEXT(13),"
-				+ BOOK_FIELD_TITLE + " TEXT(255)," 
+				+ BOOK_FIELD_TITLE + " TEXT(255),"
 				+ BOOK_FIELD_AUTHOR + " TEXT(255),"
-				+ BOOK_FIELD_EDITION + " INTEGER(2)," 
+				+ BOOK_FIELD_EDITION + " INTEGER(2),"
 				+ BOOK_FIELD_PUBLICATION_DATE + " TEXT(10),"
-				+ BOOK_FIELD_PUBLISHER + " TEXT(255)," 
+				+ BOOK_FIELD_PUBLISHER + " TEXT(255),"
 				+ BOOK_FIELD_PAGES + " INTEGER(5),"
 				+ BOOK_FIELD_QUANTITY + " INTEGER(2),"
-				+ "FOREIGN KEY("+BOOK_FIELD_LIBRARY_ID+") REFERENCES libaries("+LIBRARY_FIELD_ID+")"
+				+ "FOREIGN KEY(" + BOOK_FIELD_LIBRARY_ID + ") REFERENCES libaries(" + LIBRARY_FIELD_ID + ")"
 				+ ");");
 	}
 
 	/*
 	 * method: createLibraryTable
-	 * 
+	 *
 	 * description: Creates the Library table in the database
 	 */
 	private void createLibraryTable(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE " + LIBRARY_TABLE_NAME + " ("
 				+ LIBRARY_FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-				+ LIBRARY_FIELD_ADDRESS + " TEXT(255)," 
+				+ LIBRARY_FIELD_ADDRESS + " TEXT(255),"
 				+ LIBRARY_FIELD_GEO_LONGITUDE + " REAL(15),"
-				+ LIBRARY_FIELD_GEO_LATITUDE + " REAL(15)," 
-				+ LIBRARY_FIELD_NAME + " TEXT(255)" 
+				+ LIBRARY_FIELD_GEO_LATITUDE + " REAL(15),"
+				+ LIBRARY_FIELD_NAME + " TEXT(255)"
 				+ ");");
 	}
 
 	/*
 	 * method: createLoanTable
-	 * 
+	 *
 	 * description: Creates the Loan table in the database
 	 */
 	private void createLoanTable(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE " + LOAN_TABLE_NAME + " ("
-				+ LOAN_FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
+				+ LOAN_FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ LOAN_FIELD_BOOK_ID + " INTEGER,"
 				+ LOAN_FIELD_CONTACT_ID + " INTEGER,"
 				+ LOAN_FIELD_LEND_DATE + " INTEGER,"
 				+ LOAN_FIELD_DUE_DATE + " INTEGER,"
-				+ "FOREIGN KEY("+LOAN_FIELD_BOOK_ID+") REFERENCES books("+BOOK_FIELD_ID+")"
+				+ "FOREIGN KEY(" + LOAN_FIELD_BOOK_ID + ") REFERENCES books(" + BOOK_FIELD_ID + ")"
 				+ ");");
 	}
 

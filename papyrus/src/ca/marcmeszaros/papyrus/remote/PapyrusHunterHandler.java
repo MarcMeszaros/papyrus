@@ -16,6 +16,7 @@
 package ca.marcmeszaros.papyrus.remote;
 
 import ca.marcmeszaros.papyrus.R;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Handler;
@@ -24,19 +25,19 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class PapyrusHunterHandler extends Handler {
-		
+
 	Context context;
 	ProgressDialog dialog;
-	
-	public PapyrusHunterHandler(Context context){
+
+	public PapyrusHunterHandler(Context context) {
 		this.context = context;
 	}
-	
-	public void handleMessage(Message msg){
+
+	public void handleMessage(Message msg) {
 		switch (msg.what) {
 		case -1:
 			Log.i("network", "we got the message");
-			dialog.cancel();		
+			dialog.cancel();
 			Toast.makeText(context, String.format(context.getString(R.string.PapyrusHunterHandler_toast_bookSaved), msg.obj.toString()), Toast.LENGTH_LONG).show();
 			break;
 		case 0:
@@ -48,11 +49,11 @@ public class PapyrusHunterHandler extends Handler {
 			Toast.makeText(context, context.getString(R.string.PapyrusHunterHandler_toast_noBookInfo), Toast.LENGTH_LONG).show();
 			break;
 		}
-		
+
 	}
-	
-	public void setDialog(ProgressDialog dialog){
+
+	public void setDialog(ProgressDialog dialog) {
 		this.dialog = dialog;
 	}
-	
+
 }

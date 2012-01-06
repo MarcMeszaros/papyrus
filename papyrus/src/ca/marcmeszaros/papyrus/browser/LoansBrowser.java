@@ -15,6 +15,13 @@
  */
 package ca.marcmeszaros.papyrus.browser;
 
+import ca.marcmeszaros.papyrus.R;
+import ca.marcmeszaros.papyrus.Settings;
+import ca.marcmeszaros.papyrus.database.AddLibrary;
+import ca.marcmeszaros.papyrus.database.Book;
+import ca.marcmeszaros.papyrus.database.Loan;
+import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -26,15 +33,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import ca.marcmeszaros.papyrus.R;
-import ca.marcmeszaros.papyrus.Settings;
-import ca.marcmeszaros.papyrus.database.AddLibrary;
-import ca.marcmeszaros.papyrus.database.Book;
-import ca.marcmeszaros.papyrus.database.Loan;
-import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import android.widget.Toast;
 
 public class LoansBrowser extends ListActivity implements OnItemClickListener,
 		OnItemLongClickListener, DialogInterface.OnClickListener {
@@ -92,13 +93,13 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 			long id) {
 		// TODO Auto-generated method stub
 		//Toast.makeText(this, "Loan details not implemented yet.", Toast.LENGTH_SHORT).show();
-		
+
 		// set the item id to a class variable
 		this.selectedLoanID = id;
-		
+
 		DBHelper helper = new DBHelper(getApplicationContext());
 		SQLiteDatabase db = helper.getReadableDatabase();
-		
+
 		/* do a join on Loan and Book to get the book information and
 		 * the contact ID for the person the book is loaned to
 		 */
@@ -113,27 +114,27 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 			DBHelper.BOOK_FIELD_ISBN13,
 			DBHelper.BOOK_FIELD_TITLE,
 			DBHelper.BOOK_FIELD_AUTHOR,
-			DBHelper.LOAN_TABLE_NAME+"."+DBHelper.LOAN_FIELD_ID,
+			DBHelper.LOAN_TABLE_NAME + "." + DBHelper.LOAN_FIELD_ID,
 			DBHelper.LOAN_FIELD_BOOK_ID,
 			DBHelper.LOAN_FIELD_CONTACT_ID,
 			DBHelper.LOAN_FIELD_LEND_DATE,
 			DBHelper.LOAN_FIELD_DUE_DATE
 		};
-		
+
 		// store result of query
 		Cursor result = db.query(tables, columns, selection, null, null, null, null);
-		
+
 		result.moveToFirst();
-		
+
 		Book book = new Book(result.getString(0), result.getString(1), result.getString(2), result.getString(3));
 		Loan loan = new Loan(result.getInt(4), result.getInt(5), result.getInt(6), result.getLong(7), result.getLong(8));
-		
+
 		Intent intent = new Intent(this, LoanDetails.class);
-		
+
 		intent.putExtra("book", book);
 		intent.putExtra("loan", loan);
 		db.close();
-		
+
 		startActivity(intent);
 	}
 
@@ -151,7 +152,7 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 		builder.setTitle(getString(R.string.LoansBrowser_LongClickDialog_title));
 
 		// create the dialog items
-		final CharSequence[] items = { getString(R.string.LoansBrowser_LongClickDialog_returnBook) };
+		final CharSequence[] items = {getString(R.string.LoansBrowser_LongClickDialog_returnBook)};
 
 		// set the items and the click listener
 		builder.setItems(items, this);
@@ -189,7 +190,7 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 			break;
 		}
 	}
-	
+
 	/**
 	 * Creates the menu when the "menu" button is pressed.
 	 */
@@ -199,7 +200,7 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 		getMenuInflater().inflate(R.menu.loans_browser , menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -207,7 +208,7 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 			startActivity(new Intent(this, AddLibrary.class));
 			break;
 		case R.id.BooksBrowser_Settings_menu:
-			startActivity(new Intent(this, Settings.class));		
+			startActivity(new Intent(this, Settings.class));
 			break;
 		}
 		return false;

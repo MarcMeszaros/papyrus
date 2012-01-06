@@ -20,13 +20,13 @@ import android.os.Parcelable;
 
 /**
  * class: Loan
- * 
+ *
  *	@description: a class to loosely represent Loan objects.
  *		has variables for due date, loan date
  */
 public class Loan implements Parcelable {
-	
-	/* 
+
+	/*
 	 * Class Variables
 	 */
 	private int loanID;
@@ -46,39 +46,39 @@ public class Loan implements Parcelable {
 		this.dueDate = dueDate;
 		this.lendDate = lendDate;
 	}
-	
+
 	public Loan(int loanID, int bookID, int contactID, long lendDate, long dueDate) {
 		super();
 		this.dueDate = dueDate;
 		this.lendDate = lendDate;
 		this.loanID = loanID;
 		this.bookID = bookID;
-		this.contactID =contactID;
+		this.contactID = contactID;
 	}
-	
-	/* 
+
+	/*
 	 * Getters
-	 */	
+	 */
 	public long getLendDate() {
 		return lendDate;
 	}
-	
+
 	public long getDueDate() {
 		return dueDate;
 	}
-	
+
 	public int getLoanID() {
 		return loanID;
 	}
-	
+
 	public int getBookID() {
 		return bookID;
 	}
-	
+
 	public int getContactID() {
 		return contactID;
 	}
-	
+
 	/*
 	 *  Parcelable
 	 */

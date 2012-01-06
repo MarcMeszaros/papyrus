@@ -18,6 +18,7 @@ package ca.marcmeszaros.papyrus.browser;
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 import ca.marcmeszaros.papyrus.tools.TNManager;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -31,9 +32,9 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 public class BookAdapter extends CursorAdapter implements SectionIndexer {
-	
+
 	private static final String TAG = "BookAdapter";
-	
+
 	public BookAdapter(Context context, Cursor c) {
 		super(context, c);
 	}
@@ -43,21 +44,20 @@ public class BookAdapter extends CursorAdapter implements SectionIndexer {
 		ImageView cover = (ImageView) view.findViewById(R.id.BookRow_book_cover);
 		TextView title = (TextView) view.findViewById(R.id.BookRow_book_title);
 		TextView author = (TextView) view.findViewById(R.id.BookRow_book_author);
-		
+
 		title.setText(cursor.getString(cursor.getColumnIndex(DBHelper.BOOK_FIELD_TITLE)));
 		author.setText(cursor.getString(cursor.getColumnIndex(DBHelper.BOOK_FIELD_AUTHOR)));
-		
+
 		// try and get both isbn numbers from the result
 		String isbn10 = cursor.getString(cursor.getColumnIndex(DBHelper.BOOK_FIELD_ISBN10));
 		String isbn13 = cursor.getString(cursor.getColumnIndex(DBHelper.BOOK_FIELD_ISBN13));
-		
+
 		// check if we got an isbn10 number from query and file exists
-		if(isbn10 != null && TNManager.getThumbnail(isbn10).exists()){
+		if (isbn10 != null && TNManager.getThumbnail(isbn10).exists()) {
 			Log.i(TAG, "Set cover image path (ISBN10)");
 			cover.setImageURI(Uri.parse(TNManager.getThumbnail(isbn10).getAbsolutePath()));
-		}
-		// check if we got an isbn13 number from query and file exists
-		else if(isbn13 != null && TNManager.getThumbnail(isbn13).exists()){
+		} else if (isbn13 != null && TNManager.getThumbnail(isbn13).exists()) {
+			// check if we got an isbn13 number from query and file exists
 			Log.i(TAG, "Set cover image path (ISBN13)");
 			cover.setImageURI(Uri.parse(TNManager.getThumbnail(isbn13).getAbsolutePath()));
 		}

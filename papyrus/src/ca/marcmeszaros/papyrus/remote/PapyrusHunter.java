@@ -15,10 +15,6 @@
  */
 package ca.marcmeszaros.papyrus.remote;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 import ca.marcmeszaros.papyrus.tools.Manifest;
 import ca.marcmeszaros.papyrus.tools.TNManager;
@@ -43,17 +39,21 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class PapyrusHunter extends Thread {
-	
+
 	private static final String TAG = "PapyrusHunter";
-	
+
 	// class variables
 	private Context context;
 	private int libraryID;
 	private int quantity;
 	private Handler messageHandler;
 	private String bar_code;
-		
+
 	public PapyrusHunter(Context applicationContext, Handler messageHandler, String bar_code, int libraryID, int quantity) {
 		this.context = applicationContext;
 		this.messageHandler = messageHandler;
@@ -61,20 +61,20 @@ public class PapyrusHunter extends Thread {
 		this.libraryID = libraryID;
 		this.quantity = quantity;
 	}
-		
+
 	@Override
 	public void run() {
-		
+
 		Message msg = new Message();
-		
+
 		try {
-			
+
 			// create the JsonFactory and the booksrequest builder
 			JsonFactory jsonFactory = new JacksonFactory();
 			Books.Builder booksBuilder = Books.builder(new NetHttpTransport(), jsonFactory);
-			
+
 			// set some properties on the builder
-			String applicationName = "Papyrus/"+Manifest.getVersionName(context);
+			String applicationName = "Papyrus/" + Manifest.getVersionName(context);
 			booksBuilder.setApplicationName(applicationName);
 			booksBuilder.setJsonHttpRequestInitializer(new JsonHttpRequestInitializer() {
 				@Override
@@ -83,73 +83,74 @@ public class PapyrusHunter extends Thread {
 		            //booksRequest.setKey(ClientCredentials.KEY);
 				}
 			});
-			
+
 			// get the final builder
 			final Books books = booksBuilder.build();
-			
+
 			// prepare the query
-			List volumesList = books.volumes().list("isbn:"+bar_code);
-			
+			List volumesList = books.volumes().list("isbn:" + bar_code);
+
 		    // execute the query.
 		    Volumes volumes = volumesList.execute();
-		
+
 			// parse some results... if we have some of course...
-			if(volumes.getTotalItems() > 0 && volumes.getItems() != null) {
+			if (volumes.getTotalItems() > 0 && volumes.getItems() != null) {
 				for (Volume volume : volumes.getItems()) {
 					Log.i("PapyrusHunter", "Got book: " + volume.getVolumeInfo().getTitle());
 				}
-			
+
 				// get the first entry
 				Volume volume = volumes.getItems().get(0);
 				VolumeVolumeInfo volInfo = volume.getVolumeInfo();
 				java.util.List<VolumeVolumeInfoIndustryIdentifiers> volIdents = volInfo.getIndustryIdentifiers();
-				
+
 				// get the isbn numbers
 				String isbn10 = "";
 				String isbn13 = "";
 				// iterate through the identifiers
 				for (VolumeVolumeInfoIndustryIdentifiers identifier : volIdents) {
-					if(identifier.getType().equals("ISBN_10")) {
+					if (identifier.getType().equals("ISBN_10")) {
 						isbn10 = identifier.getIdentifier();
-					} else if(identifier.getType().equals("ISBN_13")) {
+					} else if (identifier.getType().equals("ISBN_13")) {
 						isbn13 = identifier.getIdentifier();
 					}
 				}
-				Log.d(TAG, "isbn10: "+isbn10);
-				Log.d(TAG, "isbn13: "+isbn13);
-				
+				Log.d(TAG, "isbn10: " + isbn10);
+				Log.d(TAG, "isbn13: " + isbn13);
+
 				// get the title
 				String title = volInfo.getTitle();
-				
+
 				// get the authors
 				String authors = "";
-				for(String author : volInfo.getAuthors()) {
-					authors += author+", ";
+				for (String author : volInfo.getAuthors()) {
+					authors += author + ", ";
 				}
 				// fix the last ', '
-				if(authors.length() > 0) {
-					authors = authors.substring(0, authors.length()-2);
+				if (authors.length() > 0) {
+					authors = authors.substring(0, authors.length() - 2);
 				}
-				
+
 				// get other data
 				String publishers = volInfo.getPublisher();
 				String date = volInfo.getPublishedDate();
-				
+
 				// the thumbnail url
 				String rawThumbnailUrl = null;
-				if(volInfo.getImageLinks() != null)
+				if (volInfo.getImageLinks() != null) {
 					rawThumbnailUrl = volInfo.getImageLinks().getSmallThumbnail();
+				}
 				URL thumbnail = null;
 				if (rawThumbnailUrl != null) {
-					Log.d(TAG, "thumbnail url: "+rawThumbnailUrl);
+					Log.d(TAG, "thumbnail url: " + rawThumbnailUrl);
 					thumbnail = new URL(rawThumbnailUrl);
 				}
-				
+
 				Log.i(TAG, "Start saving book");
 				// get the local SQL db connection
 				DBHelper helper = new DBHelper(context);
 				SQLiteDatabase db = helper.getWritableDatabase();
-				
+
 				// create the query
 				ContentValues values = new ContentValues();
 				values.put(DBHelper.BOOK_FIELD_TITLE, title);
@@ -160,44 +161,39 @@ public class PapyrusHunter extends Thread {
 				values.put(DBHelper.BOOK_FIELD_PUBLICATION_DATE, date);
 				values.put(DBHelper.BOOK_FIELD_LIBRARY_ID, libraryID);
 				values.put(DBHelper.BOOK_FIELD_QUANTITY, quantity);
-				
+
 				// insert the book
 				db.insert(DBHelper.BOOK_TABLE_NAME, "", values);
 				db.close();
 				Log.d(TAG, "Saving book complete");
-				
+
 				// get the thumbnail and save it
 				// check if we got an isbn10 number from query and file exists
-				if(isbn10 != "" && thumbnail != null) {
+				if (isbn10 != "" && thumbnail != null) {
 					TNManager.saveThumbnail(thumbnail, isbn10);
 					Log.d(TAG, "Got thumbnail");
-				}
-				// check if we got an isbn13 number from query and file exists
-				else if(isbn13 != "" && thumbnail != null) {
+				} else if (isbn13 != "" && thumbnail != null) {
+					// check if we got an isbn13 number from query and file exists
 					TNManager.saveThumbnail(thumbnail, isbn13);
 					Log.d(TAG, "Got thumbnail");
 				}
-				
+
 				// send message that we saved the book
 				msg.what = -1;
 				msg.obj = title;
 				messageHandler.sendMessage(msg);
-			
+
 			} else {
 				msg.what = 1; // no book info
 				messageHandler.sendMessage(msg); // send message to handler
 			}
-			
-		}
-		
-		catch (MalformedURLException e) {
+
+		} catch (MalformedURLException e) {
 			messageHandler.sendEmptyMessage(0);
 			Log.e(TAG, "Malformed URL Exception.", e);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			messageHandler.sendEmptyMessage(0);
 			Log.e(TAG, "Couldn't connect to the server.", e);
 		}
-		
 	}
 }

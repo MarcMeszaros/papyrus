@@ -35,13 +35,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 //imports for getting contact information
-import android.provider.ContactsContract;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.ContactsContract;
 
 import java.util.Calendar;
 
@@ -54,9 +54,12 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 
 	private long dDate;
 	private Button dueDate;
-	private final String[] MONTH_ENUM = { "January", "February", "March",
-			"April", "May", "June", "July", "August", "September", "October",
-			"November", "December" };
+	private final String[] MONTH_ENUM = {
+			"January", "February", "March",
+			"April", "May", "June",
+			"July", "August", "September",
+			"October", "November", "December"
+	};
 
 	static final int DATE_DIALOG_ID = 0;
 
@@ -75,7 +78,7 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 		Book book = bundle.getParcelable("book");
 		loan = bundle.getParcelable("loan");
 		String name = "";
-		
+
 		// retrieve contact information
 		ContentResolver cr = getContentResolver();
 		Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
@@ -129,14 +132,10 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 		/*
 		 * thumbnail image
 		 */
-		if (book.getISBN10() != null
-				&& TNManager.getThumbnail(book.getISBN10()).exists()) {
-			cover.setImageURI(Uri.parse(TNManager
-					.getThumbnail(book.getISBN10()).getAbsolutePath()));
-		} else if (book.getISBN13() != null
-				&& TNManager.getThumbnail(book.getISBN13()).exists()) {
-			cover.setImageURI(Uri.parse(TNManager
-					.getThumbnail(book.getISBN13()).getAbsolutePath()));
+		if (book.getISBN10() != null && TNManager.getThumbnail(book.getISBN10()).exists()) {
+			cover.setImageURI(Uri.parse(TNManager.getThumbnail(book.getISBN10()).getAbsolutePath()));
+		} else if (book.getISBN13() != null && TNManager.getThumbnail(book.getISBN13()).exists()) {
+			cover.setImageURI(Uri.parse(TNManager.getThumbnail(book.getISBN13()).getAbsolutePath()));
 		}
 	}
 
@@ -144,8 +143,7 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 		if (v.getId() == R.id.LoanDetails_button) {
 
 			// append the contact id to the end of the contact CONTENT_URI
-			Uri uri = ContentUris.withAppendedId(
-					ContactsContract.Contacts.CONTENT_URI, loan.getContactID());
+			Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, loan.getContactID());
 
 			// create a new intent to view this 'content'
 			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -169,15 +167,13 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case DATE_DIALOG_ID:
-			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth,
-					mDay);
+			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);
 		}
 		return null;
 	}
 
 	@Override
-	public void onDateSet(DatePicker view, int year, int monthOfYear,
-			int dayOfMonth) {
+	public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 		// auto stub
 	}
 
@@ -186,8 +182,7 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 	 */
 	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
-		public void onDateSet(DatePicker view, int year, int monthOfYear,
-				int dayOfMonth) {
+		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 			mYear = year;
 			mMonth = monthOfYear;
 			mDay = dayOfMonth;
@@ -208,8 +203,7 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 				/*
 				 * Update Database
 				 */
-				SQLiteDatabase db = new DBHelper(getApplicationContext())
-						.getWritableDatabase();
+				SQLiteDatabase db = new DBHelper(getApplicationContext()).getWritableDatabase();
 
 				// create the update query
 				ContentValues values = new ContentValues();
