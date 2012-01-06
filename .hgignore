@@ -24,6 +24,7 @@ local\.properties # local android enviroment file
 \.settings\/.*
 \.classpath
 \.metadata
+\.checkstyle
 
 # ignore temp files from various editors
 \.DS_Store
