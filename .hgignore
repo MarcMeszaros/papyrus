@@ -2,6 +2,7 @@
 syntax: regexp
 
 # ignore automatically generated files
+^target/
 ^papyrus/bin/
 ^papyrus/gen/
 ^papyrus/build/

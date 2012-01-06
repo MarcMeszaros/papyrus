@@ -20,6 +20,15 @@
 		<url>https://bitbucket.org/marcmeszaros/papyrus/src</url>
 	</scm>
 
+	<!-- distribution management info -->
+	<distributionManagement>
+		<site>
+			<id>papyrus.marcmeszaros.ca</id>
+			<name>Papyrus Website</name>
+			<url>file://${project.build.directory}/deploy</url>
+		</site>
+	</distributionManagement>
+
 	<!-- Third-Party Maven Repositories -->
 	<repositories>
 		<repository>
@@ -221,7 +230,57 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+
+		<plugins>
+			<!-- the site plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<reportPlugins>
+						<!-- the project details plugin -->
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-project-info-reports-plugin</artifactId>
+							<configuration>
+								<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+								<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+							</configuration>
+						</plugin>
+						<!-- the checkstyle plugin -->
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-checkstyle-plugin</artifactId>
+							<version>2.8</version>
+							<configuration>
+								<configLocation>checkstyle.xml</configLocation>
+							</configuration>
+						</plugin>
+					</reportPlugins>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
+
+	<!-- reporting config -->
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.4</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>dependencies</report>
+							<report>scm</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
 
 	<!-- the various modules that make up the project -->
 	<modules>
