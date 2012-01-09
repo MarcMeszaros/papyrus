@@ -19,13 +19,13 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 public class AllTests extends TestSuite {
-	
+
 	public static Test suite() {
-		
+
 		TestSuite suite = new TestSuite();
 		suite.addTestSuite(BooksBrowserTest.class);
 		suite.addTestSuite(DownloadThumbnailsTest.class);
-					
+
 		return suite;
 	}
 

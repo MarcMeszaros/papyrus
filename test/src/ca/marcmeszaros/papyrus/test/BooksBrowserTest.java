@@ -16,6 +16,7 @@
 package ca.marcmeszaros.papyrus.test;
 
 import ca.marcmeszaros.papyrus.browser.BooksBrowser;
+
 import android.test.ActivityInstrumentationTestCase2;
 
 public class BooksBrowserTest extends ActivityInstrumentationTestCase2<BooksBrowser> {
@@ -34,7 +35,7 @@ public class BooksBrowserTest extends ActivityInstrumentationTestCase2<BooksBrow
     protected void tearDown() throws Exception {
     	super.tearDown();
     }
-   
+
     public void testPreconditions() {
         assertNotNull(mActivity);
     }

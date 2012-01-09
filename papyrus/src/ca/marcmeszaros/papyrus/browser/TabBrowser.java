@@ -16,9 +16,9 @@
 package ca.marcmeszaros.papyrus.browser;
 
 import ca.marcmeszaros.papyrus.R;
+
 import android.app.TabActivity;
 import android.content.Intent;
-//import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
 
@@ -27,13 +27,13 @@ public class TabBrowser extends TabActivity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_tab_browser);
-	    
+
 	    // get the extras
 	    Bundle bundle = getIntent().getExtras();
 	    // if the tab browser was started from a notification, set the
 	    // default tab to the one specified by the intent
 	    int tab = (bundle == null) ? 0 : bundle.getInt("tab", 0);
-	    
+
 	    //Resources res = getResources(); // Resource object to get Drawables
 	    TabHost tabHost = getTabHost();  // The activity TabHost
 	    TabHost.TabSpec spec;  // Resusable TabSpec for each tab
@@ -57,5 +57,4 @@ public class TabBrowser extends TabActivity {
 
 	    tabHost.setCurrentTab(tab);
 	}
-	
 }

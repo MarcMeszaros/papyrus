@@ -15,12 +15,12 @@
  */
 package ca.marcmeszaros.papyrus.tools;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
+import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
+import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -29,12 +29,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Environment;
-import android.util.Log;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class TNManager {
 
@@ -42,7 +42,7 @@ public class TNManager {
 
 	/**
 	 * Downloads and saves the thumbnail of a book to the SD card.
-	 * 
+	 *
 	 * @param thumbnailURL the URL to the thumbnail
 	 * @param isbn the ISBN number of the book
 	 * @return {@code true} on success or {@code false} on failure
@@ -96,7 +96,7 @@ public class TNManager {
 
 	/**
 	 * Return a File handler to the book thumbnail.
-	 * 
+	 *
 	 * @param isbn the ISBN number to the book to get
 	 * @return a {@code File} handle to the thumbnail image
 	 */
@@ -106,7 +106,7 @@ public class TNManager {
 
 	/**
 	 * Delete a book thumbnail using it's ISBN number.
-	 * 
+	 *
 	 * @param isbn the ISBN number to delete
 	 * @return {@code true} on operation success or {@code false} on failure
 	 */

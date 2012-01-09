@@ -15,9 +15,7 @@
  */
 package ca.marcmeszaros.papyrus.test;
 
-import java.net.URL;
-import java.util.LinkedList;
-import java.util.concurrent.ExecutionException;
+import ca.marcmeszaros.papyrus.remote.DownloadThumbnails;
 
 import android.content.Context;
 import android.content.Intent;
@@ -28,28 +26,31 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.test.ActivityUnitTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
-import ca.marcmeszaros.papyrus.remote.DownloadThumbnails;
+
+import java.net.URL;
+import java.util.LinkedList;
+import java.util.concurrent.ExecutionException;
 
 public class DownloadThumbnailsTest extends ActivityUnitTestCase<MockActivity> {
 
 	private DownloadThumbnails download;
 	private URL testUrl;
 	private Intent startIntent;
-	
+
 	public DownloadThumbnailsTest() {
 		super(MockActivity.class);
 	}
-	
+
     @Override
     protected void setUp() throws Exception {
     	super.setUp();
     	download = new DownloadThumbnails();
     	testUrl = new URL("http://developer.android.com/assets/images/bg_logo.png");
-    	
+
     	// only start the intent in each test
     	startIntent = new Intent(Intent.ACTION_MAIN);
     }
-    
+
     /**
      * Used to test the network connection inside tests.
      */
@@ -61,7 +62,7 @@ public class DownloadThumbnailsTest extends ActivityUnitTestCase<MockActivity> {
     	NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
     	assertTrue(activeNetworkInfo.getState() == NetworkInfo.State.CONNECTED);
 	}
-    
+
     /**
      * The name 'test preconditions' is a convention to signal that if this
      * test doesn't pass, the test case was not set up properly and it might
@@ -72,16 +73,16 @@ public class DownloadThumbnailsTest extends ActivityUnitTestCase<MockActivity> {
     public void testPreconditions() {
     	// start the activity
     	startActivity(startIntent, null, null);
-    	
+
     	// check some stuff isn't null
     	assertNotNull(download);
     	assertNotNull(testUrl);
     	assertNotNull(getActivity());
-    	
+
     	// make sure we have a network connection
     	checkNetworkConnection();
     }
-    
+
     /**
      * Make sure a download can start.
      */
@@ -89,23 +90,23 @@ public class DownloadThumbnailsTest extends ActivityUnitTestCase<MockActivity> {
     public void testStartDownload() {
     	// start the activity
     	startActivity(startIntent, null, null);
-    	
+
     	// make sure we have a network connection
     	checkNetworkConnection();
-    	
+
     	// make sure it's pending (not started)
     	assertEquals(AsyncTask.Status.PENDING, download.getStatus());
-    	
+
     	// use the background header logo in the Android Documentation as a sample image
     	download.execute(testUrl);
-    	
+
     	// make sure it started
     	assertEquals(AsyncTask.Status.RUNNING, download.getStatus());
     }
-    
+
     /**
      * See if the downloaded image is the same as the one saved locally.
-     * 
+     *
      * @throws InterruptedException
      * @throws ExecutionException
      */
@@ -113,29 +114,29 @@ public class DownloadThumbnailsTest extends ActivityUnitTestCase<MockActivity> {
     public void testDownloadImage() throws InterruptedException, ExecutionException {
     	// start the activity
     	MockActivity activity = startActivity(startIntent, null, null);
-    	
+
     	// make sure we have a network connection
     	checkNetworkConnection();
-    	
+
     	// use the background header logo in the Android Documentation as a sample image
     	download.execute(testUrl);
     	LinkedList<Bitmap> images = download.get();
-    	
+
     	// make sure there are image
     	assertNotNull(images);
-    	
-    	// need a "real" activity to get a context (to get resources)	
+
+    	// need a "real" activity to get a context (to get resources)
     	// load up an image from the app
     	Bitmap bm = BitmapFactory.decodeResource(activity.getResources(), R.drawable.bg_logo);
-   	
+
     	// check images are the same
     	// TODO this test fails; figure out why (theory: the resource image and the
-    	// one downloaded are not binary equivalent - last modified date etc.) 
+    	// one downloaded are not binary equivalent - last modified date etc.)
     	//assertEquals(bm, images.getFirst());
 
     	assertEquals(bm, bm);
     	assertEquals(images.getFirst(), images.getFirst());
-    
+
     }
-    
+
 }

@@ -15,9 +15,9 @@
  */
 package ca.marcmeszaros.papyrus;
 
-
 import ca.marcmeszaros.papyrus.browser.TabBrowser;
 import ca.marcmeszaros.papyrus.database.Loan;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -32,21 +32,21 @@ import android.provider.ContactsContract;
 public class AlarmReceiver extends BroadcastReceiver {
 
 	private static int NOTIFICATION_ID = 1;
-	
+
 	@Override
     public void onReceive(Context context, Intent intent) {
 		NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-	
+
 		Notification notification = new Notification(R.drawable.icon, context.getString(R.string.Notification_teaser), System.currentTimeMillis());
-		
+
 		Intent notificationIntent = new Intent(context, TabBrowser.class);
 		notificationIntent.putExtra("tab", 1);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, notificationIntent, 0);
-		
+
 		Bundle extras = intent.getExtras();
 		Loan loan = extras.getParcelable("loan");
 		String name = "";
-		
+
 		// retrieve contact information
 		ContentResolver cr = context.getContentResolver();
 		Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
@@ -60,14 +60,14 @@ public class AlarmReceiver extends BroadcastReceiver {
 				}
 			}
 		}
-		
+
 		//here we get the title and description of our Notification
 		notification.setLatestEventInfo(context, context.getString(R.string.Notification_title), context.getString(R.string.Notification_content, name), pendingIntent);
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		//notification.flags = Notification.FLAG_INSISTENT;
 		//notification.defaults |= Notification.DEFAULT_SOUND;
-		
+
 		nm.notify(NOTIFICATION_ID++, notification);
 	}
- 
+
 }
