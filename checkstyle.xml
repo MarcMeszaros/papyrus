@@ -8,6 +8,11 @@ what the following rules do, please see the checkstyle configuration
 page at http://checkstyle.sourceforge.net/config.html -->
 <module name="Checker">
 
+  <!-- Include the supression file -->
+  <module name="SuppressionFilter">
+    <property name="file" value="checkstyle-suppressions.xml"/>
+  </module>
+
   <!-- REGULAR EXPRESSIONS -->
   <module name="RegexpSingleline">
     <!-- detect trailing whitespace characters -->
@@ -144,6 +149,9 @@ page at http://checkstyle.sourceforge.net/config.html -->
       -->
       <property name="severity" value="warning"/>
     </module>
+    
+    <!-- JAVADOC CHECKS -->
+    <module name="JavadocMethod"/>
 
   </module>
 </module>

@@ -196,7 +196,15 @@
 					<version>2.8</version>
 					<configuration>
 						<configLocation>checkstyle.xml</configLocation>
+						<consoleOutput>true</consoleOutput>
 					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
