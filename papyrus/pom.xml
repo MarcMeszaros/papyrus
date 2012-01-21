@@ -101,6 +101,9 @@
 							<proguard>
 								<skip>false</skip>
 							</proguard>
+							<zipalignInputApk>${project.build.directory}/Papyrus-${project.version}.apk</zipalignInputApk>
+							<zipalignOutputApk>${project.build.directory}/Papyrus-${project.version}-final.apk</zipalignOutputApk>
+							<zipalignVerbose>true</zipalignVerbose>
 						</configuration>
 					</plugin>
 
