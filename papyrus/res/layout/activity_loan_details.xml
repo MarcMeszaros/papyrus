@@ -14,49 +14,54 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<RelativeLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
 
-	<ImageView android:id="@+id/LoanDetails_book_cover"
-			   android:layout_width="wrap_content" 
-			   android:layout_height="wrap_content" 
-			   android:layout_alignParentTop="true"
-			   android:padding="5dip"
-			   android:src="@drawable/icon">
-	</ImageView>
-	
-	<TextView android:id="@+id/LoanDetails_book_title"
-			  android:layout_width="fill_parent"
-			  android:layout_height="wrap_content"			   
-			  android:layout_alignParentTop="true" 
-			  android:layout_alignParentRight="true"
-			  android:layout_toRightOf="@id/LoanDetails_book_cover" 
-			  android:textStyle="bold">
-	</TextView>
-	
-	<TextView android:id="@+id/LoanDetails_book_author"
-			  android:layout_width="fill_parent"
-			  android:layout_height="wrap_content"
-			  android:layout_alignParentRight="true"
-			  android:layout_below="@id/LoanDetails_book_title" 
-			  android:layout_toRightOf="@id/LoanDetails_book_cover"
-			  android:singleLine="true"
-			  android:ellipsize="marquee">
-	</TextView>
-	
-	<TextView android:id="@+id/LoanDetails_lendDate_label"
-			  android:layout_width="wrap_content"
-			  android:layout_height="wrap_content"
-			  android:layout_below="@id/LoanDetails_book_cover"
-			  android:singleLine="true"
-			  android:ellipsize="marquee"
-			  android:text="@string/LoanDetails_lendDate_label"
-			  android:paddingTop="25sp"
-			  android:paddingRight="5sp">
-	</TextView>
-	<!-- 
+    <ImageView
+        android:id="@+id/LoanDetails_book_cover"
+        android:layout_width="60dip"
+        android:layout_height="60dip"
+        android:layout_alignParentTop="true"
+        android:padding="5dip"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon" >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/LoanDetails_book_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/LoanDetails_book_cover"
+        android:textColor="#FFFFFFFF"
+        android:textStyle="bold" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/LoanDetails_book_author"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/LoanDetails_book_title"
+        android:layout_toRightOf="@id/LoanDetails_book_cover"
+        android:ellipsize="marquee"
+        android:singleLine="true" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/LoanDetails_lendDate_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/LoanDetails_book_cover"
+        android:ellipsize="marquee"
+        android:paddingRight="5sp"
+        android:paddingTop="25sp"
+        android:singleLine="true"
+        android:text="@string/LoanDetails_lendDate_label" >
+    </TextView>
+    <!--
 	<TextView android:id="@+id/LoanDetails_lendDate"
 			  android:layout_width="fill_parent"
 			  android:layout_height="wrap_content"
@@ -67,27 +72,28 @@
 			  android:ellipsize="marquee"
 			  android:text="unknown">
 	</TextView>
-	-->
-	
-	<Button android:id="@+id/LoanDetails_lendDate_button" 
-			android:layout_height="wrap_content" 
-			android:layout_width="fill_parent"
-			android:layout_below="@+id/LoanDetails_lendDate_label"
-			android:enabled="false"
-			android:text="unknown">
-	</Button>
-	
+    -->
 
-	<TextView android:id="@+id/LoanDetails_dueDate_label"
-			  android:layout_width="wrap_content"
-			  android:layout_height="wrap_content"
-			  android:layout_below="@id/LoanDetails_lendDate_button"
-			  android:singleLine="true"
-			  android:ellipsize="marquee"
-			  android:text="@string/LoanDetails_dueDate_label"
-			  android:paddingRight="5sp">
-	</TextView>
-	<!--  
+    <Button
+        android:id="@+id/LoanDetails_lendDate_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/LoanDetails_lendDate_label"
+        android:enabled="false"
+        android:text="unknown" >
+    </Button>
+
+    <TextView
+        android:id="@+id/LoanDetails_dueDate_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/LoanDetails_lendDate_button"
+        android:ellipsize="marquee"
+        android:paddingRight="5sp"
+        android:singleLine="true"
+        android:text="@string/LoanDetails_dueDate_label" >
+    </TextView>
+    <!--
 	<TextView android:id="@+id/LoanDetails_dueDate"
 			  android:layout_width="fill_parent"
 			  android:layout_height="wrap_content"
@@ -97,25 +103,28 @@
 			  android:ellipsize="marquee"
 			  android:text="unknown">
 	</TextView>
-	-->
-	<Button android:id="@+id/LoanDetails_dueDate_button" 
-			android:layout_height="wrap_content" 
-			android:layout_width="fill_parent"
-			android:layout_below="@+id/LoanDetails_dueDate_label"
-			android:text="unknown">
-	</Button>
-	
-	<TextView android:id="@+id/LoanDetails_contact_label"
-			  android:layout_width="wrap_content"
-			  android:layout_height="wrap_content"
-			  android:layout_below="@id/LoanDetails_dueDate_button"
-			  android:singleLine="true"
-			  android:ellipsize="marquee"
-			  android:paddingRight="5sp"
-			  android:text="@string/LoanDetails_contact_label">
-	</TextView>
-	
-<!--
+    -->
+
+    <Button
+        android:id="@+id/LoanDetails_dueDate_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/LoanDetails_dueDate_label"
+        android:text="unknown" >
+    </Button>
+
+    <TextView
+        android:id="@+id/LoanDetails_contact_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/LoanDetails_dueDate_button"
+        android:ellipsize="marquee"
+        android:paddingRight="5sp"
+        android:singleLine="true"
+        android:text="@string/LoanDetails_contact_label" >
+    </TextView>
+
+    <!--
 	<TextView android:id="@+id/LoanDetails_contact"
 			  android:layout_width="fill_parent"
 			  android:layout_height="wrap_content"
@@ -126,13 +135,14 @@
 			  android:paddingTop="25sp"
 			  android:text="unknown">
 	</TextView>
--->
+    -->
 
-	<Button android:id="@+id/LoanDetails_button" 
-			android:layout_height="wrap_content" 
-			android:layout_width="fill_parent"
-			android:layout_below="@id/LoanDetails_contact_label"
-			android:text="unknown">
-	</Button>
-	
+    <Button
+        android:id="@+id/LoanDetails_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/LoanDetails_contact_label"
+        android:text="unknown" >
+    </Button>
+
 </RelativeLayout>
