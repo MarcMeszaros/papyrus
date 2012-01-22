@@ -46,6 +46,15 @@
 			<version>${project.version}</version>
 			<type>apk</type>
 		</dependency>
+		
+		<!-- required: compile time dependency, so that we can read from the R.java and other -->
+		<dependency>
+			<groupId>ca.marcmeszaros.papyrus</groupId>
+			<artifactId>papyrus</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+            <type>jar</type>
+		</dependency>
 
 	</dependencies>
 
