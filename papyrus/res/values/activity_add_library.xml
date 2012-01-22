@@ -20,4 +20,5 @@
 	<string name="AddLibrary_field_name_hint">Home</string>
 	<string name="AddLibrary_button_addLibrary_text">Add Library</string>
 	<string name="AddLibrary_toast_libraryAdded">Library added.</string>
+	<string name="AddLibrary_toast_libraryNameMissing">Library name is missing.</string>
 </resources>

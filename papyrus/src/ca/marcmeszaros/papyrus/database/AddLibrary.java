@@ -46,22 +46,32 @@ public class AddLibrary extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.AddLibrary_button_addLibrary:
-				addLibrary();
+			if (addLibrary()) {
 				Toast.makeText(this, getString(R.string.AddLibrary_toast_libraryAdded), Toast.LENGTH_SHORT).show();
 				finish();
+			} else {
+				Toast.makeText(this, getString(R.string.AddLibrary_toast_libraryNameMissing), Toast.LENGTH_SHORT)
+						.show();
+			}
 			break;
 		}
 	}
 
 	/**
 	 * Adds the library to the database.
+	 * 
+	 * @return return true
 	 */
-	private void addLibrary() {
+	private boolean addLibrary() {
 
 		boolean isFirstLibrary = false;
 
 		// get the text field that has the name
 		EditText libraryName = (EditText) findViewById(R.id.AddLibrary_field_name);
+
+		if (libraryName.getText().toString().isEmpty()) {
+			return false;
+		}
 
 		// get the connection to the database
 		SQLiteDatabase db = new DBHelper(getApplicationContext()).getWritableDatabase();
@@ -86,9 +96,10 @@ public class AddLibrary extends Activity implements OnClickListener {
 			result = db.query(DBHelper.LIBRARY_TABLE_NAME, null, null, null, null, null, null, null);
 			result.moveToFirst();
 
-			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()); 
+			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 			SharedPreferences.Editor prefEditor = pref.edit();
-			prefEditor.putString(Settings.KEY_DEFAULT_LIBRARY, Long.toString(result.getLong(result.getColumnIndex(DBHelper.LIBRARY_FIELD_ID))));
+			prefEditor.putString(Settings.KEY_DEFAULT_LIBRARY,
+					Long.toString(result.getLong(result.getColumnIndex(DBHelper.LIBRARY_FIELD_ID))));
 			prefEditor.commit();
 		}
 
@@ -97,6 +108,8 @@ public class AddLibrary extends Activity implements OnClickListener {
 
 		// close the connection
 		db.close();
+
+		return true;
 
 	}
 
