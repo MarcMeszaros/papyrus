@@ -18,19 +18,19 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>android</artifactId>
-			<scope>provided</scope>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-books</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>com.google.api-client</groupId>
 			<artifactId>google-api-client</artifactId>
 		</dependency>
-
+		
 		<dependency>
-			<groupId>com.google.apis</groupId>
-			<artifactId>google-api-services-books</artifactId>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>
