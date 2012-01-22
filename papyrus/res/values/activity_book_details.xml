@@ -16,6 +16,7 @@
 -->
 <resources>
 	<string name="BookDetails_title">Book Details</string>
+	<string name="BookDetails_book_thumbnail_contentDescription">Cover art thumbnail.</string>
 	<string name="BookDetails_book_publisher_label">Publisher:</string>
 	<string name="BookDetails_book_isbn10_label">ISBN10:</string>
 	<string name="BookDetails_book_isbn13_label">ISBN13:</string>

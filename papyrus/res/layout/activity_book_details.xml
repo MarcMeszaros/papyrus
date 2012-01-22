@@ -27,6 +27,7 @@
             android:layout_width="60dip"
             android:layout_height="60dip"
             android:layout_alignParentTop="true"
+            android:contentDescription="@string/BookDetails_book_thumbnail_contentDescription"
             android:padding="5dip"
             android:scaleType="fitCenter"
             android:src="@drawable/icon" />

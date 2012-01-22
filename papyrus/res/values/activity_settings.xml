@@ -23,9 +23,5 @@
 	<string name="Settings_Library_defaultLibrary_title">Default Library</string>
 	<string name="Settings_Library_defaultLibrary_summary">The default library books are stored in</string>
 
-	<string name="Settings_Book">Books</string>
-	<string name="Settings_Book_defaultScan_title">Scan ISBN</string>
-	<string name="Settings_Book_defaultScan_summary">By default start bar code scanner when adding book</string>
-
 	<string name="Settings_versionName_title">Version</string>
 </resources>

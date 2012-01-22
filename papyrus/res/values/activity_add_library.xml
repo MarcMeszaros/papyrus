@@ -16,10 +16,8 @@
 -->
 <resources>
 	<string name="AddLibrary_title">Add Library</string>
-	
 	<string name="AddLibrary_field_name_label">Library Name</string>
-
+	<string name="AddLibrary_field_name_hint">Home</string>
 	<string name="AddLibrary_button_addLibrary_text">Add Library</string>
-	
 	<string name="AddLibrary_toast_libraryAdded">Library added.</string>
 </resources>
