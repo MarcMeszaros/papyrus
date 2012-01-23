@@ -33,6 +33,11 @@
 			<artifactId>google-api-services-books</artifactId>
 		</dependency>
 
+		<dependency>
+  			<groupId>android.support</groupId>
+  			<artifactId>compatibility-v4</artifactId>
+  		</dependency>
+
 	</dependencies>
 
 	<!-- override some defaults with module specific parameters -->

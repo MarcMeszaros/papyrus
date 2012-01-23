@@ -59,6 +59,13 @@
 				<version>2.2.1</version>
 			</dependency>
 
+			<!-- compatibility package -->
+			<dependency>
+  				<groupId>android.support</groupId>
+  				<artifactId>compatibility-v4</artifactId>
+ 				<version>r6</version>
+			</dependency>
+
 			<!-- Google API Java Client -->
 			<dependency>
 				<groupId>com.google.api-client</groupId>
