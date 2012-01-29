@@ -79,10 +79,8 @@ public class DBHelper extends SQLiteOpenHelper {
 		createLoanTable(db);
 	}
 
-	/*
-	 * method: createBookTable
-	 *
-	 * description: Creates the Book table in the database
+	/**
+	 * Creates the book table in the database.
 	 */
 	private void createBookTable(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE " + BOOK_TABLE_NAME + " ("
@@ -98,29 +96,25 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ BOOK_FIELD_PUBLISHER + " TEXT(255),"
 				+ BOOK_FIELD_PAGES + " INTEGER(5),"
 				+ BOOK_FIELD_QUANTITY + " INTEGER(2),"
-				+ "FOREIGN KEY(" + BOOK_FIELD_LIBRARY_ID + ") REFERENCES libaries(" + LIBRARY_FIELD_ID + ")"
+				+ "FOREIGN KEY(" + BOOK_FIELD_LIBRARY_ID + ") REFERENCES " + LIBRARY_TABLE_NAME + "(" + LIBRARY_FIELD_ID + ")"
 				+ ");");
 	}
 
-	/*
-	 * method: createLibraryTable
-	 *
-	 * description: Creates the Library table in the database
+	/**
+	 * Creates the library table in the database.
 	 */
 	private void createLibraryTable(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE " + LIBRARY_TABLE_NAME + " ("
 				+ LIBRARY_FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-				+ LIBRARY_FIELD_ADDRESS + " TEXT(255),"
-				+ LIBRARY_FIELD_GEO_LONGITUDE + " REAL(15),"
-				+ LIBRARY_FIELD_GEO_LATITUDE + " REAL(15),"
+				+ LIBRARY_FIELD_ADDRESS + " TEXT(255)," // not used yet
+				+ LIBRARY_FIELD_GEO_LONGITUDE + " REAL(15)," // not used yet
+				+ LIBRARY_FIELD_GEO_LATITUDE + " REAL(15)," // not used yet
 				+ LIBRARY_FIELD_NAME + " TEXT(255)"
 				+ ");");
 	}
 
-	/*
-	 * method: createLoanTable
-	 *
-	 * description: Creates the Loan table in the database
+	/**
+	 * Creates the Loan table in the database
 	 */
 	private void createLoanTable(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE " + LOAN_TABLE_NAME + " ("
@@ -129,7 +123,7 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ LOAN_FIELD_CONTACT_ID + " INTEGER,"
 				+ LOAN_FIELD_LEND_DATE + " INTEGER,"
 				+ LOAN_FIELD_DUE_DATE + " INTEGER,"
-				+ "FOREIGN KEY(" + LOAN_FIELD_BOOK_ID + ") REFERENCES books(" + BOOK_FIELD_ID + ")"
+				+ "FOREIGN KEY(" + LOAN_FIELD_BOOK_ID + ") REFERENCES " + BOOK_TABLE_NAME + "(" + BOOK_FIELD_ID + ")"
 				+ ");");
 	}
 
