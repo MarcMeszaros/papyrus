@@ -23,5 +23,6 @@
 	<string name="Settings_Library_defaultLibrary_title">Default Library</string>
 	<string name="Settings_Library_defaultLibrary_summary">The default library books are stored in</string>
 
+	<string name="Settings_Info">Application Information</string>
 	<string name="Settings_versionName_title">Version</string>
 </resources>

@@ -23,11 +23,16 @@
             android:persistent="true"
             android:summary="@string/Settings_Library_defaultLibrary_summary"
             android:title="@string/Settings_Library_defaultLibrary_title" />
+
     </PreferenceCategory>
 
-    <Preference
-        android:enabled="false"
-        android:key="versionName"
-        android:title="@string/Settings_versionName_title" />
+    <PreferenceCategory android:title="@string/Settings_Info" >
+
+        <Preference
+            android:enabled="false"
+            android:key="versionName"
+            android:title="@string/Settings_versionName_title" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>
