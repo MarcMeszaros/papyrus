@@ -44,7 +44,7 @@ public class BooksContentProvider extends ContentProvider {
 	public static final String FIELD_TITLE = DBHelper.BOOK_FIELD_TITLE;
 	public static final String FIELD_AUTHOR = DBHelper.BOOK_FIELD_AUTHOR;
 	public static final String FIELD_EDITION = DBHelper.BOOK_FIELD_EDITION;
-	public static final String PUBLICATION_DATE = DBHelper.BOOK_FIELD_PUBLICATION_DATE;
+	public static final String FIELD_PUBLICATION_DATE = DBHelper.BOOK_FIELD_PUBLICATION_DATE;
 	public static final String FIELD_PUBLISHER = DBHelper.BOOK_FIELD_PUBLISHER;
 	public static final String FIELD_PAGES = DBHelper.BOOK_FIELD_PAGES;
 	public static final String FIELD_QUANTITY = DBHelper.BOOK_FIELD_QUANTITY;
