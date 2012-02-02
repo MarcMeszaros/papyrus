@@ -16,6 +16,7 @@
 package ca.marcmeszaros.papyrus.remote;
 
 import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.provider.BooksContentProvider;
 import ca.marcmeszaros.papyrus.tools.Manifest;
 import ca.marcmeszaros.papyrus.tools.TNManager;
 
@@ -147,9 +148,6 @@ public class PapyrusHunter extends Thread {
 				}
 
 				Log.i(TAG, "Start saving book");
-				// get the local SQL db connection
-				DBHelper helper = new DBHelper(context);
-				SQLiteDatabase db = helper.getWritableDatabase();
 
 				// create the query
 				ContentValues values = new ContentValues();
@@ -163,8 +161,7 @@ public class PapyrusHunter extends Thread {
 				values.put(DBHelper.BOOK_FIELD_QUANTITY, quantity);
 
 				// insert the book
-				db.insert(DBHelper.BOOK_TABLE_NAME, "", values);
-				db.close();
+				context.getContentResolver().insert(BooksContentProvider.CONTENT_URI, values);
 				Log.d(TAG, "Saving book complete");
 
 				// get the thumbnail and save it
