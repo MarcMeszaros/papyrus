@@ -26,6 +26,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -69,7 +70,12 @@ public class AddLibrary extends Activity implements OnClickListener {
 		// get the text field that has the name
 		EditText libraryName = (EditText) findViewById(R.id.AddLibrary_field_name);
 
-		if (libraryName.getText().toString().isEmpty()) {
+		// We need this because android 2.2 and earlier doesn't have java.lang.String.isEmpty()
+		// because pre Android 2.3 Android was built with JDK 1.5. Android 2.3+ is built with
+		// JDK 1.6 which include the String.isEmpty() method. Android has helper class with
+		// a similar function.
+		// TODO update this when the project is upgraded to Android 2.3+
+		if (TextUtils.isEmpty(libraryName.getText())) {
 			return false;
 		}
 
