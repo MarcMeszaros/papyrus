@@ -151,14 +151,14 @@ public class PapyrusHunter extends Thread {
 
 				// create the query
 				ContentValues values = new ContentValues();
-				values.put(DBHelper.BOOK_FIELD_TITLE, title);
-				values.put(DBHelper.BOOK_FIELD_AUTHOR, authors);
-				values.put(DBHelper.BOOK_FIELD_ISBN10, isbn10);
-				values.put(DBHelper.BOOK_FIELD_ISBN13, isbn13);
-				values.put(DBHelper.BOOK_FIELD_PUBLISHER, publishers);
-				values.put(DBHelper.BOOK_FIELD_PUBLICATION_DATE, date);
-				values.put(DBHelper.BOOK_FIELD_LIBRARY_ID, libraryID);
-				values.put(DBHelper.BOOK_FIELD_QUANTITY, quantity);
+				values.put(BooksContentProvider.FIELD_TITLE, title);
+				values.put(BooksContentProvider.FIELD_AUTHOR, authors);
+				values.put(BooksContentProvider.FIELD_ISBN10, isbn10);
+				values.put(BooksContentProvider.FIELD_ISBN13, isbn13);
+				values.put(BooksContentProvider.FIELD_PUBLISHER, publishers);
+				values.put(BooksContentProvider.FIELD_PUBLICATION_DATE, date);
+				values.put(BooksContentProvider.FIELD_LIBRARY_ID, libraryID);
+				values.put(BooksContentProvider.FIELD_QUANTITY, quantity);
 
 				// insert the book
 				context.getContentResolver().insert(BooksContentProvider.CONTENT_URI, values);
