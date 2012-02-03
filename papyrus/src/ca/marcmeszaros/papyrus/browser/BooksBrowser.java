@@ -23,6 +23,7 @@ import ca.marcmeszaros.papyrus.database.AddLibrary;
 import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.database.Loan;
 import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.provider.BooksContentProvider;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -31,6 +32,7 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.PendingIntent;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -85,7 +87,8 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 		SQLiteDatabase db = helper.getWritableDatabase();
 
 		// run a query on the DB and get a Cursor (aka result)
-		Cursor result = db.query(DBHelper.BOOK_TABLE_NAME, null, null, null, null, null, DBHelper.BOOK_FIELD_TITLE);
+		String sortOrder = BooksContentProvider.FIELD_TITLE;
+		Cursor result = getContentResolver().query(BooksContentProvider.CONTENT_URI, null, null, null, sortOrder);
 		startManagingCursor(result);
 
 		// create our custom adapter with our result and
@@ -119,22 +122,25 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 		// set the item id to a class variable
 		this.selectedBookID = id;
 
-		DBHelper helper = new DBHelper(getApplicationContext());
-		SQLiteDatabase db = helper.getReadableDatabase();
-
+		// create the query criteria
 		String[] columns = {
-				DBHelper.BOOK_FIELD_ISBN10, DBHelper.BOOK_FIELD_ISBN13, DBHelper.BOOK_FIELD_TITLE,
-				DBHelper.BOOK_FIELD_AUTHOR, DBHelper.BOOK_FIELD_PUBLISHER, DBHelper.BOOK_FIELD_QUANTITY,
-				DBHelper.BOOK_FIELD_ID, DBHelper.BOOK_FIELD_LIBRARY_ID
+				BooksContentProvider.FIELD_ISBN10,
+				BooksContentProvider.FIELD_ISBN13,
+				BooksContentProvider.FIELD_TITLE,
+				BooksContentProvider.FIELD_AUTHOR,
+				BooksContentProvider.FIELD_PUBLISHER,
+				BooksContentProvider.FIELD_QUANTITY,
+				BooksContentProvider.FIELD_ID,
+				BooksContentProvider.FIELD_LIBRARY_ID
 		};
+		Uri bookQuery = ContentUris.withAppendedId(BooksContentProvider.CONTENT_URI, id);
 
-		// delete the entry in the database
-		Cursor bookCursor = db.query(DBHelper.BOOK_TABLE_NAME, columns, DBHelper.BOOK_FIELD_ID + "=" + selectedBookID,
-				null, null, null, null);
+		// execute the query and store the result
+		Cursor bookCursor = getContentResolver().query(bookQuery, columns, null, null, null);
 		startManagingCursor(bookCursor);
 
+		// get the first result and build a 'Book' object
 		bookCursor.moveToFirst();
-
 		Book book = new Book(bookCursor.getString(0), bookCursor.getString(1), bookCursor.getString(2),
 				bookCursor.getString(3));
 		book.setPublisher(bookCursor.getString(4));
@@ -142,11 +148,11 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 		book.setBookID(bookCursor.getInt(6));
 		book.setLibraryID(bookCursor.getInt(7));
 
+		// create the intent for the Book Details activity and pass it the book
 		Intent intent = new Intent(this, BookDetails.class);
-
 		intent.putExtra("book", book);
-		db.close();
 
+		// start the activity
 		startActivity(intent);
 	}
 
@@ -184,21 +190,11 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 	@Override
 	public void onClick(DialogInterface dialog, int position) {
 		switch (position) {
-		// edit
-		// case 0:
-		// Toast.makeText(getApplicationContext(),
-		// "Feature not implemented yet.", Toast.LENGTH_SHORT).show();
-		// break;
-
 		// delete
 		case 0:
-			// create an instance of the db helper class
-			DBHelper helper = new DBHelper(getApplicationContext());
-			SQLiteDatabase db = helper.getWritableDatabase();
-
-			// delete the entry in the database
-			db.delete(DBHelper.BOOK_TABLE_NAME, DBHelper.BOOK_FIELD_ID + "=" + selectedBookID, null);
-			db.close();
+			// delete the data
+			Uri bookDelete = ContentUris.withAppendedId(BooksContentProvider.CONTENT_URI, selectedBookID);
+			getContentResolver().delete(bookDelete, null, null);
 
 			// requery the database
 			((BookAdapter) getListAdapter()).getCursor().requery();
@@ -287,17 +283,9 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long id) {
-		// create an instance of the db helper class
-		DBHelper helper = new DBHelper(getApplicationContext());
-		SQLiteDatabase db = helper.getReadableDatabase();
-
-		Log.i(TAG, "Item select ID: " + id);
-
-		String selection = DBHelper.BOOK_TABLE_NAME + "." + DBHelper.BOOK_FIELD_LIBRARY_ID + "=" + id;
-
 		// run a query on the DB and get a Cursor (aka result)
-		Cursor result = db
-				.query(DBHelper.BOOK_TABLE_NAME, null, selection, null, null, null, DBHelper.BOOK_FIELD_TITLE);
+		Uri bookQuery = ContentUris.withAppendedId(BooksContentProvider.CONTENT_URI, id);
+		Cursor result = getContentResolver().query(bookQuery, null, null, null, null);
 		startManagingCursor(result);
 
 		setListAdapter(new BookAdapter(this, result));
@@ -409,21 +397,20 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 		SQLiteDatabase db = helper.getReadableDatabase();
 
 		// Get the quantity of books stored
-		String tables = DBHelper.BOOK_TABLE_NAME;
-		String selection = DBHelper.BOOK_TABLE_NAME + "." + DBHelper.BOOK_FIELD_ID + " = " + selectedBookID;
-		String[] columns = {DBHelper.BOOK_FIELD_QUANTITY};
+		String[] projection = { BooksContentProvider.FIELD_QUANTITY };
 
 		// store result of query
-		Cursor result = db.query(tables, columns, selection, null, null, null, null);
+		Uri bookQuery = ContentUris.withAppendedId(BooksContentProvider.CONTENT_URI, selectedBookID);
+		Cursor result = getContentResolver().query(bookQuery, projection, null, null, null);
 		result.moveToFirst();
 		int qty = result.getShort(0);
 
-		tables = DBHelper.LOAN_TABLE_NAME;
-		selection = DBHelper.LOAN_TABLE_NAME + "." + DBHelper.LOAN_FIELD_BOOK_ID + " = " + selectedBookID;
-		columns[0] = DBHelper.LOAN_FIELD_ID;
+		String tables = DBHelper.LOAN_TABLE_NAME;
+		String selection = DBHelper.LOAN_TABLE_NAME + "." + DBHelper.LOAN_FIELD_BOOK_ID + " = " + selectedBookID;
+		projection[0] = DBHelper.LOAN_FIELD_ID;
 
 		// store result of query
-		result = db.query(tables, columns, selection, null, null, null, null);
+		result = db.query(tables, projection, selection, null, null, null, null);
 
 		// determine the number of books on loan
 		int onLoan = 0;
