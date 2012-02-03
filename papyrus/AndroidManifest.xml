@@ -78,9 +78,13 @@
             android:label="@string/AddLibrary_title" >
         </activity>
 
-       <provider
-            android:authorities="ca.marcmeszaros.papyrus.provider"
+        <provider
             android:name=".provider.BooksContentProvider"
+            android:authorities="ca.marcmeszaros.papyrus.provider"
+            android:exported="false" />
+        <provider
+            android:name=".provider.LoansContentProvider"
+            android:authorities="ca.marcmeszaros.papyrus.provider"
             android:exported="false" />
 
         <receiver android:name=".AlarmReceiver" />
