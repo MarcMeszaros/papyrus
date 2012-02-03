@@ -79,13 +79,12 @@ public class BooksContentProvider extends ContentProvider {
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-
 		// create an SQL builder object and set the table to books
 		SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-		builder.setTables(DBHelper.BOOK_TABLE_NAME);
+		builder.setTables(TABLE_NAME);
 		
 		// instantiate the objects
-		String order = DBHelper.BOOK_FIELD_TITLE;
+		String order = FIELD_TITLE;
 		Cursor result = null;
 		
 		// if there is a defined sort order user it, otherwise
@@ -122,7 +121,7 @@ public class BooksContentProvider extends ContentProvider {
 		switch (uriMatcher.match(uri)) {
 			case BOOKS:
 				// get the new id and close the db
-				long id = db.insert(DBHelper.BOOK_TABLE_NAME, null, values);
+				long id = db.insert(TABLE_NAME, null, values);
 				db.close();
 			
 				// build the result uri, notify of data change, and return
@@ -145,7 +144,7 @@ public class BooksContentProvider extends ContentProvider {
 			// delete all books
 			case BOOKS:
 				// the "1" is required to return the number of rows deleted
-				rowsAffected = db.delete(DBHelper.BOOK_TABLE_NAME, "1", null);
+				rowsAffected = db.delete(TABLE_NAME, "1", null);
 				getContext().getContentResolver().notifyChange(uri, null);
 				return rowsAffected;
 
@@ -153,11 +152,11 @@ public class BooksContentProvider extends ContentProvider {
 			case BOOK_ID:
 				// get the book id from the uri and build the query parts
 				long id = ContentUris.parseId(uri);
-				String whereClause = DBHelper.BOOK_FIELD_ID + " = ?";
+				String whereClause = FIELD_ID + " = ?";
 				String[] whereArgs = { Long.toString(id) };
 				
 				// execute the delete and return the number of rows affected
-				rowsAffected = db.delete(DBHelper.BOOK_TABLE_NAME, whereClause, whereArgs);
+				rowsAffected = db.delete(TABLE_NAME, whereClause, whereArgs);
 				getContext().getContentResolver().notifyChange(uri, null);
 				return rowsAffected;
 
@@ -176,7 +175,7 @@ public class BooksContentProvider extends ContentProvider {
 		switch (uriMatcher.match(uri)) {
 			// update all books matching where clause
 			case BOOKS:
-				rowsAffected = db.update(DBHelper.BOOK_TABLE_NAME, values, selection, selectionArgs);
+				rowsAffected = db.update(TABLE_NAME, values, selection, selectionArgs);
 				getContext().getContentResolver().notifyChange(uri, null);
 				return rowsAffected;
 
@@ -184,11 +183,11 @@ public class BooksContentProvider extends ContentProvider {
 			case BOOK_ID:
 				// get the book id from the uri and build the query parts
 				long id = ContentUris.parseId(uri);
-				String whereClause = DBHelper.BOOK_FIELD_ID + " = ?";
+				String whereClause = FIELD_ID + " = ?";
 				String[] whereArgs = { Long.toString(id) };
 					
 				// execute the delete and return the number of rows affected
-				rowsAffected = db.update(DBHelper.BOOK_TABLE_NAME, values, whereClause, whereArgs);
+				rowsAffected = db.update(TABLE_NAME, values, whereClause, whereArgs);
 				getContext().getContentResolver().notifyChange(uri, null);
 				return rowsAffected;
 
