@@ -30,7 +30,7 @@ import android.util.Log;
 public class BooksContentProvider extends ContentProvider {
 
 	private static final String TAG = "BooksContentProvider";
-	
+
 	public static final String AUTHORITY = "ca.marcmeszaros.papyrus.provider";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/books");
 
@@ -48,11 +48,11 @@ public class BooksContentProvider extends ContentProvider {
 	public static final String FIELD_PUBLISHER = DBHelper.BOOK_FIELD_PUBLISHER;
 	public static final String FIELD_PAGES = DBHelper.BOOK_FIELD_PAGES;
 	public static final String FIELD_QUANTITY = DBHelper.BOOK_FIELD_QUANTITY;
-	
+
 	// uri matching static variables
 	private static final int BOOKS = 1;
 	private static final int BOOK_ID = 2;
-	
+
 	private static final UriMatcher uriMatcher;
 	static {
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -82,11 +82,11 @@ public class BooksContentProvider extends ContentProvider {
 		// create an SQL builder object and set the table to books
 		SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
 		builder.setTables(TABLE_NAME);
-		
+
 		// instantiate the objects
 		String order = FIELD_TITLE;
 		Cursor result = null;
-		
+
 		// if there is a defined sort order user it, otherwise
 		// use the default sort order
 		if (sortOrder != null) {
@@ -102,15 +102,15 @@ public class BooksContentProvider extends ContentProvider {
 	@Override
 	public String getType(Uri uri) {
 		switch (uriMatcher.match(uri)) {
-			// get all books
-			case BOOKS:
-				return "vnd.android.cursor.dir/vnd.ca.marcmeszaros.papyrus.book";
+		// get all books
+		case BOOKS:
+			return "vnd.android.cursor.dir/vnd.ca.marcmeszaros.papyrus.book";
 			// get a specific book
-			case BOOK_ID:
-				return "vnd.android.cursor.item/vnd.ca.marcmeszaros.papyrus.book";
+		case BOOK_ID:
+			return "vnd.android.cursor.item/vnd.ca.marcmeszaros.papyrus.book";
 			// not a valid URI
-			default:
-				throw new IllegalArgumentException("Unsupported URI: " + uri);
+		default:
+			throw new IllegalArgumentException("Unsupported URI: " + uri);
 		}
 	}
 
@@ -119,18 +119,18 @@ public class BooksContentProvider extends ContentProvider {
 		// create an SQL builder object and set the table to books
 		db = helper.getWritableDatabase();
 		switch (uriMatcher.match(uri)) {
-			case BOOKS:
-				// get the new id and close the db
-				long id = db.insert(TABLE_NAME, null, values);
-				db.close();
-			
-				// build the result uri, notify of data change, and return
-				Uri result = ContentUris.withAppendedId(CONTENT_URI, id);
-				getContext().getContentResolver().notifyChange(uri, null);
-				return result;
+		case BOOKS:
+			// get the new id and close the db
+			long id = db.insert(TABLE_NAME, null, values);
+			db.close();
 
-			default:
-				return null;
+			// build the result uri, notify of data change, and return
+			Uri result = ContentUris.withAppendedId(CONTENT_URI, id);
+			getContext().getContentResolver().notifyChange(uri, null);
+			return result;
+
+		default:
+			return null;
 		}
 	}
 
@@ -139,30 +139,30 @@ public class BooksContentProvider extends ContentProvider {
 		// create an SQL builder object and set the table to books
 		db = helper.getWritableDatabase();
 		int rowsAffected = 0;
-		
+
 		switch (uriMatcher.match(uri)) {
-			// delete all books
-			case BOOKS:
-				// the "1" is required to return the number of rows deleted
-				rowsAffected = db.delete(TABLE_NAME, "1", null);
-				getContext().getContentResolver().notifyChange(uri, null);
-				return rowsAffected;
+		// delete all books
+		case BOOKS:
+			// the "1" is required to return the number of rows deleted
+			rowsAffected = db.delete(TABLE_NAME, "1", null);
+			getContext().getContentResolver().notifyChange(uri, null);
+			return rowsAffected;
 
 			// delete the book matching the id
-			case BOOK_ID:
-				// get the book id from the uri and build the query parts
-				long id = ContentUris.parseId(uri);
-				String whereClause = FIELD_ID + " = ?";
-				String[] whereArgs = { Long.toString(id) };
-				
-				// execute the delete and return the number of rows affected
-				rowsAffected = db.delete(TABLE_NAME, whereClause, whereArgs);
-				getContext().getContentResolver().notifyChange(uri, null);
-				return rowsAffected;
+		case BOOK_ID:
+			// get the book id from the uri and build the query parts
+			long id = ContentUris.parseId(uri);
+			String whereClause = FIELD_ID + " = ?";
+			String[] whereArgs = { Long.toString(id) };
+
+			// execute the delete and return the number of rows affected
+			rowsAffected = db.delete(TABLE_NAME, whereClause, whereArgs);
+			getContext().getContentResolver().notifyChange(uri, null);
+			return rowsAffected;
 
 			// nothing to do
-			default:
-				return rowsAffected;
+		default:
+			return rowsAffected;
 		}
 	}
 
@@ -173,27 +173,27 @@ public class BooksContentProvider extends ContentProvider {
 		int rowsAffected = 0;
 
 		switch (uriMatcher.match(uri)) {
-			// update all books matching where clause
-			case BOOKS:
-				rowsAffected = db.update(TABLE_NAME, values, selection, selectionArgs);
-				getContext().getContentResolver().notifyChange(uri, null);
-				return rowsAffected;
+		// update all books matching where clause
+		case BOOKS:
+			rowsAffected = db.update(TABLE_NAME, values, selection, selectionArgs);
+			getContext().getContentResolver().notifyChange(uri, null);
+			return rowsAffected;
 
 			// delete the book matching the id
-			case BOOK_ID:
-				// get the book id from the uri and build the query parts
-				long id = ContentUris.parseId(uri);
-				String whereClause = FIELD_ID + " = ?";
-				String[] whereArgs = { Long.toString(id) };
-					
-				// execute the delete and return the number of rows affected
-				rowsAffected = db.update(TABLE_NAME, values, whereClause, whereArgs);
-				getContext().getContentResolver().notifyChange(uri, null);
-				return rowsAffected;
+		case BOOK_ID:
+			// get the book id from the uri and build the query parts
+			long id = ContentUris.parseId(uri);
+			String whereClause = FIELD_ID + " = ?";
+			String[] whereArgs = { Long.toString(id) };
+
+			// execute the delete and return the number of rows affected
+			rowsAffected = db.update(TABLE_NAME, values, whereClause, whereArgs);
+			getContext().getContentResolver().notifyChange(uri, null);
+			return rowsAffected;
 
 			// nothing to do
-			default:
-				return rowsAffected;
+		default:
+			return rowsAffected;
 		}
 	}
 
