@@ -79,18 +79,6 @@
         </activity>
 
         <provider
-            android:name=".provider.BooksContentProvider"
-            android:authorities="ca.marcmeszaros.papyrus.provider"
-            android:exported="false" />
-        <provider
-            android:name=".provider.LoansContentProvider"
-            android:authorities="ca.marcmeszaros.papyrus.provider"
-            android:exported="false" />
-        <provider
-            android:name=".provider.LibrariesContentProvider"
-            android:authorities="ca.marcmeszaros.papyrus.provider"
-            android:exported="false" />
-        <provider
             android:name=".provider.PapyrusContentProvider"
             android:authorities="ca.marcmeszaros.papyrus.provider.PapyrusContentProvider"
             android:exported="false" />
