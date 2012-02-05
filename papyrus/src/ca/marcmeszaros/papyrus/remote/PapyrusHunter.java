@@ -15,8 +15,7 @@
  */
 package ca.marcmeszaros.papyrus.remote;
 
-import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
-import ca.marcmeszaros.papyrus.provider.BooksContentProvider;
+import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 import ca.marcmeszaros.papyrus.tools.Manifest;
 import ca.marcmeszaros.papyrus.tools.TNManager;
 
@@ -35,7 +34,6 @@ import com.google.api.services.books.model.Volumes;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -151,17 +149,17 @@ public class PapyrusHunter extends Thread {
 
 				// create the query
 				ContentValues values = new ContentValues();
-				values.put(BooksContentProvider.FIELD_TITLE, title);
-				values.put(BooksContentProvider.FIELD_AUTHOR, authors);
-				values.put(BooksContentProvider.FIELD_ISBN10, isbn10);
-				values.put(BooksContentProvider.FIELD_ISBN13, isbn13);
-				values.put(BooksContentProvider.FIELD_PUBLISHER, publishers);
-				values.put(BooksContentProvider.FIELD_PUBLICATION_DATE, date);
-				values.put(BooksContentProvider.FIELD_LIBRARY_ID, libraryID);
-				values.put(BooksContentProvider.FIELD_QUANTITY, quantity);
+				values.put(PapyrusContentProvider.Books.FIELD_TITLE, title);
+				values.put(PapyrusContentProvider.Books.FIELD_AUTHOR, authors);
+				values.put(PapyrusContentProvider.Books.FIELD_ISBN10, isbn10);
+				values.put(PapyrusContentProvider.Books.FIELD_ISBN13, isbn13);
+				values.put(PapyrusContentProvider.Books.FIELD_PUBLISHER, publishers);
+				values.put(PapyrusContentProvider.Books.FIELD_PUBLICATION_DATE, date);
+				values.put(PapyrusContentProvider.Books.FIELD_LIBRARY_ID, libraryID);
+				values.put(PapyrusContentProvider.Books.FIELD_QUANTITY, quantity);
 
 				// insert the book
-				context.getContentResolver().insert(BooksContentProvider.CONTENT_URI, values);
+				context.getContentResolver().insert(PapyrusContentProvider.Books.CONTENT_URI, values);
 				Log.d(TAG, "Saving book complete");
 
 				// get the thumbnail and save it
