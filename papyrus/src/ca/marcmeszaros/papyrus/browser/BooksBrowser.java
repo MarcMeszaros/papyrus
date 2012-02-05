@@ -24,6 +24,7 @@ import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.database.Loan;
 import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 import ca.marcmeszaros.papyrus.provider.BooksContentProvider;
+import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -82,13 +83,9 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 		getListView().setOnItemClickListener(this);
 		getListView().setOnItemLongClickListener(this);
 
-		// create an instance of the db helper class
-		DBHelper helper = new DBHelper(getApplicationContext());
-		SQLiteDatabase db = helper.getWritableDatabase();
-
 		// run a query on the DB and get a Cursor (aka result)
-		String sortOrder = BooksContentProvider.FIELD_TITLE;
-		Cursor result = getContentResolver().query(BooksContentProvider.CONTENT_URI, null, null, null, sortOrder);
+		String sortOrder = PapyrusContentProvider.Books.FIELD_TITLE;
+		Cursor result = getContentResolver().query(PapyrusContentProvider.Books.CONTENT_URI, null, null, null, sortOrder);
 		startManagingCursor(result);
 
 		// create our custom adapter with our result and
@@ -99,8 +96,7 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 		Spinner spinner = (Spinner) findViewById(R.id.BooksBrowser_spinner_library);
 
 		// get all the libraries
-		Cursor library = db.query(DBHelper.LIBRARY_TABLE_NAME, null, null, null, null, null,
-				DBHelper.LIBRARY_FIELD_NAME);
+		Cursor library = getContentResolver().query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null, PapyrusContentProvider.Libraries.FIELD_NAME);
 		startManagingCursor(library);
 
 		// specify what fields to map to what views
@@ -124,16 +120,16 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 
 		// create the query criteria
 		String[] columns = {
-				BooksContentProvider.FIELD_ISBN10,
-				BooksContentProvider.FIELD_ISBN13,
-				BooksContentProvider.FIELD_TITLE,
-				BooksContentProvider.FIELD_AUTHOR,
-				BooksContentProvider.FIELD_PUBLISHER,
-				BooksContentProvider.FIELD_QUANTITY,
-				BooksContentProvider.FIELD_ID,
-				BooksContentProvider.FIELD_LIBRARY_ID
+				PapyrusContentProvider.Books.FIELD_ISBN10,
+				PapyrusContentProvider.Books.FIELD_ISBN13,
+				PapyrusContentProvider.Books.FIELD_TITLE,
+				PapyrusContentProvider.Books.FIELD_AUTHOR,
+				PapyrusContentProvider.Books.FIELD_PUBLISHER,
+				PapyrusContentProvider.Books.FIELD_QUANTITY,
+				PapyrusContentProvider.Books.FIELD_ID,
+				PapyrusContentProvider.Books.FIELD_LIBRARY_ID
 		};
-		Uri bookQuery = ContentUris.withAppendedId(BooksContentProvider.CONTENT_URI, id);
+		Uri bookQuery = ContentUris.withAppendedId(PapyrusContentProvider.Books.CONTENT_URI, id);
 
 		// execute the query and store the result
 		Cursor bookCursor = getContentResolver().query(bookQuery, columns, null, null, null);
@@ -193,7 +189,7 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 		// delete
 		case 0:
 			// delete the data
-			Uri bookDelete = ContentUris.withAppendedId(BooksContentProvider.CONTENT_URI, selectedBookID);
+			Uri bookDelete = ContentUris.withAppendedId(PapyrusContentProvider.Books.CONTENT_URI, selectedBookID);
 			getContentResolver().delete(bookDelete, null, null);
 
 			// requery the database
@@ -264,15 +260,13 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.BooksBrowser_menu_addBook:
-			SQLiteDatabase db = new DBHelper(getApplicationContext()).getReadableDatabase();
-			Cursor result = db.query(DBHelper.LIBRARY_TABLE_NAME, null, null, null, null, null, null, null);
+			Cursor result = getContentResolver().query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null, null); 
 			startManagingCursor(result);
 			if (result.getCount() > 0) {
 				startActivity(new Intent(this, AddBook.class));
 			} else {
 				startActivity(new Intent(this, AddLibrary.class));
 			}
-			db.close();
 			break;
 		case R.id.BooksBrowser_Settings_menu:
 			startActivity(new Intent(this, Settings.class));
@@ -284,7 +278,7 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long id) {
 		// run a query on the DB and get a Cursor (aka result)
-		Uri bookQuery = ContentUris.withAppendedId(BooksContentProvider.CONTENT_URI, id);
+		Uri bookQuery = ContentUris.withAppendedId(PapyrusContentProvider.Books.CONTENT_URI, id);
 		Cursor result = getContentResolver().query(bookQuery, null, null, null, null);
 		startManagingCursor(result);
 
@@ -340,33 +334,17 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 		// gets the user id
 		String id = user.getLastPathSegment();
 
-		// get a reference to the database
-		DBHelper helper = new DBHelper(getApplicationContext());
-		SQLiteDatabase db = helper.getWritableDatabase();
-
 		// prepare the query
 		ContentValues values = new ContentValues();
-		values.put(DBHelper.LOAN_FIELD_BOOK_ID, selectedBookID);
-		values.put(DBHelper.LOAN_FIELD_CONTACT_ID, id);
-		values.put(DBHelper.LOAN_FIELD_LEND_DATE, System.currentTimeMillis());
-		values.put(DBHelper.LOAN_FIELD_DUE_DATE, c.getTimeInMillis());
+		values.put(PapyrusContentProvider.Loans.FIELD_BOOK_ID, selectedBookID);
+		values.put(PapyrusContentProvider.Loans.FIELD_CONTACT_ID, id);
+		values.put(PapyrusContentProvider.Loans.FIELD_LEND_DATE, System.currentTimeMillis());
+		values.put(PapyrusContentProvider.Loans.FIELD_DUE_DATE, c.getTimeInMillis());
 
-		// insert the entry in the database
-		db.insert(DBHelper.LOAN_TABLE_NAME, "", values);
-
-		// loan the new id
-		String tables = DBHelper.LOAN_TABLE_NAME;
-		String selection = DBHelper.LOAN_TABLE_NAME + "." + DBHelper.LOAN_FIELD_BOOK_ID + " = " + selectedBookID
-				+ " AND " + DBHelper.LOAN_TABLE_NAME + "." + DBHelper.LOAN_FIELD_CONTACT_ID + " = " + id;
-		String[] columns = {DBHelper.LOAN_FIELD_ID};
-		Cursor cursor = db.query(tables, columns, selection, null, null, null, DBHelper.LOAN_FIELD_ID + " DESC");
-		cursor.moveToFirst();
-		int loanID = cursor.getInt(0);
-		cursor.close();
-
-		// close the db
-		db.close();
-
+		// insert the entry in the database, and get the new loan id
+		Uri newLoan = getContentResolver().insert(PapyrusContentProvider.Loans.CONTENT_URI, values);
+		int loanID = Integer.parseInt(newLoan.getLastPathSegment());
+		
 		// Book book = new Book(isbn10, title, author);
 		Loan loan = new Loan(loanID, values.getAsInteger(DBHelper.LOAN_FIELD_BOOK_ID),
 				values.getAsInteger(DBHelper.LOAN_FIELD_CONTACT_ID), values.getAsLong(DBHelper.LOAN_FIELD_LEND_DATE),
@@ -392,33 +370,25 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 	 * Checks that there are enough books to loan out this copy
 	 */
 	public boolean canLoanBook() {
-
-		DBHelper helper = new DBHelper(getApplicationContext());
-		SQLiteDatabase db = helper.getReadableDatabase();
-
 		// Get the quantity of books stored
-		String[] projection = { BooksContentProvider.FIELD_QUANTITY };
+		String[] projection = { PapyrusContentProvider.Books.FIELD_QUANTITY };
 
 		// store result of query
-		Uri bookQuery = ContentUris.withAppendedId(BooksContentProvider.CONTENT_URI, selectedBookID);
+		Uri bookQuery = ContentUris.withAppendedId(PapyrusContentProvider.Books.CONTENT_URI, selectedBookID);
 		Cursor result = getContentResolver().query(bookQuery, projection, null, null, null);
 		result.moveToFirst();
 		int qty = result.getShort(0);
 
-		String tables = DBHelper.LOAN_TABLE_NAME;
-		String selection = DBHelper.LOAN_TABLE_NAME + "." + DBHelper.LOAN_FIELD_BOOK_ID + " = " + selectedBookID;
-		projection[0] = DBHelper.LOAN_FIELD_ID;
+		// see how many loans there are of the book we selected
+		String selection = PapyrusContentProvider.Loans.FIELD_BOOK_ID + "= ?";
+		String[] selectionArgs = { Long.toString(selectedBookID) };
+		projection[0] = PapyrusContentProvider.Loans.FIELD_ID;
 
 		// store result of query
-		result = db.query(tables, projection, selection, null, null, null, null);
-
+		result = getContentResolver().query(PapyrusContentProvider.Loans.CONTENT_URI, projection, selection, selectionArgs, null);
+		
 		// determine the number of books on loan
-		int onLoan = 0;
-		while (result.moveToNext()) {
-			onLoan++;
-		}
-
-		if (onLoan < qty) {
+		if (result.getCount() < qty) {
 			return true;
 		}
 
