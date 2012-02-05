@@ -23,6 +23,7 @@ import ca.marcmeszaros.papyrus.database.AddLibrary;
 import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.database.Loan;
 import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.fragment.BooksListFragment;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
 import android.app.AlarmManager;
@@ -30,7 +31,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.app.PendingIntent;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -42,6 +42,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,13 +52,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.DatePicker;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Spinner;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.Calendar;
 
-public class BooksBrowser extends ListActivity implements OnItemSelectedListener, OnItemClickListener,
+public class BooksBrowser extends FragmentActivity implements OnItemSelectedListener, OnItemClickListener,
 		OnItemLongClickListener, DialogInterface.OnClickListener, OnDateSetListener {
 
 	private static final String TAG = "BooksBrowser";
@@ -76,41 +76,12 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_books_browser);
 
-		// set listeners for list clicks and long clicks to this activity
-		getListView().setOnItemClickListener(this);
-		getListView().setOnItemLongClickListener(this);
-
-		// create an instance of the db helper class
-		DBHelper helper = new DBHelper(getApplicationContext());
-		SQLiteDatabase db = helper.getWritableDatabase();
-
-		// run a query on the DB and get a Cursor (aka result)
-		Cursor result = getContentResolver().query(PapyrusContentProvider.Books.CONTENT_URI, null, null, null, PapyrusContentProvider.Books.FIELD_TITLE);
-		startManagingCursor(result);
-
-		// create our custom adapter with our result and
-		// set the adapter to the ListView to display the books
-		setListAdapter(new BookAdapter(this, result));
-
-		// get the library spinner
-		Spinner spinner = (Spinner) findViewById(R.id.BooksBrowser_spinner_library);
-
-		// get all the libraries
-		Cursor library = db.query(DBHelper.LIBRARY_TABLE_NAME, null, null, null, null, null,
-				DBHelper.LIBRARY_FIELD_NAME);
-		startManagingCursor(library);
-
-		// specify what fields to map to what views
-		String[] from = { PapyrusContentProvider.Libraries.FIELD_NAME };
-		int[] to = { android.R.id.text1 };
-
-		// create a cursor adapter and set it to the list
-		SimpleCursorAdapter adp = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, library, from, to);
-		adp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinner.setAdapter(adp);
-		spinner.setOnItemSelectedListener(this);
+		// Create the list fragment and add it as our sole content.
+		if (getSupportFragmentManager().findFragmentById(android.R.id.content) == null) {
+			BooksListFragment list = new BooksListFragment();
+			getSupportFragmentManager().beginTransaction().add(android.R.id.content, list).commit();
+		}
 	}
 
 	/**
@@ -192,12 +163,6 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 			Uri bookDelete = ContentUris.withAppendedId(PapyrusContentProvider.Books.CONTENT_URI, selectedBookID);
 			getContentResolver().delete(bookDelete, null, null);
 
-			// requery the database
-			((BookAdapter) getListAdapter()).getCursor().requery();
-
-			// tell the list we have new data
-			((BookAdapter) getListAdapter()).notifyDataSetChanged();
-
 			Toast.makeText(getApplicationContext(), getString(R.string.BooksBrowser_toast_bookDeleted),
 					Toast.LENGTH_SHORT).show();
 			break;
@@ -276,21 +241,26 @@ public class BooksBrowser extends ListActivity implements OnItemSelectedListener
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long id) {
+	public void onItemSelected(AdapterView<?> adapter, View selected, int position, long id) {
 		// create an instance of the db helper class
 		DBHelper helper = new DBHelper(getApplicationContext());
 		SQLiteDatabase db = helper.getReadableDatabase();
 
-		Log.i(TAG, "Item select ID: " + id);
+		switch (adapter.getId()) {
+		case R.id.BooksBrowser_spinner_library:
+			String selection = DBHelper.BOOK_TABLE_NAME + "." + DBHelper.BOOK_FIELD_LIBRARY_ID + "=" + id;
+			Cursor result = db
+					.query(DBHelper.BOOK_TABLE_NAME, null, selection, null, null, null, DBHelper.BOOK_FIELD_TITLE);
+			startManagingCursor(result);
 
-		String selection = DBHelper.BOOK_TABLE_NAME + "." + DBHelper.BOOK_FIELD_LIBRARY_ID + "=" + id;
+			((ListView) findViewById(android.R.id.list)).setAdapter(new BookAdapter(this, result));
+			break;
 
-		// run a query on the DB and get a Cursor (aka result)
-		Cursor result = db
-				.query(DBHelper.BOOK_TABLE_NAME, null, selection, null, null, null, DBHelper.BOOK_FIELD_TITLE);
-		startManagingCursor(result);
+		default:
+			break;
+		}
 
-		setListAdapter(new BookAdapter(this, result));
+		db.close();
 	}
 
 	@Override
