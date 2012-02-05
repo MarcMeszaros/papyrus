@@ -18,12 +18,14 @@ package ca.marcmeszaros.papyrus.database;
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.Settings;
 import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -79,44 +81,32 @@ public class AddLibrary extends Activity implements OnClickListener {
 			return false;
 		}
 
-		// get the connection to the database
-		SQLiteDatabase db = new DBHelper(getApplicationContext()).getWritableDatabase();
-
 		// get all the libraries
-		Cursor result = db.query(DBHelper.LIBRARY_TABLE_NAME, null, null, null, null, null, null, null);
+		Cursor result = getContentResolver().query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null, null);
 
 		// check if it's the first one
 		if (result.getCount() == 0) {
 			isFirstLibrary = true;
 		}
+		// close the cursor
+		result.close();
 
 		// create the query
 		ContentValues values = new ContentValues();
 		values.put(DBHelper.LIBRARY_FIELD_NAME, libraryName.getText().toString());
 
-		// insert the values
-		db.insert(DBHelper.LIBRARY_TABLE_NAME, "unknown", values);
+		// insert the values and save the resulting uri
+		Uri newLibrary = getContentResolver().insert(PapyrusContentProvider.Libraries.CONTENT_URI, values);
 
-		// requery
+		// if it's the first library set it as the default
 		if (isFirstLibrary) {
-			result = db.query(DBHelper.LIBRARY_TABLE_NAME, null, null, null, null, null, null, null);
-			result.moveToFirst();
-
 			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 			SharedPreferences.Editor prefEditor = pref.edit();
-			prefEditor.putString(Settings.KEY_DEFAULT_LIBRARY,
-					Long.toString(result.getLong(result.getColumnIndex(DBHelper.LIBRARY_FIELD_ID))));
+			prefEditor.putString(Settings.KEY_DEFAULT_LIBRARY, Long.toString(ContentUris.parseId(newLibrary)));
 			prefEditor.commit();
 		}
 
-		// we don't need the cursor anymore
-		result.close();
-
-		// close the connection
-		db.close();
-
 		return true;
-
 	}
 
 }
