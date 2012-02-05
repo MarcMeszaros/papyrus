@@ -90,6 +90,10 @@
             android:name=".provider.LibrariesContentProvider"
             android:authorities="ca.marcmeszaros.papyrus.provider"
             android:exported="false" />
+        <provider
+            android:name=".provider.PapyrusContentProvider"
+            android:authorities="ca.marcmeszaros.papyrus.provider.PapyrusContentProvider"
+            android:exported="false" />
 
         <receiver android:name=".AlarmReceiver" />
     </application>
