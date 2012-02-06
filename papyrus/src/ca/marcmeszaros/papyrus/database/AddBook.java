@@ -17,6 +17,7 @@ package ca.marcmeszaros.papyrus.database;
 
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 import ca.marcmeszaros.papyrus.remote.PapyrusHunter;
 import ca.marcmeszaros.papyrus.remote.PapyrusHunterHandler;
 
@@ -33,6 +34,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -62,11 +64,9 @@ public class AddBook extends Activity implements OnClickListener, OnItemSelected
 
 		// create the spinner and db connection
 		Spinner spinner = (Spinner) findViewById(R.id.AddBook_spinner_library);
-		SQLiteDatabase db = new DBHelper(getApplicationContext()).getWritableDatabase();
 
 		// get all the libraries
-		result = db.query(DBHelper.LIBRARY_TABLE_NAME, null, null, null, null, null, DBHelper.LIBRARY_FIELD_NAME);
-		startManagingCursor(result);
+		result = getContentResolver().query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null, PapyrusContentProvider.Libraries.FIELD_NAME);
 
 		// specify what fields to map to what views
 		String[] from = {DBHelper.LIBRARY_FIELD_NAME};
@@ -84,14 +84,14 @@ public class AddBook extends Activity implements OnClickListener, OnItemSelected
 		String libraryId = prefs.getString("defaultLibrary", "");
 
 		// if the id is not empty
-		if (libraryId != "") {
+		if (!TextUtils.isEmpty(libraryId)) {
 			// parse it
 			int defLibrary = Integer.parseInt(libraryId);
 
 			// set the spinner selection to the matching default library id
 			for (int i = 0; i < spinner.getCount(); i++) {
 			    Cursor value = (Cursor) spinner.getItemAtPosition(i);
-			    long id = value.getLong(value.getColumnIndex(DBHelper.LIBRARY_FIELD_ID));
+			    long id = value.getLong(value.getColumnIndex(PapyrusContentProvider.Libraries.FIELD_ID));
 			    if (id == defLibrary) {
 			        spinner.setSelection(i);
 			    }
@@ -179,7 +179,7 @@ public class AddBook extends Activity implements OnClickListener, OnItemSelected
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int pos, long row) {
 		// TODO Auto-generated method stub
 		result.moveToPosition(pos);
-		libraryId = result.getInt(result.getColumnIndex(DBHelper.LIBRARY_FIELD_ID));
+		libraryId = result.getInt(result.getColumnIndex(PapyrusContentProvider.Libraries.FIELD_ID));
 	}
 
 	@Override
