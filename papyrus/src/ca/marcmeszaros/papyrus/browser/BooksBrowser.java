@@ -22,7 +22,6 @@ import ca.marcmeszaros.papyrus.database.AddBook;
 import ca.marcmeszaros.papyrus.database.AddLibrary;
 import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.database.Loan;
-import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 import ca.marcmeszaros.papyrus.fragment.BooksListFragment;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
@@ -38,7 +37,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -93,13 +91,13 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 		this.selectedBookID = id;
 
 		String[] columns = { 
-				PapyrusContentProvider.Books.FIELD_ISBN10, 
-				PapyrusContentProvider.Books.FIELD_ISBN13, 
+				PapyrusContentProvider.Books.FIELD_ISBN10,
+				PapyrusContentProvider.Books.FIELD_ISBN13,
 				PapyrusContentProvider.Books.FIELD_TITLE,
-				PapyrusContentProvider.Books.FIELD_AUTHOR, 
-				PapyrusContentProvider.Books.FIELD_PUBLISHER, 
+				PapyrusContentProvider.Books.FIELD_AUTHOR,
+				PapyrusContentProvider.Books.FIELD_PUBLISHER,
 				PapyrusContentProvider.Books.FIELD_QUANTITY,
-				PapyrusContentProvider.Books.FIELD_ID, 
+				PapyrusContentProvider.Books.FIELD_ID,
 				PapyrusContentProvider.Books.FIELD_LIBRARY_ID };
 
 		// delete the entry in the database
@@ -116,7 +114,7 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 		book.setLibraryID(bookCursor.getInt(7));
 
 		bookCursor.close();
-		
+
 		// create the intent and start the activity
 		Intent intent = new Intent(this, BookDetails.class);
 		intent.putExtra("book", book);
@@ -225,7 +223,8 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.BooksBrowser_menu_addBook:
-			Cursor result = getContentResolver().query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null, null);
+			Cursor result = getContentResolver().query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null,
+					null);
 			if (result.getCount() > 0) {
 				startActivity(new Intent(this, AddBook.class));
 			} else {
@@ -242,25 +241,18 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 
 	@Override
 	public void onItemSelected(AdapterView<?> adapter, View selected, int position, long id) {
-		// create an instance of the db helper class
-		DBHelper helper = new DBHelper(getApplicationContext());
-		SQLiteDatabase db = helper.getReadableDatabase();
-
 		switch (adapter.getId()) {
 		case R.id.BooksBrowser_spinner_library:
-			String selection = DBHelper.BOOK_TABLE_NAME + "." + DBHelper.BOOK_FIELD_LIBRARY_ID + "=" + id;
-			Cursor result = db
-					.query(DBHelper.BOOK_TABLE_NAME, null, selection, null, null, null, DBHelper.BOOK_FIELD_TITLE);
-			startManagingCursor(result);
-
-			((ListView) findViewById(android.R.id.list)).setAdapter(new BookAdapter(this, result));
+			String selection = PapyrusContentProvider.Books.FIELD_LIBRARY_ID + "=?";
+			String[] selectionArgs = { Long.toString(id) };
+			Cursor result = getContentResolver().query(PapyrusContentProvider.Books.CONTENT_URI, null, selection,
+					selectionArgs, PapyrusContentProvider.Books.FIELD_TITLE);
+			((BookAdapter) ((ListView) findViewById(android.R.id.list)).getAdapter()).changeCursor(result);
 			break;
 
 		default:
 			break;
 		}
-
-		db.close();
 	}
 
 	@Override
@@ -312,37 +304,22 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 		// gets the user id
 		String id = user.getLastPathSegment();
 
-		// get a reference to the database
-		DBHelper helper = new DBHelper(getApplicationContext());
-		SQLiteDatabase db = helper.getWritableDatabase();
-
 		// prepare the query
 		ContentValues values = new ContentValues();
-		values.put(DBHelper.LOAN_FIELD_BOOK_ID, selectedBookID);
-		values.put(DBHelper.LOAN_FIELD_CONTACT_ID, id);
-		values.put(DBHelper.LOAN_FIELD_LEND_DATE, System.currentTimeMillis());
-		values.put(DBHelper.LOAN_FIELD_DUE_DATE, c.getTimeInMillis());
+		values.put(PapyrusContentProvider.Loans.FIELD_BOOK_ID, selectedBookID);
+		values.put(PapyrusContentProvider.Loans.FIELD_CONTACT_ID, id);
+		values.put(PapyrusContentProvider.Loans.FIELD_LEND_DATE, System.currentTimeMillis());
+		values.put(PapyrusContentProvider.Loans.FIELD_DUE_DATE, c.getTimeInMillis());
 
-		// insert the entry in the database
-		db.insert(DBHelper.LOAN_TABLE_NAME, "", values);
-
-		// loan the new id
-		String tables = DBHelper.LOAN_TABLE_NAME;
-		String selection = DBHelper.LOAN_TABLE_NAME + "." + DBHelper.LOAN_FIELD_BOOK_ID + " = " + selectedBookID
-				+ " AND " + DBHelper.LOAN_TABLE_NAME + "." + DBHelper.LOAN_FIELD_CONTACT_ID + " = " + id;
-		String[] columns = { DBHelper.LOAN_FIELD_ID };
-		Cursor cursor = db.query(tables, columns, selection, null, null, null, DBHelper.LOAN_FIELD_ID + " DESC");
-		cursor.moveToFirst();
-		int loanID = cursor.getInt(0);
-		cursor.close();
-
-		// close the db
-		db.close();
+		// insert the entry in the database, and get the new loan id
+		Uri newLoan = getContentResolver().insert(PapyrusContentProvider.Loans.CONTENT_URI, values);
+		int loanID = (int) ContentUris.parseId(newLoan);
 
 		// Book book = new Book(isbn10, title, author);
-		Loan loan = new Loan(loanID, values.getAsInteger(DBHelper.LOAN_FIELD_BOOK_ID),
-				values.getAsInteger(DBHelper.LOAN_FIELD_CONTACT_ID), values.getAsLong(DBHelper.LOAN_FIELD_LEND_DATE),
-				values.getAsLong(DBHelper.LOAN_FIELD_DUE_DATE));
+		Loan loan = new Loan(loanID, values.getAsInteger(PapyrusContentProvider.Loans.FIELD_BOOK_ID),
+				values.getAsInteger(PapyrusContentProvider.Loans.FIELD_CONTACT_ID),
+				values.getAsLong(PapyrusContentProvider.Loans.FIELD_LEND_DATE),
+				values.getAsLong(PapyrusContentProvider.Loans.FIELD_DUE_DATE));
 
 		// get an alarm manager
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -377,7 +354,8 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 		columns[0] = PapyrusContentProvider.Loans.FIELD_ID;
 
 		// store result of query
-		result = getContentResolver().query(PapyrusContentProvider.Loans.CONTENT_URI, columns, selection, selectionArgs, null);
+		result = getContentResolver().query(PapyrusContentProvider.Loans.CONTENT_URI, columns, selection,
+				selectionArgs, null);
 
 		if (result.getCount() < qty) {
 			result.close();
