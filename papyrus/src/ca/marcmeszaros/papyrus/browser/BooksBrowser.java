@@ -20,7 +20,6 @@ import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.Settings;
 import ca.marcmeszaros.papyrus.database.AddBook;
 import ca.marcmeszaros.papyrus.database.AddLibrary;
-import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.database.Loan;
 import ca.marcmeszaros.papyrus.fragment.BooksListFragment;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
@@ -46,7 +45,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.DatePicker;
@@ -55,7 +53,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-public class BooksBrowser extends FragmentActivity implements OnItemSelectedListener, OnItemClickListener,
+public class BooksBrowser extends FragmentActivity implements OnItemSelectedListener,
 		OnItemLongClickListener, DialogInterface.OnClickListener, OnDateSetListener {
 
 	private static final String TAG = "BooksBrowser";
@@ -80,45 +78,6 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 			BooksListFragment list = new BooksListFragment();
 			getSupportFragmentManager().beginTransaction().add(android.R.id.content, list).commit();
 		}
-	}
-
-	/**
-	 * Handles a Click from an item in the list.
-	 */
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
-		// set the item id to a class variable
-		this.selectedBookID = id;
-
-		String[] columns = { 
-				PapyrusContentProvider.Books.FIELD_ISBN10,
-				PapyrusContentProvider.Books.FIELD_ISBN13,
-				PapyrusContentProvider.Books.FIELD_TITLE,
-				PapyrusContentProvider.Books.FIELD_AUTHOR,
-				PapyrusContentProvider.Books.FIELD_PUBLISHER,
-				PapyrusContentProvider.Books.FIELD_QUANTITY,
-				PapyrusContentProvider.Books.FIELD_ID,
-				PapyrusContentProvider.Books.FIELD_LIBRARY_ID };
-
-		// delete the entry in the database
-		Uri bookQuery = ContentUris.withAppendedId(PapyrusContentProvider.Books.CONTENT_URI, id);
-		Cursor bookCursor = getContentResolver().query(bookQuery, columns, null, null, null);
-
-		bookCursor.moveToFirst();
-
-		Book book = new Book(bookCursor.getString(0), bookCursor.getString(1), bookCursor.getString(2),
-				bookCursor.getString(3));
-		book.setPublisher(bookCursor.getString(4));
-		book.setQuantity(bookCursor.getInt(5));
-		book.setBookID(bookCursor.getInt(6));
-		book.setLibraryID(bookCursor.getInt(7));
-
-		bookCursor.close();
-
-		// create the intent and start the activity
-		Intent intent = new Intent(this, BookDetails.class);
-		intent.putExtra("book", book);
-		startActivity(intent);
 	}
 
 	/**
