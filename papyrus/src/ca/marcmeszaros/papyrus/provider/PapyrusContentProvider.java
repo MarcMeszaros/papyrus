@@ -234,12 +234,10 @@ public class PapyrusContentProvider extends ContentProvider {
 
 		// if we failed close the db and return
 		default:
-			db.close();
 			return null;
 		}
 
 		// we successfully inserted the row, close the db, notify of change and return
-		db.close();
 		getContext().getContentResolver().notifyChange(uri, null);
 		return result;
 	}
@@ -293,7 +291,6 @@ public class PapyrusContentProvider extends ContentProvider {
 
 		// we encountered and error, close and return
 		default:
-			db.close();
 			return rowsAffected;
 		}
 
@@ -305,7 +302,6 @@ public class PapyrusContentProvider extends ContentProvider {
 
 		// we successfully deleted, close the db, notify of change and return
 		rowsAffected = db.delete(table, selection, selectionArgs);
-		db.close();
 		getContext().getContentResolver().notifyChange(uri, null);
 		return rowsAffected;
 	}
@@ -356,13 +352,11 @@ public class PapyrusContentProvider extends ContentProvider {
 
 		// an error occurred, close the db and return
 		default:
-			db.close();
 			return rowsAffected;
 		}
 
 		// we successfully updated, close the db, notify of change and return
 		rowsAffected = db.update(table, values, selection, selectionArgs);
-		db.close();
 		getContext().getContentResolver().notifyChange(uri, null);
 		return rowsAffected;
 	}
