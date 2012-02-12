@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>ca.marcmeszaros.papyrus</groupId>
 		<artifactId>parent</artifactId>
-		<version>0.1.6-SNAPSHOT</version>
+		<version>0.1.6</version>
 	</parent>
 
 	<!-- define the applications -->
