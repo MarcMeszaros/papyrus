@@ -19,15 +19,18 @@ import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.Settings;
 import ca.marcmeszaros.papyrus.database.AddLibrary;
 import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -40,7 +43,8 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-public class LibrariesBrowser extends ListActivity implements OnItemClickListener, OnItemLongClickListener, DialogInterface.OnClickListener {
+public class LibrariesBrowser extends ListActivity implements OnItemClickListener, OnItemLongClickListener,
+		DialogInterface.OnClickListener {
 
 	private static final String TAG = "LibrariesBrowser";
 
@@ -48,29 +52,30 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 	private SimpleCursorAdapter adapter;
 	private Cursor result;
 	private long selectedLibraryID;
+	private ContentResolver resolver;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_libraries_browser);
 
+		// get the content resolver
+		this.resolver = getContentResolver();
+
 		// set listeners for list clicks and long clicks to this activity
 		getListView().setOnItemClickListener(this);
 		getListView().setOnItemLongClickListener(this);
 
-		// create an instance of the db helper class
-		DBHelper helper = new DBHelper(getApplicationContext());
-		SQLiteDatabase db = helper.getWritableDatabase();
-
 		// run a query on the DB and get a Cursor (aka result)
-		this.result = db.query(DBHelper.LIBRARY_TABLE_NAME, null, null, null, null, null, DBHelper.LIBRARY_FIELD_NAME);
-		startManagingCursor(result);
+		this.result = resolver.query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null,
+				PapyrusContentProvider.Libraries.FIELD_NAME);
 
 		// specify what fields to map to what views
-		String[] from = {DBHelper.LIBRARY_FIELD_NAME};
-		int[] to = {android.R.id.text1};
+		String[] from = { PapyrusContentProvider.Libraries.FIELD_NAME };
+		int[] to = { android.R.id.text1 };
 
-		adapter = new SimpleCursorAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, result, from, to);
+		adapter = new SimpleCursorAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, result, from,
+				to);
 
 		// set the adapter to the ListView to display the books
 		setListAdapter(adapter);
@@ -79,7 +84,7 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
 		// TODO Auto-generated method stub
-		//Toast.makeText(this, "Library details not implemented yet.", Toast.LENGTH_SHORT).show();
+		// Toast.makeText(this, "Library details not implemented yet.", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -92,10 +97,7 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 		builder.setTitle(getString(R.string.LibrariesBrowser_LongClickDialog_title));
 
 		// create the dialog items
-		final CharSequence[] items = {
-			//getString(R.string.LibrariesBrowser_LongClickDialog_edit),
-			getString(R.string.LibrariesBrowser_LongClickDialog_delete)
-		};
+		final CharSequence[] items = { getString(R.string.LibrariesBrowser_LongClickDialog_delete) };
 
 		// handle a click in the dialog
 		builder.setItems(items, this);
@@ -113,21 +115,15 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 	@Override
 	public void onClick(DialogInterface dialog, int position) {
 		switch (position) {
-		// edit
-		//case 0:
-		//	Toast.makeText(getApplicationContext(), "Feature not implemented yet.", Toast.LENGTH_SHORT).show();
-		//	break;
 		// delete
 		case 0:
-			// create an instance of the db helper class
-			DBHelper helper = new DBHelper(getApplicationContext());
-			SQLiteDatabase db = helper.getWritableDatabase();
-
-			String selection = DBHelper.LIBRARY_TABLE_NAME + "." + DBHelper.LIBRARY_FIELD_ID + "<>" + selectedLibraryID;
-			String[] columns = {DBHelper.LIBRARY_FIELD_ID, DBHelper.LIBRARY_FIELD_NAME};
+			// setup the selection criteria
+			String selection = PapyrusContentProvider.Libraries.FIELD_ID + "<>" + selectedLibraryID;
+			String[] columns = { PapyrusContentProvider.Libraries.FIELD_ID, PapyrusContentProvider.Libraries.FIELD_NAME };
 
 			// get all libraries
-			final Cursor otherLibraries = db.query(DBHelper.LIBRARY_TABLE_NAME, columns, selection, null, null, null, null);
+			final Cursor otherLibraries = resolver.query(PapyrusContentProvider.Libraries.CONTENT_URI, columns,
+					selection, null, null);
 			startManagingCursor(otherLibraries);
 
 			// make sure it is not the only library
@@ -137,35 +133,35 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 				otherLibraries.move(-1);
 				for (int i = 0; i < otherLibraries.getCount(); i++) {
 					otherLibraries.moveToNext();
-					libraries[i] = otherLibraries.getString(otherLibraries.getColumnIndex(DBHelper.LIBRARY_FIELD_NAME));
+					libraries[i] = otherLibraries.getString(otherLibraries
+							.getColumnIndex(PapyrusContentProvider.Libraries.FIELD_NAME));
 				}
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				builder.setTitle(getString(R.string.LibrariesBrowser_alert_moveBooks_title));
 				builder.setItems(libraries, new DialogInterface.OnClickListener() {
-				    public void onClick(DialogInterface dialog, int item) {
-				    	DBHelper helper = new DBHelper(getApplicationContext());
-						SQLiteDatabase db = helper.getWritableDatabase();
-
+					public void onClick(DialogInterface dialog, int item) {
 						// the columns to return for the books that need to updated
-						String[] columns = {DBHelper.BOOK_FIELD_ID};
+						String[] columns = { PapyrusContentProvider.Books.FIELD_ID };
 						// the selectedLibraryID still points to the one we want to delete
-						String selection = DBHelper.BOOK_TABLE_NAME + "." + DBHelper.BOOK_FIELD_LIBRARY_ID + "=" + selectedLibraryID;
+						String selection = PapyrusContentProvider.Books.FIELD_LIBRARY_ID + "=" + selectedLibraryID;
 
 						// get all the books from the library we are deleting
-						Cursor books = db.query(DBHelper.BOOK_TABLE_NAME, columns, selection, null, null, null, null);
+						Cursor books = resolver.query(PapyrusContentProvider.Books.CONTENT_URI, columns, selection,
+								null, null);
 						startManagingCursor(books);
 
 						Log.i(TAG, "Move to the new library in the cursor");
 						// get the library id to move books to
 						otherLibraries.moveToPosition(item);
 						Log.i(TAG, "Get the new library ID");
-						int newLibraryId = otherLibraries.getInt(otherLibraries.getColumnIndex(DBHelper.LIBRARY_FIELD_ID));
+						int newLibraryId = otherLibraries.getInt(otherLibraries
+								.getColumnIndex(PapyrusContentProvider.Libraries.FIELD_ID));
 
 						Log.i(TAG, "Setup update query");
 						// setup the update query
 						ContentValues values;
-						String whereClause = DBHelper.BOOK_TABLE_NAME + "." + DBHelper.BOOK_FIELD_ID + "=?";
+						String whereClause = PapyrusContentProvider.Books.FIELD_ID + "=?";
 						String[] whereValues = new String[1];
 
 						Log.i(TAG, "Start looping through the books");
@@ -175,7 +171,7 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 							whereValues[0] = books.getString(0);
 							values = new ContentValues();
 							values.put(DBHelper.BOOK_FIELD_LIBRARY_ID, newLibraryId);
-							db.update(DBHelper.BOOK_TABLE_NAME, values, whereClause, whereValues);
+							resolver.update(PapyrusContentProvider.Books.CONTENT_URI, values, whereClause, whereValues);
 						}
 
 						// set the new default library if the one to be deleted is the default
@@ -188,22 +184,24 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 						}
 
 						// delete the old library entry in the database
-						db.delete(DBHelper.LIBRARY_TABLE_NAME, DBHelper.LIBRARY_FIELD_ID + "=" + selectedLibraryID, null);
-						db.close();
+						Uri libraryToDelete = ContentUris.withAppendedId(PapyrusContentProvider.Libraries.CONTENT_URI, selectedLibraryID);
+						resolver.delete(libraryToDelete, null, null);
 
 						// requery the database
 						result.requery();
 
 						// tell the list we have new data
 						adapter.notifyDataSetChanged();
-				    	Toast.makeText(getApplicationContext(), getString(R.string.LibrariesBrowser_toast_libraryDeleted), Toast.LENGTH_SHORT).show();
-				    }
+						Toast.makeText(getApplicationContext(),
+								getString(R.string.LibrariesBrowser_toast_libraryDeleted), Toast.LENGTH_SHORT).show();
+					}
 				});
 
 				AlertDialog alert = builder.create();
 				alert.show();
-	    	} else {
-				Toast.makeText(getApplicationContext(), getString(R.string.LibrariesBrowser_toast_cantDeleteOnlyLibrary), Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						getString(R.string.LibrariesBrowser_toast_cantDeleteOnlyLibrary), Toast.LENGTH_SHORT).show();
 			}
 			break;
 		}
@@ -220,8 +218,7 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 	}
 
 	/**
-	 * Handles the event when an option is selected from the
-	 * option menu.
+	 * Handles the event when an option is selected from the option menu.
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
