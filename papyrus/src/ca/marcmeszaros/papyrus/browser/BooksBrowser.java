@@ -30,6 +30,7 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -53,13 +54,14 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-public class BooksBrowser extends FragmentActivity implements OnItemSelectedListener,
-		OnItemLongClickListener, DialogInterface.OnClickListener, OnDateSetListener {
+public class BooksBrowser extends FragmentActivity implements OnItemSelectedListener, OnItemLongClickListener,
+		DialogInterface.OnClickListener, OnDateSetListener {
 
 	private static final String TAG = "BooksBrowser";
 
 	// class variables
 	private long selectedBookID;
+	private ContentResolver resolver;
 
 	private int mYear;
 	private int mMonth;
@@ -72,6 +74,9 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// get the content resolver
+		this.resolver = getContentResolver();
 
 		// Create the list fragment and add it as our sole content.
 		if (getSupportFragmentManager().findFragmentById(android.R.id.content) == null) {
@@ -94,7 +99,6 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 
 		// create the dialog items
 		final CharSequence[] items = {
-				// getString(R.string.BooksBrowser_LongClickDialog_edit),
 				getString(R.string.BooksBrowser_LongClickDialog_delete),
 				getString(R.string.BooksBrowser_LongClickDialog_lendTo) };
 
@@ -118,7 +122,7 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 		case 0:
 			// delete the entry in the database
 			Uri bookDelete = ContentUris.withAppendedId(PapyrusContentProvider.Books.CONTENT_URI, selectedBookID);
-			getContentResolver().delete(bookDelete, null, null);
+			resolver.delete(bookDelete, null, null);
 
 			Toast.makeText(getApplicationContext(), getString(R.string.BooksBrowser_toast_bookDeleted),
 					Toast.LENGTH_SHORT).show();
@@ -182,8 +186,7 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.BooksBrowser_menu_addBook:
-			Cursor result = getContentResolver().query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null,
-					null);
+			Cursor result = resolver.query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null, null);
 			if (result.getCount() > 0) {
 				startActivity(new Intent(this, AddBook.class));
 			} else {
@@ -204,8 +207,8 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 		case R.id.BooksBrowser_spinner_library:
 			String selection = PapyrusContentProvider.Books.FIELD_LIBRARY_ID + "=?";
 			String[] selectionArgs = { Long.toString(id) };
-			Cursor result = getContentResolver().query(PapyrusContentProvider.Books.CONTENT_URI, null, selection,
-					selectionArgs, PapyrusContentProvider.Books.FIELD_TITLE);
+			Cursor result = resolver.query(PapyrusContentProvider.Books.CONTENT_URI, null, selection, selectionArgs,
+					PapyrusContentProvider.Books.FIELD_TITLE);
 			((BookAdapter) ((ListView) findViewById(android.R.id.list)).getAdapter()).changeCursor(result);
 			break;
 
@@ -271,7 +274,7 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 		values.put(PapyrusContentProvider.Loans.FIELD_DUE_DATE, c.getTimeInMillis());
 
 		// insert the entry in the database, and get the new loan id
-		Uri newLoan = getContentResolver().insert(PapyrusContentProvider.Loans.CONTENT_URI, values);
+		Uri newLoan = resolver.insert(PapyrusContentProvider.Loans.CONTENT_URI, values);
 		int loanID = (int) ContentUris.parseId(newLoan);
 
 		// Book book = new Book(isbn10, title, author);
@@ -304,7 +307,7 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 		Uri bookQuery = ContentUris.withAppendedId(PapyrusContentProvider.Books.CONTENT_URI, selectedBookID);
 		String[] columns = { PapyrusContentProvider.Books.FIELD_QUANTITY };
 		// store result of query
-		Cursor result = getContentResolver().query(bookQuery, columns, null, null, null);
+		Cursor result = resolver.query(bookQuery, columns, null, null, null);
 		result.moveToFirst();
 		int qty = result.getShort(0);
 
@@ -313,8 +316,7 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 		columns[0] = PapyrusContentProvider.Loans.FIELD_ID;
 
 		// store result of query
-		result = getContentResolver().query(PapyrusContentProvider.Loans.CONTENT_URI, columns, selection,
-				selectionArgs, null);
+		result = resolver.query(PapyrusContentProvider.Loans.CONTENT_URI, columns, selection, selectionArgs, null);
 
 		if (result.getCount() < qty) {
 			result.close();
