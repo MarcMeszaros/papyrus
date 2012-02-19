@@ -15,6 +15,8 @@
  */
 package ca.marcmeszaros.papyrus.provider;
 
+import java.util.List;
+
 import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -91,7 +93,8 @@ public class PapyrusContentProvider extends ContentProvider {
 
 	private static final int LOANS = 2001;
 	private static final int LOAN_ID = 2002;
-	private static final int LOANS_DETAILS = 2003;
+	private static final int LOAN_DETAILS = 2003;
+	private static final int LOANS_DETAILS = 2004;
 
 	private static final int LIBRARIES = 3001;
 	private static final int LIBRARY_ID = 3002;
@@ -104,6 +107,7 @@ public class PapyrusContentProvider extends ContentProvider {
 
 		uriMatcher.addURI(AUTHORITY, "loans", LOANS);
 		uriMatcher.addURI(AUTHORITY, "loans/#", LOAN_ID);
+		uriMatcher.addURI(AUTHORITY, "loans/#/details", LOAN_DETAILS);
 		uriMatcher.addURI(AUTHORITY, "loans/details", LOANS_DETAILS);
 
 		uriMatcher.addURI(AUTHORITY, "libraries", LIBRARIES);
@@ -202,6 +206,20 @@ public class PapyrusContentProvider extends ContentProvider {
 			// build the query
 			selection = Loans.TABLE_NAME + "." + Loans.FIELD_BOOK_ID + " = " + Books.TABLE_NAME + "." + Books.FIELD_ID;
 			selectionArgs = null;
+			break;
+
+		// handle the case for loan details
+		case LOAN_DETAILS:
+			// if the sort order is defined use it, or set a default order
+			order = (sortOrder != null) ? sortOrder : null;
+			builder.setTables(Loans.TABLE_NAME + ", " + Books.TABLE_NAME);
+
+			List<String> segments = uri.getPathSegments();
+
+			// build the query
+			selection = Loans.TABLE_NAME + "." + Loans.FIELD_BOOK_ID + " = " + Books.TABLE_NAME + "." + Books.FIELD_ID
+					+ " AND " + Loans.TABLE_NAME + "." + Loans.FIELD_ID + " = ?";
+			selectionArgs = new String[] { segments.get(segments.size() - 2) };
 			break;
 
 		// handle the case for all libraries
