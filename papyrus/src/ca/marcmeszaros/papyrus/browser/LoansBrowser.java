@@ -20,14 +20,16 @@ import ca.marcmeszaros.papyrus.Settings;
 import ca.marcmeszaros.papyrus.database.AddLibrary;
 import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.database.Loan;
-import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,39 +46,31 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 	private BookAdapter adapter;
 	private Cursor result;
 	private long selectedLoanID;
+	private ContentResolver resolver;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_loans_browser);
 
+		this.resolver = getContentResolver();
+
 		// set listeners for list clicks and long clicks to this activity
 		getListView().setOnItemClickListener(this);
 		getListView().setOnItemLongClickListener(this);
 
-		// create an instance of the db helper class
-		DBHelper helper = new DBHelper(getApplicationContext());
-		SQLiteDatabase db = helper.getWritableDatabase();
-
 		// strings for use in db query
-		String tables = DBHelper.LOAN_TABLE_NAME + ", " + DBHelper.BOOK_TABLE_NAME;
 		String[] columns = {
-				DBHelper.BOOK_TABLE_NAME + "." + DBHelper.BOOK_FIELD_TITLE,
-				DBHelper.BOOK_TABLE_NAME + "." + DBHelper.BOOK_FIELD_AUTHOR,
-				DBHelper.BOOK_TABLE_NAME + "." + DBHelper.BOOK_FIELD_ISBN10,
-				DBHelper.BOOK_TABLE_NAME + "." + DBHelper.BOOK_FIELD_ISBN13,
-				DBHelper.LOAN_TABLE_NAME + "." + DBHelper.LOAN_FIELD_CONTACT_ID,
-				DBHelper.LOAN_TABLE_NAME + "." + DBHelper.LOAN_FIELD_ID };
-		String selection = DBHelper.LOAN_TABLE_NAME + "."
-				+ DBHelper.LOAN_FIELD_BOOK_ID + " = "
-				+ DBHelper.BOOK_TABLE_NAME + "." + DBHelper.BOOK_FIELD_ID;
-		/*
-		 * SELECT books.title, loans.contact_ID FROM books, loans where
-		 * loans.book_ID = books."_id"
-		 */
-		this.result = db.query(tables, columns, selection, null, null, null, null);
+				PapyrusContentProvider.Books.TABLE_NAME + "." + PapyrusContentProvider.Books.FIELD_TITLE,
+				PapyrusContentProvider.Books.TABLE_NAME + "." + PapyrusContentProvider.Books.FIELD_AUTHOR,
+				PapyrusContentProvider.Books.TABLE_NAME + "." + PapyrusContentProvider.Books.FIELD_ISBN10,
+				PapyrusContentProvider.Books.TABLE_NAME + "." + PapyrusContentProvider.Books.FIELD_ISBN13,
+				PapyrusContentProvider.Loans.TABLE_NAME + "." + PapyrusContentProvider.Loans.FIELD_CONTACT_ID,
+				PapyrusContentProvider.Loans.TABLE_NAME + "." + PapyrusContentProvider.Loans.FIELD_ID };
 
-		startManagingCursor(result);
+		// create the loan details query
+		Uri loansDetails = Uri.withAppendedPath(PapyrusContentProvider.Loans.CONTENT_URI, "details");
+		this.result = resolver.query(loansDetails, columns, null, null, null);
 
 		// create our custom adapter with our result
 		this.adapter = new BookAdapter(this, result);
@@ -91,39 +85,28 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 			long id) {
-		// TODO Auto-generated method stub
-		//Toast.makeText(this, "Loan details not implemented yet.", Toast.LENGTH_SHORT).show();
 
 		// set the item id to a class variable
 		this.selectedLoanID = id;
 
-		DBHelper helper = new DBHelper(getApplicationContext());
-		SQLiteDatabase db = helper.getReadableDatabase();
-
 		/* do a join on Loan and Book to get the book information and
 		 * the contact ID for the person the book is loaned to
 		 */
-		String tables = DBHelper.LOAN_TABLE_NAME + ", " + DBHelper.BOOK_TABLE_NAME;
-		String selection = DBHelper.LOAN_TABLE_NAME + "."
-				+ DBHelper.LOAN_FIELD_BOOK_ID + " = "
-				+ DBHelper.BOOK_TABLE_NAME + "." + DBHelper.BOOK_FIELD_ID
-				+ " AND " +
-				DBHelper.LOAN_TABLE_NAME + "." + DBHelper.LOAN_FIELD_ID + " = " + selectedLoanID;
 		String[] columns = {
-			DBHelper.BOOK_FIELD_ISBN10,
-			DBHelper.BOOK_FIELD_ISBN13,
-			DBHelper.BOOK_FIELD_TITLE,
-			DBHelper.BOOK_FIELD_AUTHOR,
-			DBHelper.LOAN_TABLE_NAME + "." + DBHelper.LOAN_FIELD_ID,
-			DBHelper.LOAN_FIELD_BOOK_ID,
-			DBHelper.LOAN_FIELD_CONTACT_ID,
-			DBHelper.LOAN_FIELD_LEND_DATE,
-			DBHelper.LOAN_FIELD_DUE_DATE
+			PapyrusContentProvider.Books.FIELD_ISBN10,
+			PapyrusContentProvider.Books.FIELD_ISBN13,
+			PapyrusContentProvider.Books.FIELD_TITLE,
+			PapyrusContentProvider.Books.FIELD_AUTHOR,
+			PapyrusContentProvider.Loans.TABLE_NAME + "." + PapyrusContentProvider.Loans.FIELD_ID,
+			PapyrusContentProvider.Loans.FIELD_BOOK_ID,
+			PapyrusContentProvider.Loans.FIELD_CONTACT_ID,
+			PapyrusContentProvider.Loans.FIELD_LEND_DATE,
+			PapyrusContentProvider.Loans.FIELD_DUE_DATE
 		};
 
 		// store result of query
-		Cursor result = db.query(tables, columns, selection, null, null, null, null);
-
+		Uri loansUri = Uri.withAppendedPath(ContentUris.withAppendedId(PapyrusContentProvider.Loans.CONTENT_URI, id), "details");
+		Cursor result = resolver.query(loansUri, columns, null, null, null);
 		result.moveToFirst();
 
 		Book book = new Book(result.getString(0), result.getString(1), result.getString(2), result.getString(3));
@@ -133,7 +116,6 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 
 		intent.putExtra("book", book);
 		intent.putExtra("loan", loan);
-		db.close();
 
 		startActivity(intent);
 	}
@@ -172,14 +154,9 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 		switch (position) {
 		// return book
 		case 0:
-			// create an instance of the db helper class
-			DBHelper helper = new DBHelper(getApplicationContext());
-			SQLiteDatabase db = helper.getWritableDatabase();
-
 			// delete the entry in the database
-			db.delete(DBHelper.LOAN_TABLE_NAME, DBHelper.LOAN_FIELD_ID + "="
-					+ selectedLoanID, null);
-			db.close();
+			Uri loanDelete = ContentUris.withAppendedId(PapyrusContentProvider.Loans.CONTENT_URI, selectedLoanID);
+			resolver.delete(loanDelete, null, null);
 
 			// requery the database
 			result.requery();
