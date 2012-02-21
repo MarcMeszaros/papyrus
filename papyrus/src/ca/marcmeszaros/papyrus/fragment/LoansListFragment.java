@@ -147,6 +147,9 @@ public class LoansListFragment extends ListFragment implements LoaderCallbacks<C
 		Book book = new Book(result.getString(5), result.getString(6), result.getString(7), result.getString(8));
 		Loan loan = new Loan(result.getInt(0), result.getInt(1), result.getInt(2), result.getLong(3), result.getLong(4));
 
+		// close the no longer needed cursor
+		result.close();
+
 		Intent intent = new Intent(getActivity(), LoanDetails.class);
 
 		intent.putExtra("book", book);
