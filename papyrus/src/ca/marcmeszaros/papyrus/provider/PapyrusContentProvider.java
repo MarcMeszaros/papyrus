@@ -160,6 +160,7 @@ public class PapyrusContentProvider extends ContentProvider {
 		// set/initiate some objects
 		Cursor result = null;
 		String order = null;
+		String[] columns = null;
 
 		// create the appropriate query based on the Uri
 		switch (uriMatcher.match(uri)) {
@@ -168,12 +169,14 @@ public class PapyrusContentProvider extends ContentProvider {
 			// if the sort order is defined use it, or set a default order
 			order = (sortOrder != null) ? sortOrder : Books.FIELD_TITLE;
 			builder.setTables(Books.TABLE_NAME);
+			columns = (projection != null) ? projection : null;
 			break;
 		// handle the case for a specific book id
 		case BOOK_ID:
 			// if the sort order is defined use it, or set a default order
 			order = (sortOrder != null) ? sortOrder : Books.FIELD_TITLE;
 			builder.setTables(Books.TABLE_NAME);
+			columns = (projection != null) ? projection : null;
 
 			// build the query with the specified id
 			selection = Books.FIELD_ID + " = ?";
@@ -185,12 +188,14 @@ public class PapyrusContentProvider extends ContentProvider {
 			// if the sort order is defined use it, or set a default order
 			order = (sortOrder != null) ? sortOrder : null;
 			builder.setTables(Loans.TABLE_NAME);
+			columns = (projection != null) ? projection : null;
 			break;
 		// handle the case for a specific loan id
 		case LOAN_ID:
 			// if the sort order is defined use it, or set a default order
 			order = (sortOrder != null) ? sortOrder : null;
 			builder.setTables(Loans.TABLE_NAME);
+			columns = (projection != null) ? projection : null;
 
 			// build the query with the specified id
 			selection = Loans.FIELD_ID + " = ?";
@@ -202,6 +207,17 @@ public class PapyrusContentProvider extends ContentProvider {
 			// if the sort order is defined use it, or set a default order
 			order = (sortOrder != null) ? sortOrder : null;
 			builder.setTables(Loans.TABLE_NAME + ", " + Books.TABLE_NAME);
+			columns = (projection != null) ? projection : new String[] {
+				Loans.TABLE_NAME + "." + Loans.FIELD_ID,
+				Loans.FIELD_BOOK_ID,
+				Loans.FIELD_CONTACT_ID,
+				Loans.FIELD_LEND_DATE,
+				Loans.FIELD_DUE_DATE,
+				Books.FIELD_ISBN10,
+				Books.FIELD_ISBN13,
+				Books.FIELD_TITLE,
+				Books.FIELD_AUTHOR
+			};
 
 			// build the query
 			selection = Loans.TABLE_NAME + "." + Loans.FIELD_BOOK_ID + " = " + Books.TABLE_NAME + "." + Books.FIELD_ID;
@@ -213,6 +229,17 @@ public class PapyrusContentProvider extends ContentProvider {
 			// if the sort order is defined use it, or set a default order
 			order = (sortOrder != null) ? sortOrder : null;
 			builder.setTables(Loans.TABLE_NAME + ", " + Books.TABLE_NAME);
+			columns = (projection != null) ? projection : new String[] {
+				Loans.TABLE_NAME + "." + Loans.FIELD_ID,
+				Loans.FIELD_BOOK_ID,
+				Loans.FIELD_CONTACT_ID,
+				Loans.FIELD_LEND_DATE,
+				Loans.FIELD_DUE_DATE,
+				Books.FIELD_ISBN10,
+				Books.FIELD_ISBN13,
+				Books.FIELD_TITLE,
+				Books.FIELD_AUTHOR
+			};
 
 			List<String> segments = uri.getPathSegments();
 
@@ -227,12 +254,14 @@ public class PapyrusContentProvider extends ContentProvider {
 			// if the sort order is defined use it, or set a default order
 			order = (sortOrder != null) ? sortOrder : Libraries.FIELD_NAME;
 			builder.setTables(Libraries.TABLE_NAME);
+			columns = (projection != null) ? projection : null;
 			break;
 		// handle the case for a specific library id
 		case LIBRARY_ID:
 			// if the sort order is defined use it, or set a default order
 			order = (sortOrder != null) ? sortOrder : Libraries.FIELD_NAME;
 			builder.setTables(Libraries.TABLE_NAME);
+			columns = (projection != null) ? projection : null;
 
 			// build the query with the specified id
 			selection = Loans.FIELD_ID + " = ?";
@@ -244,7 +273,7 @@ public class PapyrusContentProvider extends ContentProvider {
 		}
 
 		// notify of data change and return the result
-		result = builder.query(helper.getReadableDatabase(), projection, selection, selectionArgs, null, null, order);
+		result = builder.query(helper.getReadableDatabase(), columns, selection, selectionArgs, null, null, order);
 		result.setNotificationUri(getContext().getContentResolver(), uri);
 		return result;
 	}
