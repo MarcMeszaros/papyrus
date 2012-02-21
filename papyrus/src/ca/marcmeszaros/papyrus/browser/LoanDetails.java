@@ -18,7 +18,6 @@ package ca.marcmeszaros.papyrus.browser;
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.database.Loan;
-import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 import ca.marcmeszaros.papyrus.tools.TNManager;
 
@@ -204,7 +203,7 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 
 				// create the update query
 				ContentValues values = new ContentValues();
-				values.put(DBHelper.LOAN_FIELD_DUE_DATE, dDate);
+				values.put(PapyrusContentProvider.Loans.FIELD_DUE_DATE, dDate);
 
 				// select the right book and update it
 				Uri updateLoan = ContentUris.withAppendedId(PapyrusContentProvider.Loans.CONTENT_URI, loan.getLoanID());
