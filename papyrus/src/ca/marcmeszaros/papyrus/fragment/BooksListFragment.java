@@ -61,10 +61,8 @@ public class BooksListFragment extends ListFragment implements LoaderCallbacks<C
 		
 		getListView().setOnItemClickListener(this);
 		getListView().setOnItemLongClickListener((OnItemLongClickListener) getActivity());
-		Log.d(TAG, "spinner id: "+spinner.getId());
 		spinner.setOnItemSelectedListener((OnItemSelectedListener) getActivity());
 		
-		Log.d(TAG, "fragment created");
 		books = new BookAdapter(getActivity(), null);
 		setListAdapter(books);
 		
