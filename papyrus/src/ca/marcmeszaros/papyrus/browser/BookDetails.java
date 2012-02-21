@@ -17,13 +17,14 @@ package ca.marcmeszaros.papyrus.browser;
 
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.database.Book;
-import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 import ca.marcmeszaros.papyrus.tools.TNManager;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -40,6 +41,7 @@ public class BookDetails extends Activity implements OnClickListener {
 	private EditText quantity;
 	private Spinner library;
 	private Book book;
+	private ContentResolver resolver;
 
 	/**
 	 * Called when the activity is first created.
@@ -48,6 +50,9 @@ public class BookDetails extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_book_details);
+
+		// get the content resolver for the activity
+		resolver = getContentResolver();
 
 		Bundle bundle = getIntent().getExtras();
 		this.book = bundle.getParcelable("book");
@@ -72,17 +77,13 @@ public class BookDetails extends Activity implements OnClickListener {
 		isbn13.setText(book.getISBN13());
 		quantity.setText(String.valueOf(book.getQuantity()));
 
-		// get the library name
-		SQLiteDatabase db = new DBHelper(getApplicationContext()).getReadableDatabase();
-
 		// get the library the book belongs to
-		Cursor result = db.query(DBHelper.LIBRARY_TABLE_NAME, null, null, null, null, null, DBHelper.LIBRARY_FIELD_NAME);
+		Cursor result = resolver.query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null, PapyrusContentProvider.Libraries.FIELD_NAME);
 		startManagingCursor(result);
 
-		// set the library name from the db info
 		// specify what fields to map to what views
-		String[] from = {DBHelper.LIBRARY_FIELD_NAME};
-		int[] to = {android.R.id.text1};
+		String[] from = { PapyrusContentProvider.Libraries.FIELD_NAME };
+		int[] to = { android.R.id.text1 };
 
 		// create a cursor adapter and set it to the list
 		SimpleCursorAdapter adp = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, result, from, to);
@@ -92,7 +93,7 @@ public class BookDetails extends Activity implements OnClickListener {
 		// set the spinner selection to the matching default library id
 		for (int i = 0; i < library.getCount(); i++) {
 			Cursor value = (Cursor) library.getItemAtPosition(i);
-			long id = value.getLong(value.getColumnIndex(DBHelper.LIBRARY_FIELD_ID));
+			long id = value.getLong(value.getColumnIndex(PapyrusContentProvider.Libraries.FIELD_ID));
 			if (id == book.getLibraryID()) {
 				library.setSelection(i);
 			}
@@ -104,29 +105,20 @@ public class BookDetails extends Activity implements OnClickListener {
 		} else if (book.getISBN13() != null && TNManager.getThumbnail(book.getISBN13()).exists()) {
 			cover.setImageURI(Uri.parse(TNManager.getThumbnail(book.getISBN13()).getAbsolutePath()));
 		}
-
-		// close db connection
-		db.close();
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.BookDetails_book_update_button:
-			// update the database
-			SQLiteDatabase db = new DBHelper(getApplicationContext()).getWritableDatabase();
-
 			// create the update query
 			ContentValues values = new ContentValues();
-			values.put(DBHelper.BOOK_FIELD_QUANTITY, Integer.parseInt(quantity.getText().toString()));
-			values.put(DBHelper.BOOK_FIELD_LIBRARY_ID, library.getSelectedItemId());
+			values.put(PapyrusContentProvider.Books.FIELD_QUANTITY, Integer.parseInt(quantity.getText().toString()));
+			values.put(PapyrusContentProvider.Books.FIELD_LIBRARY_ID, library.getSelectedItemId());
 
-			// select the right book
-			String whereClause = DBHelper.BOOK_TABLE_NAME + "." + DBHelper.BOOK_FIELD_ID + "=" + book.getBookID();
-
-			// update and close the db
-			db.update(DBHelper.BOOK_TABLE_NAME, values, whereClause, null);
-			db.close();
+			// update the right book
+			Uri updateBook = ContentUris.withAppendedId(PapyrusContentProvider.Books.CONTENT_URI, book.getBookID());
+			resolver.update(updateBook, values, null, null);
 
 			Toast.makeText(this, getString(R.string.BookDetails_book_update_toast), Toast.LENGTH_LONG).show();
 			break;
