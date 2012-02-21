@@ -16,7 +16,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.marcmeszaros.papyrus"
-    android:versionCode="017"
+    android:versionCode="000107"
     android:versionName="0.1.7-SNAPSHOT" >
 
     <uses-permission android:name="android.permission.INTERNET" />
