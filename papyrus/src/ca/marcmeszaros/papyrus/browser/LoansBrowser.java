@@ -18,33 +18,27 @@ package ca.marcmeszaros.papyrus.browser;
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.Settings;
 import ca.marcmeszaros.papyrus.database.AddLibrary;
-import ca.marcmeszaros.papyrus.database.Book;
-import ca.marcmeszaros.papyrus.database.Loan;
+import ca.marcmeszaros.papyrus.fragment.LoansListFragment;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Toast;
 
-public class LoansBrowser extends ListActivity implements OnItemClickListener,
-		OnItemLongClickListener, DialogInterface.OnClickListener {
+public class LoansBrowser extends FragmentActivity implements OnItemLongClickListener, DialogInterface.OnClickListener {
 
 	// class variables
-	private BookAdapter adapter;
-	private Cursor result;
 	private long selectedLoanID;
 	private ContentResolver resolver;
 
@@ -53,79 +47,21 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_loans_browser);
 
+		// get the content resolver
 		this.resolver = getContentResolver();
 
-		// set listeners for list clicks and long clicks to this activity
-		getListView().setOnItemClickListener(this);
-		getListView().setOnItemLongClickListener(this);
-
-		// strings for use in db query
-		String[] columns = {
-				PapyrusContentProvider.Books.TABLE_NAME + "." + PapyrusContentProvider.Books.FIELD_TITLE,
-				PapyrusContentProvider.Books.TABLE_NAME + "." + PapyrusContentProvider.Books.FIELD_AUTHOR,
-				PapyrusContentProvider.Books.TABLE_NAME + "." + PapyrusContentProvider.Books.FIELD_ISBN10,
-				PapyrusContentProvider.Books.TABLE_NAME + "." + PapyrusContentProvider.Books.FIELD_ISBN13,
-				PapyrusContentProvider.Loans.TABLE_NAME + "." + PapyrusContentProvider.Loans.FIELD_CONTACT_ID,
-				PapyrusContentProvider.Loans.TABLE_NAME + "." + PapyrusContentProvider.Loans.FIELD_ID };
-
-		// create the loan details query
-		Uri loansDetails = Uri.withAppendedPath(PapyrusContentProvider.Loans.CONTENT_URI, "details");
-		this.result = resolver.query(loansDetails, columns, null, null, null);
-
-		// create our custom adapter with our result
-		this.adapter = new BookAdapter(this, result);
-
-		// set the adapter to the ListView to display the books
-		setListAdapter(adapter);
-	}
-
-	/**
-	 * Handles a Click from an item in the list.
-	 */
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-			long id) {
-
-		// set the item id to a class variable
-		this.selectedLoanID = id;
-
-		/* do a join on Loan and Book to get the book information and
-		 * the contact ID for the person the book is loaned to
-		 */
-		String[] columns = {
-			PapyrusContentProvider.Books.FIELD_ISBN10,
-			PapyrusContentProvider.Books.FIELD_ISBN13,
-			PapyrusContentProvider.Books.FIELD_TITLE,
-			PapyrusContentProvider.Books.FIELD_AUTHOR,
-			PapyrusContentProvider.Loans.TABLE_NAME + "." + PapyrusContentProvider.Loans.FIELD_ID,
-			PapyrusContentProvider.Loans.FIELD_BOOK_ID,
-			PapyrusContentProvider.Loans.FIELD_CONTACT_ID,
-			PapyrusContentProvider.Loans.FIELD_LEND_DATE,
-			PapyrusContentProvider.Loans.FIELD_DUE_DATE
-		};
-
-		// store result of query
-		Uri loansUri = Uri.withAppendedPath(ContentUris.withAppendedId(PapyrusContentProvider.Loans.CONTENT_URI, id), "details");
-		Cursor result = resolver.query(loansUri, columns, null, null, null);
-		result.moveToFirst();
-
-		Book book = new Book(result.getString(0), result.getString(1), result.getString(2), result.getString(3));
-		Loan loan = new Loan(result.getInt(4), result.getInt(5), result.getInt(6), result.getLong(7), result.getLong(8));
-
-		Intent intent = new Intent(this, LoanDetails.class);
-
-		intent.putExtra("book", book);
-		intent.putExtra("loan", loan);
-
-		startActivity(intent);
+		// Create the list fragment and add it as our sole content.
+		if (getSupportFragmentManager().findFragmentById(android.R.id.content) == null) {
+			LoansListFragment list = new LoansListFragment();
+			getSupportFragmentManager().beginTransaction().add(android.R.id.content, list).commit();
+		}
 	}
 
 	/**
 	 * Handles a LongClick from an item in the list (create a dialog).
 	 */
 	@Override
-	public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-			final int position, final long id) {
+	public boolean onItemLongClick(AdapterView<?> arg0, View arg1, final int position, final long id) {
 		// set the item id to a class variable
 		this.selectedLoanID = id;
 
@@ -134,7 +70,7 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 		builder.setTitle(getString(R.string.LoansBrowser_LongClickDialog_title));
 
 		// create the dialog items
-		final CharSequence[] items = {getString(R.string.LoansBrowser_LongClickDialog_returnBook)};
+		final CharSequence[] items = { getString(R.string.LoansBrowser_LongClickDialog_returnBook) };
 
 		// set the items and the click listener
 		builder.setItems(items, this);
@@ -158,10 +94,6 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 			Uri loanDelete = ContentUris.withAppendedId(PapyrusContentProvider.Loans.CONTENT_URI, selectedLoanID);
 			resolver.delete(loanDelete, null, null);
 
-			// requery the database
-			result.requery();
-			// tell the list we have new data
-			adapter.notifyDataSetChanged();
 			Toast.makeText(getApplicationContext(), getString(R.string.LoansBrowser_toast_bookReturned),
 					Toast.LENGTH_SHORT).show();
 			break;
@@ -174,7 +106,7 @@ public class LoansBrowser extends ListActivity implements OnItemClickListener,
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.loans_browser , menu);
+		getMenuInflater().inflate(R.menu.loans_browser, menu);
 		return true;
 	}
 
