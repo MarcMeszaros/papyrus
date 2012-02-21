@@ -19,6 +19,7 @@ import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.database.Loan;
 import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 import ca.marcmeszaros.papyrus.tools.TNManager;
 
 import android.app.Activity;
@@ -30,7 +31,6 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -61,6 +61,8 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 
 	static final int DATE_DIALOG_ID = 0;
 
+	private ContentResolver resolver;
+
 	/**
 	 * Called when the activity is first created.
 	 */
@@ -68,6 +70,9 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_loan_details);
+
+		// get the content resolver
+		resolver = getContentResolver();
 
 		/*
 		 * get book information, loan information and contact ID
@@ -78,8 +83,7 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 		String name = "";
 
 		// retrieve contact information
-		ContentResolver cr = getContentResolver();
-		Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+		Cursor cur = resolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 		if (cur.getCount() > 0) {
 			while (cur.moveToNext()) {
 				int id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
@@ -198,22 +202,13 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 				dueDate = (Button) findViewById(R.id.LoanDetails_dueDate_button);
 				dueDate.setText(MONTH_ENUM[mMonth] + " " + mDay + ", " + mYear);
 
-				/*
-				 * Update Database
-				 */
-				SQLiteDatabase db = new DBHelper(getApplicationContext()).getWritableDatabase();
-
 				// create the update query
 				ContentValues values = new ContentValues();
 				values.put(DBHelper.LOAN_FIELD_DUE_DATE, dDate);
 
-				// select the right book
-				String whereClause = DBHelper.LOAN_TABLE_NAME + "."
-						+ DBHelper.LOAN_FIELD_ID + "=" + loan.getLoanID();
-
-				// update and close the db
-				db.update(DBHelper.LOAN_TABLE_NAME, values, whereClause, null);
-				db.close();
+				// select the right book and update it
+				Uri updateLoan = ContentUris.withAppendedId(PapyrusContentProvider.Loans.CONTENT_URI, loan.getLoanID());
+				resolver.update(updateLoan, values, null, null);
 
 			} catch (Exception e) {
 				// do something eventually
