@@ -17,10 +17,10 @@ package ca.marcmeszaros.papyrus.database;
 
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.Settings;
-import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
@@ -36,10 +36,15 @@ import android.widget.Toast;
 
 public class AddLibrary extends Activity implements OnClickListener {
 
+	private ContentResolver resolver;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_library);
+
+		// get the content resolver
+		resolver = getContentResolver();
 
 		// set on click listeners
 		findViewById(R.id.AddLibrary_button_addLibrary).setOnClickListener(this);
@@ -82,7 +87,7 @@ public class AddLibrary extends Activity implements OnClickListener {
 		}
 
 		// get all the libraries
-		Cursor result = getContentResolver().query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null, null);
+		Cursor result = resolver.query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null, null);
 
 		// check if it's the first one
 		if (result.getCount() == 0) {
@@ -93,10 +98,10 @@ public class AddLibrary extends Activity implements OnClickListener {
 
 		// create the query
 		ContentValues values = new ContentValues();
-		values.put(DBHelper.LIBRARY_FIELD_NAME, libraryName.getText().toString());
+		values.put(PapyrusContentProvider.Libraries.FIELD_NAME, libraryName.getText().toString());
 
 		// insert the values and save the resulting uri
-		Uri newLibrary = getContentResolver().insert(PapyrusContentProvider.Libraries.CONTENT_URI, values);
+		Uri newLibrary = resolver.insert(PapyrusContentProvider.Libraries.CONTENT_URI, values);
 
 		// if it's the first library set it as the default
 		if (isFirstLibrary) {
