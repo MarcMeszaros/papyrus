@@ -16,7 +16,6 @@
 package ca.marcmeszaros.papyrus.database;
 
 import ca.marcmeszaros.papyrus.R;
-import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 import ca.marcmeszaros.papyrus.remote.PapyrusHunter;
 import ca.marcmeszaros.papyrus.remote.PapyrusHunterHandler;
@@ -31,7 +30,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -60,7 +58,6 @@ public class AddBook extends Activity implements OnClickListener, OnItemSelected
 		// Set up click listeners for all the buttons
 		findViewById(R.id.AddBook_button_scan).setOnClickListener(this);
 		findViewById(R.id.AddBook_button_addBook).setOnClickListener(this);
-		//findViewById(R.id.AddBook_field_isbn).setOnClickListener(this);
 
 		// create the spinner and db connection
 		Spinner spinner = (Spinner) findViewById(R.id.AddBook_spinner_library);
@@ -69,8 +66,8 @@ public class AddBook extends Activity implements OnClickListener, OnItemSelected
 		result = getContentResolver().query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null, PapyrusContentProvider.Libraries.FIELD_NAME);
 
 		// specify what fields to map to what views
-		String[] from = {DBHelper.LIBRARY_FIELD_NAME};
-		int[] to = {android.R.id.text1};
+		String[] from = { PapyrusContentProvider.Libraries.FIELD_NAME };
+		int[] to = { android.R.id.text1 };
 
 		// create a cursor adapter and set it to the list
 		SimpleCursorAdapter adp = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, result, from, to);
