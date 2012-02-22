@@ -16,7 +16,7 @@
 package ca.marcmeszaros.papyrus.browser;
 
 import ca.marcmeszaros.papyrus.R;
-import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 import ca.marcmeszaros.papyrus.tools.TNManager;
 
 import android.content.Context;
@@ -28,10 +28,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-public class BookAdapter extends CursorAdapter implements SectionIndexer {
+public class BookAdapter extends CursorAdapter {
 
 	private static final String TAG = "BookAdapter";
 
@@ -45,12 +44,12 @@ public class BookAdapter extends CursorAdapter implements SectionIndexer {
 		TextView title = (TextView) view.findViewById(R.id.BookRow_book_title);
 		TextView author = (TextView) view.findViewById(R.id.BookRow_book_author);
 
-		title.setText(cursor.getString(cursor.getColumnIndex(DBHelper.BOOK_FIELD_TITLE)));
-		author.setText(cursor.getString(cursor.getColumnIndex(DBHelper.BOOK_FIELD_AUTHOR)));
+		title.setText(cursor.getString(cursor.getColumnIndex(PapyrusContentProvider.Books.FIELD_TITLE)));
+		author.setText(cursor.getString(cursor.getColumnIndex(PapyrusContentProvider.Books.FIELD_AUTHOR)));
 
 		// try and get both isbn numbers from the result
-		String isbn10 = cursor.getString(cursor.getColumnIndex(DBHelper.BOOK_FIELD_ISBN10));
-		String isbn13 = cursor.getString(cursor.getColumnIndex(DBHelper.BOOK_FIELD_ISBN13));
+		String isbn10 = cursor.getString(cursor.getColumnIndex(PapyrusContentProvider.Books.FIELD_ISBN10));
+		String isbn13 = cursor.getString(cursor.getColumnIndex(PapyrusContentProvider.Books.FIELD_ISBN13));
 
 		// check if we got an isbn10 number from query and file exists
 		if (isbn10 != null && TNManager.getThumbnail(isbn10).exists()) {
@@ -71,24 +70,4 @@ public class BookAdapter extends CursorAdapter implements SectionIndexer {
 		return v;
 	}
 
-	// TODO implement later
-	@Override
-	public int getPositionForSection(int section) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	// TODO implement later
-	@Override
-	public int getSectionForPosition(int position) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	// TODO implement later
-	@Override
-	public Object[] getSections() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
