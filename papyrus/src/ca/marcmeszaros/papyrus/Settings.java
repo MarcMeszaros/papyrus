@@ -15,9 +15,10 @@
  */
 package ca.marcmeszaros.papyrus;
 
-import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
+import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 import ca.marcmeszaros.papyrus.tools.Manifest;
 
+import android.content.ContentResolver;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -28,7 +29,7 @@ public class Settings extends PreferenceActivity {
 
 	public static String KEY_DEFAULT_LIBRARY = "defaultLibrary";
 
-	private SQLiteDatabase db;
+	private ContentResolver resolver;
 
 	/**
 	 * Called when the activity is first created.
@@ -38,14 +39,12 @@ public class Settings extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings);
 
-		// setup the db connection
-		DBHelper helper = new DBHelper(getApplicationContext());
-		this.db = helper.getWritableDatabase();
-
-		String[] columns = {DBHelper.LIBRARY_FIELD_ID, DBHelper.LIBRARY_FIELD_NAME};
+		// get the content resolver
+		resolver = getContentResolver();
 
 		// get all libraries
-		Cursor result = db.query(DBHelper.LIBRARY_TABLE_NAME, columns, null, null, null, null, DBHelper.LIBRARY_FIELD_NAME);
+		String[] columns = { PapyrusContentProvider.Libraries.FIELD_ID, PapyrusContentProvider.Libraries.FIELD_NAME };
+		Cursor result = resolver.query(PapyrusContentProvider.Libraries.CONTENT_URI, columns, null, null, PapyrusContentProvider.Libraries.FIELD_NAME);
 
 		// get the default library preference
 		ListPreference defaultLibrary = (ListPreference) findPreference(KEY_DEFAULT_LIBRARY);
@@ -54,11 +53,11 @@ public class Settings extends PreferenceActivity {
 		CharSequence[] entries = new CharSequence[result.getCount()];
 		CharSequence[] entryValues = new CharSequence[result.getCount()];
 
-		// populate the
+		// populate the spinner
 		for (int i = 0; i < result.getCount(); i++) {
 			result.moveToNext();
-			entries[i] = result.getString(result.getColumnIndex(DBHelper.LIBRARY_FIELD_NAME));
-			entryValues[i] = result.getString(result.getColumnIndex(DBHelper.LIBRARY_FIELD_ID));
+			entries[i] = result.getString(result.getColumnIndex(PapyrusContentProvider.Libraries.FIELD_NAME));
+			entryValues[i] = result.getString(result.getColumnIndex(PapyrusContentProvider.Libraries.FIELD_ID));
 		}
 
 		// set the list and associated values
@@ -67,5 +66,8 @@ public class Settings extends PreferenceActivity {
 
 		// set the versionName
 		(this.getPreferenceScreen().findPreference("versionName")).setSummary(Manifest.getVersionName(this));
+
+		// close the cursor
+		result.close();
 	}
 }
