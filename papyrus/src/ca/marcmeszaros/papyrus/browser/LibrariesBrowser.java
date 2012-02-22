@@ -18,7 +18,6 @@ package ca.marcmeszaros.papyrus.browser;
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.Settings;
 import ca.marcmeszaros.papyrus.database.AddLibrary;
-import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
 import android.app.AlertDialog;
@@ -170,7 +169,7 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 							books.moveToNext();
 							whereValues[0] = books.getString(0);
 							values = new ContentValues();
-							values.put(DBHelper.BOOK_FIELD_LIBRARY_ID, newLibraryId);
+							values.put(PapyrusContentProvider.Books.FIELD_LIBRARY_ID, newLibraryId);
 							resolver.update(PapyrusContentProvider.Books.CONTENT_URI, values, whereClause, whereValues);
 						}
 
