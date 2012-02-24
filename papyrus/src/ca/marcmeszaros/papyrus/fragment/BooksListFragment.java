@@ -46,8 +46,8 @@ public class BooksListFragment extends ListFragment implements LoaderCallbacks<C
 
 	private static final String TAG = "BooksListFragment";
 	
-	private static final int BOOKS = 1;
-	private static final int LIBRARIES = 2;
+	private static final int BOOKS = 0x01;
+	private static final int LIBRARIES = 0x02;
 	
 	// fragment variables
 	BookAdapter books;

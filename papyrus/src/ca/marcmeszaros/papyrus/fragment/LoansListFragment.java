@@ -47,7 +47,7 @@ public class LoansListFragment extends ListFragment implements LoaderCallbacks<C
 
 	private static final String TAG = "LoansListFragment";
 	
-	private static final int LOANS = 1;
+	private static final int LOANS = 0x01;
 	
 	// fragment variables
 	BookAdapter books;
