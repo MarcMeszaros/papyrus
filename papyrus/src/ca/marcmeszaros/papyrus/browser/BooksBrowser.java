@@ -27,8 +27,6 @@ import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -57,19 +55,13 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 public class BooksBrowser extends FragmentActivity implements OnItemSelectedListener, OnItemLongClickListener,
-		DialogInterface.OnClickListener, OnDateSetListener {
+		DialogInterface.OnClickListener {
 
 	private static final String TAG = "BooksBrowser";
 
 	// class variables
 	private long selectedBookID;
 	private ContentResolver resolver;
-
-	private int mYear;
-	private int mMonth;
-	private int mDay;
-
-	static final int DATE_DIALOG_ID = 0;
 
 	private Intent loanData;
 
@@ -100,8 +92,7 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 		builder.setTitle(getString(R.string.BooksBrowser_LongClickDialog_title));
 
 		// create the dialog items
-		final CharSequence[] items = {
-				getString(R.string.BooksBrowser_LongClickDialog_delete),
+		final CharSequence[] items = { getString(R.string.BooksBrowser_LongClickDialog_delete),
 				getString(R.string.BooksBrowser_LongClickDialog_lendTo) };
 
 		// set the items and the click listener
@@ -150,12 +141,26 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 					// set default due date
 					final Calendar c = Calendar.getInstance();
 					c.setTimeInMillis(System.currentTimeMillis() + (1000 * 60 * 60 * 24 * 14));
-					mYear = c.get(Calendar.YEAR);
-					mMonth = c.get(Calendar.MONTH);
-					mDay = c.get(Calendar.DAY_OF_MONTH);
+					int mYear = c.get(Calendar.YEAR);
+					int mMonth = c.get(Calendar.MONTH);
+					int mDay = c.get(Calendar.DAY_OF_MONTH);
 
-					// Launch Date Picker Box
-					showDialog(DATE_DIALOG_ID);
+					// create the custom dialog title view block
+					LinearLayout linearLayout = (LinearLayout) getLayoutInflater().inflate(
+							R.layout.datepickerdialog_customtitle_twoline, null);
+					TextView title = (TextView) linearLayout
+							.findViewById(R.id.DatePickerDialog_customTitle_twoline_title);
+					TextView titleDescription = (TextView) linearLayout
+							.findViewById(R.id.DatePickerDialog_customTitle_twoline_description);
+
+					// set the text
+					title.setText(R.string.BooksBrowser_LoanReturnDateDialog_title);
+					titleDescription.setText(R.string.BooksBrowser_LoanReturnDateDialog_titleDescription);
+
+					// create the dialog with the custom header and display it
+					DatePickerDialog dialog = new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);
+					dialog.setCustomTitle(linearLayout);
+					dialog.show();
 				} else {
 					// there are no more copies left in the library
 					Toast.makeText(this, getString(R.string.BooksBrowser_toast_allCopiesLentOut), Toast.LENGTH_LONG)
@@ -225,51 +230,19 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 	}
 
 	/**
-	 * Date Picking
-	 */
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-		case DATE_DIALOG_ID:
-			// create the custom dialog title view block
-			LinearLayout linearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.datepickerdialog_customtitle_twoline, null);
-			TextView title = (TextView) linearLayout.findViewById(R.id.DatePickerDialog_customTitle_twoline_title);
-			TextView titleDescription = (TextView) linearLayout.findViewById(R.id.DatePickerDialog_customTitle_twoline_description);
-
-			// set the text
-			title.setText(R.string.BooksBrowser_LoanReturnDateDialog_title);
-			titleDescription.setText(R.string.BooksBrowser_LoanReturnDateDialog_titleDescription);
-
-			// create the dialog with the custom header
-			DatePickerDialog dialog = new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);
-			dialog.setCustomTitle(linearLayout);
-			return dialog;
-		}
-		return null;
-	}
-
-	@Override
-	public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-		// TODO Auto-generated method stub
-	}
-
-	/**
 	 * the callback received when the user "sets" the date in the dialog
 	 */
 	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
 		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-			mYear = year;
-			mMonth = monthOfYear;
-			mDay = dayOfMonth;
-			loanBook();
+			loanBook(year, monthOfYear, dayOfMonth);
 		}
 	};
 
 	/**
 	 * Executes the query to loan out the book
 	 */
-	private void loanBook() {
+	private void loanBook(int mYear, int mMonth, int mDay) {
 		// set the due date
 		Calendar c = Calendar.getInstance();
 		c.set(mYear, mMonth, mDay);
