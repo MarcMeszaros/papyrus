@@ -154,8 +154,8 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 							.findViewById(R.id.DatePickerDialog_customTitle_twoline_description);
 
 					// set the text
-					title.setText(R.string.BooksBrowser_LoanReturnDateDialog_title);
-					titleDescription.setText(R.string.BooksBrowser_LoanReturnDateDialog_titleDescription);
+					title.setText(R.string.AlertDialog_LoanReturnDateDialog_title);
+					titleDescription.setText(R.string.AlertDialog_LoanReturnDateDialog_titleDescription);
 
 					// create the dialog with the custom header and display it
 					DatePickerDialog dialog = new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);
