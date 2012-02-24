@@ -23,8 +23,6 @@ import ca.marcmeszaros.papyrus.tools.TNManager;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -38,16 +36,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Calendar;
 
-public class LoanDetails extends Activity implements OnClickListener, OnDateSetListener {
+public class LoanDetails extends Activity implements OnClickListener {
 
 	private Loan loan;
-	private int mYear;
-	private int mMonth;
-	private int mDay;
 
 	private long dDate;
 	private Button dueDate;
@@ -154,28 +150,27 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 		} else if (v.getId() == R.id.LoanDetails_dueDate_button) {
 			final Calendar c = Calendar.getInstance();
 			c.setTimeInMillis(dDate);
-			mYear = c.get(Calendar.YEAR);
-			mMonth = c.get(Calendar.MONTH);
-			mDay = c.get(Calendar.DAY_OF_MONTH);
-			showDialog(DATE_DIALOG_ID);
-		}
-	}
+			int mYear = c.get(Calendar.YEAR);
+			int mMonth = c.get(Calendar.MONTH);
+			int mDay = c.get(Calendar.DAY_OF_MONTH);
 
-	/**
-	 * Date Picking
-	 */
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-		case DATE_DIALOG_ID:
-			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);
-		}
-		return null;
-	}
+			// create the custom dialog title view block
+			LinearLayout linearLayout = (LinearLayout) getLayoutInflater().inflate(
+					R.layout.datepickerdialog_customtitle_twoline, null);
+			TextView title = (TextView) linearLayout
+					.findViewById(R.id.DatePickerDialog_customTitle_twoline_title);
+			TextView titleDescription = (TextView) linearLayout
+					.findViewById(R.id.DatePickerDialog_customTitle_twoline_description);
 
-	@Override
-	public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-		// auto stub
+			// set the text
+			title.setText(R.string.AlertDialog_LoanReturnDateDialog_title);
+			titleDescription.setText(R.string.AlertDialog_LoanReturnDateDialog_titleDescription);
+
+			// create the dialog with the custom header and display it
+			DatePickerDialog dialog = new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);
+			dialog.setCustomTitle(linearLayout);
+			dialog.show();
+		}
 	}
 
 	/**
@@ -184,22 +179,18 @@ public class LoanDetails extends Activity implements OnClickListener, OnDateSetL
 	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
 		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-			mYear = year;
-			mMonth = monthOfYear;
-			mDay = dayOfMonth;
-
 			// update due date label and value in database
 			try {
 
 				Calendar c = Calendar.getInstance();
-				c.set(mYear, mMonth, mDay);
+				c.set(year, monthOfYear, dayOfMonth);
 				dDate = c.getTimeInMillis();
 
 				/*
 				 * Update due date label
 				 */
 				dueDate = (Button) findViewById(R.id.LoanDetails_dueDate_button);
-				dueDate.setText(MONTH_ENUM[mMonth] + " " + mDay + ", " + mYear);
+				dueDate.setText(MONTH_ENUM[monthOfYear] + " " + dayOfMonth + ", " + year);
 
 				// create the update query
 				ContentValues values = new ContentValues();
