@@ -49,7 +49,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -229,7 +231,19 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case DATE_DIALOG_ID:
-			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);
+			// create the custom dialog title view block
+			LinearLayout linearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.datepickerdialog_customtitle_twoline, null);
+			TextView title = (TextView) linearLayout.findViewById(R.id.DatePickerDialog_customTitle_twoline_title);
+			TextView titleDescription = (TextView) linearLayout.findViewById(R.id.DatePickerDialog_customTitle_twoline_description);
+
+			// set the text
+			title.setText(R.string.BooksBrowser_LoanReturnDateDialog_title);
+			titleDescription.setText(R.string.BooksBrowser_LoanReturnDateDialog_titleDescription);
+
+			// create the dialog with the custom header
+			DatePickerDialog dialog = new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);
+			dialog.setCustomTitle(linearLayout);
+			return dialog;
 		}
 		return null;
 	}
