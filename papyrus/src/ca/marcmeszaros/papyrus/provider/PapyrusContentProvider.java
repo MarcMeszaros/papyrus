@@ -142,7 +142,9 @@ public class PapyrusContentProvider extends ContentProvider {
 		case LOAN_ID:
 			return "vnd.android.cursor.item/vnd.ca.marcmeszaros.papyrus.loan";
 		case LOANS_DETAILS:
-			return "vnd.android.cursor.dir/vnd.ca.marcmeszaros.papyrus.loan";
+			return "vnd.android.cursor.dir/vnd.ca.marcmeszaros.papyrus.loan.details";
+		case LOAN_DETAILS:
+			return "vnd.android.cursor.item/vnd.ca.marcmeszaros.papyrus.loan.details";
 		case LIBRARIES:
 			return "vnd.android.cursor.dir/vnd.ca.marcmeszaros.papyrus.library";
 		case LIBRARY_ID:
@@ -222,6 +224,11 @@ public class PapyrusContentProvider extends ContentProvider {
 			// build the query
 			selection = Loans.TABLE_NAME + "." + Loans.FIELD_BOOK_ID + " = " + Books.TABLE_NAME + "." + Books.FIELD_ID;
 			selectionArgs = null;
+
+			// we set the uri to be more generic for the notification URI
+			// so that a modification of a loan will tell loan details to
+			// update itself
+			uri = Loans.CONTENT_URI;
 			break;
 
 		// handle the case for loan details
@@ -242,11 +249,17 @@ public class PapyrusContentProvider extends ContentProvider {
 			};
 
 			List<String> segments = uri.getPathSegments();
+			String id = segments.get(segments.size() - 2);
 
 			// build the query
 			selection = Loans.TABLE_NAME + "." + Loans.FIELD_BOOK_ID + " = " + Books.TABLE_NAME + "." + Books.FIELD_ID
 					+ " AND " + Loans.TABLE_NAME + "." + Loans.FIELD_ID + " = ?";
-			selectionArgs = new String[] { segments.get(segments.size() - 2) };
+			selectionArgs = new String[] { id };
+
+			// we set the uri to be more generic for the notification URI
+			// so that a modification of a loan will tell loan details to
+			// update itself
+			uri = Uri.withAppendedPath(Loans.CONTENT_URI, id);
 			break;
 
 		// handle the case for all libraries
@@ -395,6 +408,7 @@ public class PapyrusContentProvider extends ContentProvider {
 		// update all loans
 		case LOANS:
 			table = Loans.TABLE_NAME;
+			getContext().getContentResolver().notifyChange(uri, null);
 			break;
 
 		// update the matching id
@@ -402,6 +416,7 @@ public class PapyrusContentProvider extends ContentProvider {
 			table = Loans.TABLE_NAME;
 			selection = Loans.FIELD_ID + " = ?";
 			selectionArgs = new String[] { Long.toString(ContentUris.parseId(uri)) };
+			getContext().getContentResolver().notifyChange(uri, null);
 			break;
 
 		// update all libraries
