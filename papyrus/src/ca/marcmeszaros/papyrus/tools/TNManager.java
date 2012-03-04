@@ -15,8 +15,6 @@
  */
 package ca.marcmeszaros.papyrus.tools;
 
-import ca.marcmeszaros.papyrus.database.sqlite.DBHelper;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
@@ -39,6 +37,7 @@ import java.net.URL;
 public class TNManager {
 
 	private static final String TAG = "TNManager";
+	private static final String path = "/Papyrus/";
 
 	/**
 	 * Downloads and saves the thumbnail of a book to the SD card.
@@ -46,20 +45,21 @@ public class TNManager {
 	 * @param thumbnailURL the URL to the thumbnail
 	 * @param isbn the ISBN number of the book
 	 * @return {@code true} on success or {@code false} on failure
+	 * /Android/data/<package_name>/files/
 	 */
 	public static boolean saveThumbnail(URL thumbnailURL, String isbn) {
 		// make sure we have access to the SD card
-		if (Environment.MEDIA_MOUNTED.equals(DBHelper.PAPYRUS_SDCARD_STATE)) {
+		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			try {
 				// if the folder on the SD carld doesn't exist, create it
-				if (!DBHelper.PAPYRUS_SDCARD_ROOT.exists()) {
-					DBHelper.PAPYRUS_SDCARD_ROOT.mkdir();
+				if (!(new File(Environment.getExternalStorageDirectory(), path).exists())) {
+					new File(Environment.getExternalStorageDirectory(), path).mkdirs();
 					// creates the ".nomedia" file to hide content from "Gallery"
-					new File(DBHelper.PAPYRUS_SDCARD_ROOT, ".nomedia").createNewFile();
+					new File(Environment.getExternalStorageDirectory(), path + ".nomedia").createNewFile();
 				}
 
 				// create the thumbnail
-				File thumbnail = new File(DBHelper.PAPYRUS_SDCARD_ROOT, isbn + ".jpg");
+				File thumbnail = new File(Environment.getExternalStorageDirectory(), path + isbn + ".jpg");
 
 				// if the file doesn't exist, create it and get the data
 				if (!thumbnail.exists()) {
@@ -101,7 +101,7 @@ public class TNManager {
 	 * @return a {@code File} handle to the thumbnail image
 	 */
 	public static File getThumbnail(String isbn) {
-		return new File(DBHelper.PAPYRUS_SDCARD_ROOT, isbn + ".jpg");
+		return new File(Environment.getExternalStorageDirectory(), path + isbn + ".jpg");
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class TNManager {
 	 * @return {@code true} on operation success or {@code false} on failure
 	 */
 	public static boolean deleteThumbnail(String isbn) {
-		return new File(DBHelper.PAPYRUS_SDCARD_ROOT, isbn + ".jpg").delete();
+		return new File(Environment.getExternalStorageDirectory(), path + isbn + ".jpg").delete();
 	}
 
 }
