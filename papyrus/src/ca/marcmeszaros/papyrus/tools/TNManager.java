@@ -37,7 +37,7 @@ import java.net.URL;
 public class TNManager {
 
 	private static final String TAG = "TNManager";
-	private static final String path = "/Papyrus/";
+	private static final String path = "/Android/data/ca.marcmeszaros.papyrus/files/";
 
 	/**
 	 * Downloads and saves the thumbnail of a book to the SD card.

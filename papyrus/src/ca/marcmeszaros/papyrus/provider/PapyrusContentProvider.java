@@ -15,6 +15,7 @@
  */
 package ca.marcmeszaros.papyrus.provider;
 
+import java.io.File;
 import java.util.List;
 
 import android.content.ContentProvider;
@@ -27,6 +28,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
@@ -445,11 +447,11 @@ public class PapyrusContentProvider extends ContentProvider {
 	}
 	
 	/**
-	 * Nested class for managing the SQL database
+	 * Nested class for managing the SQL database.
 	 */
 	private class DBHelper extends SQLiteOpenHelper {
 
-		private static final int DATABASE_VERSION = 1;
+		private static final int DATABASE_VERSION = 2;
 
 		public DBHelper(Context context) {
 			super(context, "papyrus.db", null, DATABASE_VERSION);
@@ -513,7 +515,27 @@ public class PapyrusContentProvider extends ContentProvider {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			// TODO Auto-generated method stub
+			// move the thumbnails to a new location on the SD card based on
+			// API documentation recommendations
+			if (oldVersion == 1) {
+				// define some paths
+				String oldPath = "/Papyrus/";
+				String newPath = "/Android/data/ca.marcmeszaros.papyrus/files/";
+
+				// create the new file folder if required
+				new File(Environment.getExternalStorageDirectory(), newPath).mkdirs();
+
+				String[] fileList = new File(Environment.getExternalStorageDirectory(), oldPath).list();
+				for (String file : fileList) {
+					File newFile = new File(Environment.getExternalStorageDirectory(), newPath + file);
+					File oldFile = new File(Environment.getExternalStorageDirectory(), oldPath + file);
+					oldFile.renameTo(newFile);
+				}
+
+				// delete the old directory and move to next migration
+				new File(Environment.getExternalStorageDirectory(), oldPath).delete();
+				oldVersion++;
+			}
 		}
 
 	}
