@@ -44,19 +44,19 @@ public class PapyrusContentProvider extends ContentProvider {
 		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/books");
 
 		// map the DB columns to fields in the content provider
-		public static final String TABLE_NAME = DBHelper.BOOK_TABLE_NAME;
-		public static final String FIELD_ID = DBHelper.BOOK_FIELD_ID;
-		public static final String FIELD_LIBRARY_ID = DBHelper.BOOK_FIELD_LIBRARY_ID;
-		public static final String FIELD_ISBN10 = DBHelper.BOOK_FIELD_ISBN10;
-		public static final String FIELD_ISBN13 = DBHelper.BOOK_FIELD_ISBN13;
-		public static final String FIELD_BAR_CODE = DBHelper.BOOK_FIELD_BAR_CODE;
-		public static final String FIELD_TITLE = DBHelper.BOOK_FIELD_TITLE;
-		public static final String FIELD_AUTHOR = DBHelper.BOOK_FIELD_AUTHOR;
-		public static final String FIELD_EDITION = DBHelper.BOOK_FIELD_EDITION;
-		public static final String FIELD_PUBLICATION_DATE = DBHelper.BOOK_FIELD_PUBLICATION_DATE;
-		public static final String FIELD_PUBLISHER = DBHelper.BOOK_FIELD_PUBLISHER;
-		public static final String FIELD_PAGES = DBHelper.BOOK_FIELD_PAGES;
-		public static final String FIELD_QUANTITY = DBHelper.BOOK_FIELD_QUANTITY;
+		public static final String TABLE_NAME = "books";
+		public static final String FIELD_ID = BaseColumns._ID;
+		public static final String FIELD_LIBRARY_ID = "library_ID";
+		public static final String FIELD_ISBN10 = "ISBN10";
+		public static final String FIELD_ISBN13 = "ISBN13";
+		public static final String FIELD_BAR_CODE = "bar_code";
+		public static final String FIELD_TITLE = "title";
+		public static final String FIELD_AUTHOR = "author";
+		public static final String FIELD_EDITION = "edition";
+		public static final String FIELD_PUBLICATION_DATE = "publication_date";
+		public static final String FIELD_PUBLISHER = "publisher";
+		public static final String FIELD_PAGES = "pages";
+		public static final String FIELD_QUANTITY = "quantity";
 	}
 
 	/**
@@ -66,12 +66,12 @@ public class PapyrusContentProvider extends ContentProvider {
 		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/loans");
 
 		// map the DB columns to fields in the content provider
-		public static final String TABLE_NAME = DBHelper.LOAN_TABLE_NAME;
-		public static final String FIELD_ID = DBHelper.LOAN_FIELD_ID;
-		public static final String FIELD_BOOK_ID = DBHelper.LOAN_FIELD_BOOK_ID;
-		public static final String FIELD_CONTACT_ID = DBHelper.LOAN_FIELD_CONTACT_ID;
-		public static final String FIELD_LEND_DATE = DBHelper.LOAN_FIELD_LEND_DATE;
-		public static final String FIELD_DUE_DATE = DBHelper.LOAN_FIELD_DUE_DATE;
+		public static final String TABLE_NAME = "loans";
+		public static final String FIELD_ID = BaseColumns._ID;
+		public static final String FIELD_BOOK_ID = "book_ID";
+		public static final String FIELD_CONTACT_ID = "contact_ID";
+		public static final String FIELD_LEND_DATE = "lend_date";
+		public static final String FIELD_DUE_DATE = "due_date";
 	}
 
 	/**
@@ -81,12 +81,12 @@ public class PapyrusContentProvider extends ContentProvider {
 		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/libraries");
 
 		// map the DB columns to fields in the content provider
-		public static final String TABLE_NAME = DBHelper.LIBRARY_TABLE_NAME;
-		public static final String FIELD_ID = DBHelper.LIBRARY_FIELD_ID;
-		public static final String FIELD_ADDRESS = DBHelper.LIBRARY_FIELD_ADDRESS;
-		public static final String FIELD_GEO_LONGITUDE = DBHelper.LIBRARY_FIELD_GEO_LONGITUDE;
-		public static final String FIELD_GEO_LATITUDE = DBHelper.LIBRARY_FIELD_GEO_LATITUDE;
-		public static final String FIELD_NAME = DBHelper.LIBRARY_FIELD_NAME;
+		public static final String TABLE_NAME = "libraries";
+		public static final String FIELD_ID = BaseColumns._ID;
+		public static final String FIELD_ADDRESS = "address";
+		public static final String FIELD_GEO_LONGITUDE = "geo_tag_longitude";
+		public static final String FIELD_GEO_LATITUDE = "geo_tag_latitude";
+		public static final String FIELD_NAME = "name";
 	}
 
 	// uri matching static variables
@@ -451,37 +451,6 @@ public class PapyrusContentProvider extends ContentProvider {
 
 		private static final int DATABASE_VERSION = 1;
 
-		// database static variables
-		public static final String BOOK_TABLE_NAME = "books";
-		public static final String LIBRARY_TABLE_NAME = "libraries";
-		public static final String LOAN_TABLE_NAME = "loans";
-
-		// database column names static variables
-		public static final String BOOK_FIELD_ID = BaseColumns._ID;
-		public static final String BOOK_FIELD_LIBRARY_ID = "library_ID";
-		public static final String BOOK_FIELD_ISBN10 = "ISBN10";
-		public static final String BOOK_FIELD_ISBN13 = "ISBN13";
-		public static final String BOOK_FIELD_BAR_CODE = "bar_code";
-		public static final String BOOK_FIELD_TITLE = "title";
-		public static final String BOOK_FIELD_AUTHOR = "author";
-		public static final String BOOK_FIELD_EDITION = "edition";
-		public static final String BOOK_FIELD_PUBLICATION_DATE = "publication_date";
-		public static final String BOOK_FIELD_PUBLISHER = "publisher";
-		public static final String BOOK_FIELD_PAGES = "pages";
-		public static final String BOOK_FIELD_QUANTITY = "quantity";
-
-		public static final String LIBRARY_FIELD_ID = BaseColumns._ID;
-		public static final String LIBRARY_FIELD_ADDRESS = "address";
-		public static final String LIBRARY_FIELD_GEO_LONGITUDE = "geo_tag_longitude";
-		public static final String LIBRARY_FIELD_GEO_LATITUDE = "geo_tag_latitude";
-		public static final String LIBRARY_FIELD_NAME = "name";
-
-		public static final String LOAN_FIELD_ID = BaseColumns._ID;
-		public static final String LOAN_FIELD_BOOK_ID = "book_ID";
-		public static final String LOAN_FIELD_CONTACT_ID = "contact_ID";
-		public static final String LOAN_FIELD_LEND_DATE = "lend_date";
-		public static final String LOAN_FIELD_DUE_DATE = "due_date";
-
 		public DBHelper(Context context) {
 			super(context, "papyrus.db", null, DATABASE_VERSION);
 		}
@@ -498,20 +467,20 @@ public class PapyrusContentProvider extends ContentProvider {
 		 * Creates the book table in the database.
 		 */
 		private void createBookTable(SQLiteDatabase db) {
-			db.execSQL("CREATE TABLE " + BOOK_TABLE_NAME + " ("
-					+ BOOK_FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ BOOK_FIELD_LIBRARY_ID + " INTEGER,"
-					+ BOOK_FIELD_ISBN10 + " TEXT(10),"
-					+ BOOK_FIELD_ISBN13 + " TEXT(13),"
-					+ BOOK_FIELD_BAR_CODE + " TEXT(13),"
-					+ BOOK_FIELD_TITLE + " TEXT(255),"
-					+ BOOK_FIELD_AUTHOR + " TEXT(255),"
-					+ BOOK_FIELD_EDITION + " INTEGER(2),"
-					+ BOOK_FIELD_PUBLICATION_DATE + " TEXT(10),"
-					+ BOOK_FIELD_PUBLISHER + " TEXT(255),"
-					+ BOOK_FIELD_PAGES + " INTEGER(5),"
-					+ BOOK_FIELD_QUANTITY + " INTEGER(2),"
-					+ "FOREIGN KEY(" + BOOK_FIELD_LIBRARY_ID + ") REFERENCES " + LIBRARY_TABLE_NAME + "(" + LIBRARY_FIELD_ID + ")"
+			db.execSQL("CREATE TABLE " + Books.TABLE_NAME + " ("
+					+ Books.FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+					+ Books.FIELD_LIBRARY_ID + " INTEGER,"
+					+ Books.FIELD_ISBN10 + " TEXT(10),"
+					+ Books.FIELD_ISBN13 + " TEXT(13),"
+					+ Books.FIELD_BAR_CODE + " TEXT(13),"
+					+ Books.FIELD_TITLE + " TEXT(255),"
+					+ Books.FIELD_AUTHOR + " TEXT(255),"
+					+ Books.FIELD_EDITION + " INTEGER(2),"
+					+ Books.FIELD_PUBLICATION_DATE + " TEXT(10),"
+					+ Books.FIELD_PUBLISHER + " TEXT(255),"
+					+ Books.FIELD_PAGES + " INTEGER(5),"
+					+ Books.FIELD_QUANTITY + " INTEGER(2),"
+					+ "FOREIGN KEY(" + Books.FIELD_LIBRARY_ID + ") REFERENCES " + Libraries.TABLE_NAME + "(" + Libraries.FIELD_ID + ")"
 					+ ");");
 		}
 
@@ -519,12 +488,12 @@ public class PapyrusContentProvider extends ContentProvider {
 		 * Creates the library table in the database.
 		 */
 		private void createLibraryTable(SQLiteDatabase db) {
-			db.execSQL("CREATE TABLE " + LIBRARY_TABLE_NAME + " ("
-					+ LIBRARY_FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ LIBRARY_FIELD_ADDRESS + " TEXT(255)," // not used yet
-					+ LIBRARY_FIELD_GEO_LONGITUDE + " REAL(15)," // not used yet
-					+ LIBRARY_FIELD_GEO_LATITUDE + " REAL(15)," // not used yet
-					+ LIBRARY_FIELD_NAME + " TEXT(255)"
+			db.execSQL("CREATE TABLE " + Libraries.TABLE_NAME + " ("
+					+ Libraries.FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+					+ Libraries.FIELD_ADDRESS + " TEXT(255)," // not used yet
+					+ Libraries.FIELD_GEO_LONGITUDE + " REAL(15)," // not used yet
+					+ Libraries.FIELD_GEO_LATITUDE + " REAL(15)," // not used yet
+					+ Libraries.FIELD_NAME + " TEXT(255)"
 					+ ");");
 		}
 
@@ -532,13 +501,13 @@ public class PapyrusContentProvider extends ContentProvider {
 		 * Creates the Loan table in the database
 		 */
 		private void createLoanTable(SQLiteDatabase db) {
-			db.execSQL("CREATE TABLE " + LOAN_TABLE_NAME + " ("
-					+ LOAN_FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ LOAN_FIELD_BOOK_ID + " INTEGER,"
-					+ LOAN_FIELD_CONTACT_ID + " INTEGER,"
-					+ LOAN_FIELD_LEND_DATE + " INTEGER,"
-					+ LOAN_FIELD_DUE_DATE + " INTEGER,"
-					+ "FOREIGN KEY(" + LOAN_FIELD_BOOK_ID + ") REFERENCES " + BOOK_TABLE_NAME + "(" + BOOK_FIELD_ID + ")"
+			db.execSQL("CREATE TABLE " + Loans.TABLE_NAME + " ("
+					+ Loans.FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+					+ Loans.FIELD_BOOK_ID + " INTEGER,"
+					+ Loans.FIELD_CONTACT_ID + " INTEGER,"
+					+ Loans.FIELD_LEND_DATE + " INTEGER,"
+					+ Loans.FIELD_DUE_DATE + " INTEGER,"
+					+ "FOREIGN KEY(" + Loans.FIELD_BOOK_ID + ") REFERENCES " + Books.TABLE_NAME + "(" + Books.FIELD_ID + ")"
 					+ ");");
 		}
 
