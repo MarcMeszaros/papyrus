@@ -133,7 +133,7 @@ public class AddBook extends Activity implements OnClickListener, OnItemSelected
 				// get the data from the activity to start the request
 				int copies = Integer.valueOf((((EditText) findViewById(R.id.AddBook_field_quantity)).getText()).toString());
 				PapyrusHunter result = new PapyrusHunter(this, handler, isbnField.getText().toString(), libraryId, copies);
-				result.start();
+				runOnUiThread(result); // terrible!!! shouldn't run on the UI thread!!!
 
 				// hide the soft keyboard
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

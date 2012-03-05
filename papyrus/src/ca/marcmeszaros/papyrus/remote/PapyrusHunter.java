@@ -34,6 +34,7 @@ import com.google.api.services.books.model.Volumes;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -41,8 +42,10 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.concurrent.ExecutionException;
 
-public class PapyrusHunter extends Thread {
+public class PapyrusHunter implements Runnable {
 
 	private static final String TAG = "PapyrusHunter";
 
@@ -165,11 +168,21 @@ public class PapyrusHunter extends Thread {
 				// get the thumbnail and save it
 				// check if we got an isbn10 number from query and file exists
 				if (isbn10 != "" && thumbnail != null) {
-					TNManager.saveThumbnail(thumbnail, isbn10);
-					Log.d(TAG, "Got thumbnail");
+					DownloadThumbnails download = new DownloadThumbnails();
+
+					download.execute(thumbnail);
+					LinkedList<Bitmap> images = download.get();
+
+					TNManager.saveThumbnail(images.getFirst(), isbn10);
+					Log.d(TAG, "Got thumbnail asynctask");
 				} else if (isbn13 != "" && thumbnail != null) {
 					// check if we got an isbn13 number from query and file exists
-					TNManager.saveThumbnail(thumbnail, isbn13);
+					DownloadThumbnails download = new DownloadThumbnails();
+
+					download.execute(thumbnail);
+					LinkedList<Bitmap> images = download.get();
+
+					TNManager.saveThumbnail(images.getFirst(), isbn13);
 					Log.d(TAG, "Got thumbnail");
 				}
 
@@ -189,6 +202,10 @@ public class PapyrusHunter extends Thread {
 		} catch (IOException e) {
 			messageHandler.sendEmptyMessage(0);
 			Log.e(TAG, "Couldn't connect to the server.", e);
+		} catch (InterruptedException e) {
+			Log.e(TAG, "The task was interuppted.", e);
+		} catch (ExecutionException e) {
+			Log.e(TAG, "The thread crashed.", e);
 		}
 	}
 }

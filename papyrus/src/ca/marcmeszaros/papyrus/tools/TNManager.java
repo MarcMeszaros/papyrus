@@ -45,9 +45,8 @@ public class TNManager {
 	 * @param thumbnailURL the URL to the thumbnail
 	 * @param isbn the ISBN number of the book
 	 * @return {@code true} on success or {@code false} on failure
-	 * /Android/data/<package_name>/files/
 	 */
-	public static boolean saveThumbnail(URL thumbnailURL, String isbn) {
+	public static boolean saveThumbnail(Bitmap bitmap, String isbn) {
 		// make sure we have access to the SD card
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			try {
@@ -64,27 +63,11 @@ public class TNManager {
 				// if the file doesn't exist, create it and get the data
 				if (!thumbnail.exists()) {
 					thumbnail.createNewFile();
-
-					Log.i(TAG, "Can write to sdcard: " + thumbnail.canWrite());
-
-					HttpGet httpRequest;
-					httpRequest = new HttpGet(thumbnailURL.toURI());
-
-					HttpClient httpclient = new DefaultHttpClient();
-					HttpResponse response = (HttpResponse) httpclient.execute(httpRequest);
-
-					HttpEntity entity = response.getEntity();
-					BufferedHttpEntity bufHttpEntity = new BufferedHttpEntity(entity);
-					InputStream instream = bufHttpEntity.getContent();
-					Bitmap bm = BitmapFactory.decodeStream(instream);
-
 					FileOutputStream out = new FileOutputStream(thumbnail);
 
-					bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
+					bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 				}
 
-			} catch (URISyntaxException e) {
-				Log.e(TAG, "URISyntaxException", e);
 			} catch (IOException e) {
 				Log.e(TAG, "IOException", e);
 			}
