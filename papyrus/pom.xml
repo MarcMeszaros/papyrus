@@ -38,6 +38,12 @@
   			<artifactId>compatibility-v4</artifactId>
   		</dependency>
 
+  		<!-- ACRA -->
+		<dependency>
+		    <groupId>org.acra</groupId>
+		    <artifactId>acra</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<!-- override some defaults with module specific parameters -->
