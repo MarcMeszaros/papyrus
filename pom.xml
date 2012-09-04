@@ -70,7 +70,7 @@
 			<dependency>
   				<groupId>android.support</groupId>
   				<artifactId>compatibility-v4</artifactId>
- 				<version>r8</version>
+ 				<version>r10</version>
 			</dependency>
 
 			<!-- Google API Java Client -->
@@ -180,7 +180,6 @@
 							<goals>
 								<goal>check</goal>
 							</goals>
-							<phase>validate</phase>
 						</execution>
 					</executions>
 				</plugin>
@@ -196,7 +195,7 @@
 				<plugin>
 					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 					<artifactId>android-maven-plugin</artifactId>
-					<version>3.0.0</version>
+					<version>3.3.0</version>
 					<extensions>true</extensions>
 					<configuration>
 						<sdk>

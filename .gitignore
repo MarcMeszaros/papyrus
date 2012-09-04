@@ -1,30 +1,30 @@
 
 # ignore automatically generated files
-target/*
-papyrus/bin/*
-papyrus/gen/*
-papyrus/build/*
-papyrus/target/*
-test/bin/*
-test/gen/*
-test/build/*
-test/target/*
+target/
+papyrus/bin/
+papyrus/gen/
+papyrus/build/
+papyrus/target/
+test/bin/
+test/gen/
+test/build/
+test/target/
 
 # ignore certain files
 test/proguard.cfg
 
 # ingnore local build files
-build\.keystore # specific to Papyrus
-local\.properties # local android enviroment file
+build.keystore # specific to Papyrus
+local.properties # local android enviroment file
 
 # ignore IDE project files
-\.project
-\.settings/*
-\.classpath
-\.metadata
-\.checkstyle
+.project
+.settings/
+.classpath
+.metadata
+.checkstyle
 
 # ignore temp files from various editors
-\.DS_Store
+.DS_Store
 *~
-*\.swp
+*.swp
