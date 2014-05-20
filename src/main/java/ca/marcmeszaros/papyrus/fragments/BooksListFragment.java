@@ -13,41 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.marcmeszaros.papyrus.fragment;
+package ca.marcmeszaros.papyrus.fragments;
 
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.browser.BookAdapter;
-import ca.marcmeszaros.papyrus.browser.LoanDetails;
+import ca.marcmeszaros.papyrus.browser.BookDetails;
 import ca.marcmeszaros.papyrus.database.Book;
-import ca.marcmeszaros.papyrus.database.Loan;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
-import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Spinner;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 /**
  * Manage the fragment lifecycle that lists all the books.
  */
-public class LoansListFragment extends ListFragment implements LoaderCallbacks<Cursor>, OnItemClickListener {
+public class BooksListFragment extends ListFragment implements LoaderCallbacks<Cursor>, OnItemClickListener {
 
-	private static final String TAG = "LoansListFragment";
+	private static final String TAG = "BooksListFragment";
 	
-	private static final int LOANS = 0x01;
+	private static final int BOOKS = 0x01;
+	private static final int LIBRARIES = 0x02;
 	
 	// fragment variables
 	BookAdapter books;
@@ -57,20 +56,31 @@ public class LoansListFragment extends ListFragment implements LoaderCallbacks<C
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		Spinner spinner = (Spinner) getView().findViewById(R.id.BooksBrowser_spinner_library);
+		
 		getListView().setOnItemClickListener(this);
 		getListView().setOnItemLongClickListener((OnItemLongClickListener) getActivity());
+		spinner.setOnItemSelectedListener((OnItemSelectedListener) getActivity());
 		
 		books = new BookAdapter(getActivity(), null);
 		setListAdapter(books);
 		
+		// specify what fields to map to what views
+		String[] from = { PapyrusContentProvider.Libraries.FIELD_NAME };
+		int[] to = { android.R.id.text1 };
+		libraries = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_spinner_item, null, from, to);
+		libraries.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(libraries);
+
 		// Prepare the loader. Either re-connect with an existing one,
 		// or start a new one.
-		getLoaderManager().initLoader(LOANS, null, this);
+		getLoaderManager().initLoader(BOOKS, null, this);
+		getLoaderManager().initLoader(LIBRARIES, null, this);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.activity_loans_browser, null);
+		return inflater.inflate(R.layout.activity_books_browser, null);
 	}
 
 	@Override
@@ -79,9 +89,13 @@ public class LoansListFragment extends ListFragment implements LoaderCallbacks<C
 		// First, pick the base URI to use depending on whether we are
 		// currently filtering.
 		switch (id) {
-		case LOANS:
-			Uri loansUri = Uri.withAppendedPath(PapyrusContentProvider.Loans.CONTENT_URI, "details");
-			return new CursorLoader(getActivity(), loansUri, null, null, null, null);
+		case BOOKS:
+			return new CursorLoader(getActivity(), PapyrusContentProvider.Books.CONTENT_URI, null, null, null,
+					PapyrusContentProvider.Books.FIELD_TITLE);
+			
+		case LIBRARIES:
+			return new CursorLoader(getActivity(), PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null,
+					PapyrusContentProvider.Libraries.FIELD_NAME);
 
 		default:
 			return null;
@@ -93,8 +107,11 @@ public class LoansListFragment extends ListFragment implements LoaderCallbacks<C
 		// Swap the new cursor in. (The framework will take care of closing the
 		// old cursor once we return.)
 		switch (loader.getId()) {
-		case LOANS:
+		case BOOKS:
 			books.changeCursor(data);
+			break;
+		case LIBRARIES:
+			libraries.changeCursor(data);
 			break;
 
 		default:
@@ -109,8 +126,12 @@ public class LoansListFragment extends ListFragment implements LoaderCallbacks<C
 		// above is about to be closed. We need to make sure we are no
 		// longer using it.
 		switch (loader.getId()) {
-		case LOANS:
+		case BOOKS:
 			books.changeCursor(null);
+			break;
+			
+		case LIBRARIES:
+			libraries.changeCursor(null);
 			break;
 
 		default:
@@ -124,37 +145,37 @@ public class LoansListFragment extends ListFragment implements LoaderCallbacks<C
 	 */
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
-		/* do a join on Loan and Book to get the book information and
-		 * the contact ID for the person the book is loaned to
-		 */
-		String[] columns = {
-			PapyrusContentProvider.Loans.TABLE_NAME + "." + PapyrusContentProvider.Loans.FIELD_ID,
-			PapyrusContentProvider.Loans.FIELD_BOOK_ID,
-			PapyrusContentProvider.Loans.FIELD_CONTACT_ID,
-			PapyrusContentProvider.Loans.FIELD_LEND_DATE,
-			PapyrusContentProvider.Loans.FIELD_DUE_DATE,
-			PapyrusContentProvider.Books.FIELD_ISBN10,
-			PapyrusContentProvider.Books.FIELD_ISBN13,
-			PapyrusContentProvider.Books.FIELD_TITLE,
-			PapyrusContentProvider.Books.FIELD_AUTHOR
+		// build the query
+		String[] projection = {
+				PapyrusContentProvider.Books.FIELD_ISBN10, 
+				PapyrusContentProvider.Books.FIELD_ISBN13, 
+				PapyrusContentProvider.Books.FIELD_TITLE,
+				PapyrusContentProvider.Books.FIELD_AUTHOR, 
+				PapyrusContentProvider.Books.FIELD_PUBLISHER, 
+				PapyrusContentProvider.Books.FIELD_QUANTITY,
+				PapyrusContentProvider.Books.FIELD_ID, 
+				PapyrusContentProvider.Books.FIELD_LIBRARY_ID
 		};
+		String selection = PapyrusContentProvider.Books.FIELD_ID + "=?";
+		String[] selectionArgs = { Long.toString(id) };
+		
+		// get the book from the database
+		Cursor bookCursor = getActivity().getContentResolver().query(PapyrusContentProvider.Books.CONTENT_URI, projection, selection, selectionArgs, null);
+		bookCursor.moveToFirst();
 
-		// store result of query
-		Uri loansUri = Uri.withAppendedPath(ContentUris.withAppendedId(PapyrusContentProvider.Loans.CONTENT_URI, id), "details");
-		Cursor result = getActivity().getContentResolver().query(loansUri, columns, null, null, null);
-		result.moveToFirst();
+		// create the book model
+		Book book = new Book(bookCursor.getString(0), bookCursor.getString(1), bookCursor.getString(2),bookCursor.getString(3));
+		book.setPublisher(bookCursor.getString(4));
+		book.setQuantity(bookCursor.getInt(5));
+		book.setBookID(bookCursor.getInt(6));
+		book.setLibraryID(bookCursor.getInt(7));
 
-		Book book = new Book(result.getString(5), result.getString(6), result.getString(7), result.getString(8));
-		Loan loan = new Loan(result.getInt(0), result.getInt(1), result.getInt(2), result.getLong(3), result.getLong(4));
-
-		// close the no longer needed cursor
-		result.close();
-
-		Intent intent = new Intent(getActivity(), LoanDetails.class);
-
+		// close the cursor
+		bookCursor.close();
+		
+		// store the book as data to be passed
+		Intent intent = new Intent(getActivity(), BookDetails.class);
 		intent.putExtra("book", book);
-		intent.putExtra("loan", loan);
-
 		startActivity(intent);
 	}
 

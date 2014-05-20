@@ -21,7 +21,7 @@ import ca.marcmeszaros.papyrus.Settings;
 import ca.marcmeszaros.papyrus.database.AddBook;
 import ca.marcmeszaros.papyrus.database.AddLibrary;
 import ca.marcmeszaros.papyrus.database.Loan;
-import ca.marcmeszaros.papyrus.fragment.BooksListFragment;
+import ca.marcmeszaros.papyrus.fragments.BooksListFragment;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
 import android.app.AlarmManager;
@@ -39,7 +39,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
