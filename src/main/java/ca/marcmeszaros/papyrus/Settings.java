@@ -16,7 +16,6 @@
 package ca.marcmeszaros.papyrus;
 
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
-import ca.marcmeszaros.papyrus.tools.Manifest;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -64,7 +63,7 @@ public class Settings extends PreferenceActivity {
 		defaultLibrary.setEntryValues(entryValues);
 
 		// set the versionName
-		(this.getPreferenceScreen().findPreference("versionName")).setSummary(Manifest.getVersionName(this));
+		(this.getPreferenceScreen().findPreference("versionName")).setSummary(Papyrus.getVersionName());
 
 		// close the cursor
 		result.close();

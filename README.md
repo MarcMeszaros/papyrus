@@ -11,15 +11,15 @@ This feature gives the user finer grained control over how they manage their
 books.
 
 # Getting Started #
-1. Make sure to uninstall/reinstall the Android SDK (SDK folder/file layouts have changed and setup is based on SDK r22+)
-2. Install the Android 2.3.3 (API 10) and Android Support Package from the SDK tools
+1. Make sure to install the Android SDK r22+
+2. Install the Android 4.0.3+ (API 15) and Android Support Repository from the SDK tools
 3. Proceed with any of the setup instructions below
 
 ## Gradle/CLI ##
-1. Done. Run some maven commands. :)
+1. Done. Run some gradle commands. :)
 
 # Basic Gradle Commands #
-Below are some basic Maven commands to do some common tasks. (Assumes you are in the project root directory.)
+Below are some basic Gradle commands to do some common tasks. (Assumes you are in the project root directory.)
 
     # debug build, with unit tests
     ./gradlew build

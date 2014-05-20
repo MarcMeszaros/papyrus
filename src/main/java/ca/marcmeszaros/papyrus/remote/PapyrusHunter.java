@@ -15,8 +15,8 @@
  */
 package ca.marcmeszaros.papyrus.remote;
 
+import ca.marcmeszaros.papyrus.Papyrus;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
-import ca.marcmeszaros.papyrus.tools.Manifest;
 import ca.marcmeszaros.papyrus.tools.TNManager;
 
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -72,7 +72,7 @@ public class PapyrusHunter implements Runnable {
 			Books.Builder booksBuilder = new Books.Builder(new NetHttpTransport(), jsonFactory, null);
 
 			// set some properties on the builder
-			String applicationName = "Papyrus/" + Manifest.getVersionName(context);
+			String applicationName = "Papyrus/" + Papyrus.getVersionName();
 			booksBuilder.setApplicationName(applicationName);
             booksBuilder.setGoogleClientRequestInitializer(new BooksRequestInitializer());
 
