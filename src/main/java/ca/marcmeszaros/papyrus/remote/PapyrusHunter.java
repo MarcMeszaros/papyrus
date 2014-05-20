@@ -20,16 +20,12 @@ import ca.marcmeszaros.papyrus.tools.Manifest;
 import ca.marcmeszaros.papyrus.tools.TNManager;
 
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.http.json.JsonHttpRequest;
-import com.google.api.client.http.json.JsonHttpRequestInitializer;
 import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson.JacksonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.books.Books;
 import com.google.api.services.books.Books.Volumes.List;
-import com.google.api.services.books.BooksRequest;
+import com.google.api.services.books.BooksRequestInitializer;
 import com.google.api.services.books.model.Volume;
-import com.google.api.services.books.model.VolumeVolumeInfo;
-import com.google.api.services.books.model.VolumeVolumeInfoIndustryIdentifiers;
 import com.google.api.services.books.model.Volumes;
 
 import android.content.ContentValues;
@@ -73,18 +69,12 @@ public class PapyrusHunter implements Runnable {
 
 			// create the JsonFactory and the booksrequest builder
 			JsonFactory jsonFactory = new JacksonFactory();
-			Books.Builder booksBuilder = Books.builder(new NetHttpTransport(), jsonFactory);
+			Books.Builder booksBuilder = new Books.Builder(new NetHttpTransport(), jsonFactory, null);
 
 			// set some properties on the builder
 			String applicationName = "Papyrus/" + Manifest.getVersionName(context);
 			booksBuilder.setApplicationName(applicationName);
-			booksBuilder.setJsonHttpRequestInitializer(new JsonHttpRequestInitializer() {
-				@Override
-				public void initialize(JsonHttpRequest request) throws IOException {
-		            BooksRequest booksRequest = (BooksRequest) request;
-		            //booksRequest.setKey(ClientCredentials.KEY);
-				}
-			});
+            booksBuilder.setGoogleClientRequestInitializer(new BooksRequestInitializer());
 
 			// get the final builder
 			final Books books = booksBuilder.build();
@@ -103,14 +93,14 @@ public class PapyrusHunter implements Runnable {
 
 				// get the first entry
 				Volume volume = volumes.getItems().get(0);
-				VolumeVolumeInfo volInfo = volume.getVolumeInfo();
-				java.util.List<VolumeVolumeInfoIndustryIdentifiers> volIdents = volInfo.getIndustryIdentifiers();
+				Volume.VolumeInfo volInfo = volume.getVolumeInfo();
+				java.util.List<Volume.VolumeInfo.IndustryIdentifiers> volIdents = volInfo.getIndustryIdentifiers();
 
 				// get the isbn numbers
 				String isbn10 = "";
 				String isbn13 = "";
 				// iterate through the identifiers
-				for (VolumeVolumeInfoIndustryIdentifiers identifier : volIdents) {
+				for (Volume.VolumeInfo.IndustryIdentifiers identifier : volIdents) {
 					if (identifier.getType().equals("ISBN_10")) {
 						isbn10 = identifier.getIdentifier();
 					} else if (identifier.getType().equals("ISBN_13")) {

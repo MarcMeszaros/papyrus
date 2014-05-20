@@ -17,11 +17,6 @@ package ca.marcmeszaros.papyrus;
 
 import android.app.Application;
 
-import org.acra.*;
-import org.acra.annotation.*;
-
-// Uncomment the following line and replace "YOUR_KEY", with your bugsense API key
-//@ReportsCrashes(formUri = "http://www.bugsense.com/api/acra?api_key=YOUR_KEY", formKey="")
 public class Papyrus extends Application {
 
 	/**
@@ -30,7 +25,6 @@ public class Papyrus extends Application {
 	@Override
 	public void onCreate() {
 		// uncomment the following line to enable ACRA crash reports
-		//ACRA.init(this);
 		super.onCreate();
 	}
 }

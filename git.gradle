@@ -1,0 +1,88 @@
+// git helper functions
+// based on http://stackoverflow.com/questions/17097263/automatically-versioning-android-project-from-git-describe-with-android-studio-g
+gradle.allprojects {
+
+    ext.gitCommitCount = { ->
+        try {
+            def stdout = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'rev-list', 'HEAD', '--count' // get the commit count for head
+                standardOutput = stdout
+            }
+            return stdout.toString().trim().toInteger()
+        }
+        catch (ignored) {
+            return -1;
+        }
+    }
+
+    ext.gitCurrentBranch = { ->
+        try {
+            def stdout = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'rev-parse', '--abbrev-ref', 'HEAD' // get the current branch
+                standardOutput = stdout
+            }
+            return stdout.toString().trim()
+        }
+        catch (ignored) {
+            return null;
+        }
+    }
+
+
+    ext.gitHash = { ->
+        try {
+            def stdout = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'rev-parse', '--short', 'HEAD' // get the current branch
+                standardOutput = stdout
+            }
+            return stdout.toString().trim()
+        } catch (ignored) {
+            return null;
+        }
+    }
+
+    ext.gitDirty = { ->
+        try {
+            def stdout = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'diff-index', '--quiet', 'HEAD' // get the current branch
+                standardOutput = stdout
+            }
+            return ''
+        } catch (ignored) {
+            return '-dirty'
+        }
+    }
+
+    ext.gitTag = { ->
+        try {
+            def stdout = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'describe', '--tags', '--dirty' // get the current branch
+                standardOutput = stdout
+            }
+            return stdout.toString().trim()
+        }
+        catch (ignored) {
+            return null;
+        }
+    }
+
+    ext.gitDescribe = { ->
+        try {
+            def stdout = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'describe', '--always', '--dirty' // get the current branch
+                standardOutput = stdout
+            }
+            return stdout.toString().trim()
+        }
+        catch (ignored) {
+            return null;
+        }
+    }
+
+}
