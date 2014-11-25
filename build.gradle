@@ -23,7 +23,7 @@ repositories {
 // application dependencies
 dependencies {
     // support library
-    compile 'com.android.support:support-v4:21.0.+'
+    compile 'com.android.support:support-v13:21.0.+'
 
     // google books SDKs
     compile 'com.google.apis:google-api-services-books:v1-rev49-1.18.0-rc'

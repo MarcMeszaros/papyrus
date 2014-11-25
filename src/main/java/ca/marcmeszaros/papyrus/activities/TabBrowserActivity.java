@@ -18,18 +18,17 @@ package ca.marcmeszaros.papyrus.activities;
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.adapters.MainActivityPagerAdapter;
 
-import android.app.ActionBar;
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
-public class TabBrowserActivity extends FragmentActivity {
+public class TabBrowserActivity extends Activity {
 
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_tab_browser);
 
-        MainActivityPagerAdapter mAdapter = new MainActivityPagerAdapter(getSupportFragmentManager());
+        MainActivityPagerAdapter mAdapter = new MainActivityPagerAdapter(getFragmentManager());
         ((ViewPager) findViewById(R.id.activity_tabs__pager)).setAdapter(mAdapter);
 	}
 }
