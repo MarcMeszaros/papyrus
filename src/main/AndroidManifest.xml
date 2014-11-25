@@ -20,8 +20,7 @@
             android:name=".activities.BookDetailsActivity"
             android:label="@string/BookDetails_title" />
 
-        <activity
-            android:name=".activities.TabBrowserActivity" />
+        <activity android:name=".activities.TabBrowserActivity" />
 
         <activity
             android:name=".activities.LoanDetailsActivity"
@@ -29,7 +28,12 @@
 
         <activity
             android:name=".activities.AddBookActivity"
-            android:label="@string/AddBook_title" />
+            android:label="@string/AddBook_title"
+            android:parentActivityName=".activities.TabBrowserActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.TabBrowserActivity" />
+        </activity>
 
         <activity
             android:name=".activities.AddLibraryActivity"
