@@ -7,6 +7,8 @@
     <!--==== Theme used by activities. ====-->
     <style name="PapyrusTheme" parent="Base">
 
+        <item name="android:actionBarStyle">@style/Papyrus.Widget.ActionBar</item>
+
     </style>
 
     <!--==== No ActionBar ====-->

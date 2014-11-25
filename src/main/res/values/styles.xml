@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ActionBar -->
+    <style name="Papyrus.Widget.ActionBar" parent="android:Widget.Holo.ActionBar.Solid">
+        <item name="android:background">@color/material_primary</item>
+    </style>
+
+</resources>
