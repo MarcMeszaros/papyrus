@@ -57,17 +57,17 @@ public class BookDetailsActivity extends Activity implements OnClickListener {
 		Bundle bundle = getIntent().getExtras();
 		this.book = bundle.getParcelable("book");
 
-		findViewById(R.id.BookDetails_book_update_button).setOnClickListener(this);
+		findViewById(R.id.activity_book_details__save_button).setOnClickListener(this);
 
 		// get handles on all the elements in the layout
-		ImageView cover = (ImageView) findViewById(R.id.BookDetails_book_cover);
-		TextView title = (TextView) findViewById(R.id.BookDetails_book_title);
-		TextView author = (TextView) findViewById(R.id.BookDetails_book_author);
-		TextView publisher = (TextView) findViewById(R.id.BookDetails_book_publisher);
-		TextView isbn10 = (TextView) findViewById(R.id.BookDetails_book_isbn10);
-		TextView isbn13 = (TextView) findViewById(R.id.BookDetails_book_isbn13);
-		this.quantity = (EditText) findViewById(R.id.BookDetails_book_quantity);
-		this.library = (Spinner) findViewById(R.id.BookDetails_book_library);
+		ImageView cover = (ImageView) findViewById(R.id.activity_book_details__cover);
+		TextView title = (TextView) findViewById(R.id.activity_book_details__title);
+		TextView author = (TextView) findViewById(R.id.activity_book_details__author);
+		TextView publisher = (TextView) findViewById(R.id.activity_book_details__publisher);
+		TextView isbn10 = (TextView) findViewById(R.id.activity_book_details__isbn10);
+		TextView isbn13 = (TextView) findViewById(R.id.activity_book_details__isbn13);
+		this.quantity = (EditText) findViewById(R.id.activity_book_details__quantity);
+		this.library = (Spinner) findViewById(R.id.activity_book_details__library);
 
 		// fill in all the values we can from the book object
 		title.setText(book.getTitle());
@@ -110,7 +110,7 @@ public class BookDetailsActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.BookDetails_book_update_button:
+		case R.id.activity_book_details__save_button:
 			// create the update query
 			ContentValues values = new ContentValues();
 			values.put(PapyrusContentProvider.Books.FIELD_QUANTITY, Integer.parseInt(quantity.getText().toString()));

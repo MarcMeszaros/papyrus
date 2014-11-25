@@ -49,7 +49,7 @@
     <string name="BookDetails_book_isbn13_label">ISBN13:</string>
     <string name="BookDetails_book_quantity_label"># of copies:</string>
     <string name="BookDetails_book_library_label">Library:</string>
-    <string name="BookDetails_book_update_button">Update</string>
+    <string name="BookDetails_book_update_button">Save</string>
     <string name="BookDetails_book_update_toast">Book details have been updated.</string>
 
     <!-- LoansBrowser activity -->
