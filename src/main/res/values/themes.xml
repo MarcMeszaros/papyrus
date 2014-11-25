@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--==== Base application theme. ====-->
+    <style name="Base" parent="android:Theme.Holo" />
+
+    <!--==== Theme used by activities. ====-->
+    <style name="PapyrusTheme" parent="Base">
+
+    </style>
+
+    <!--==== No ActionBar ====-->
+    <style name="PapyrusTheme.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+    </style>
+
+</resources>
