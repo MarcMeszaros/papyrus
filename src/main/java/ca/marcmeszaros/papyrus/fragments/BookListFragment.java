@@ -84,7 +84,7 @@ public class BookListFragment extends ListFragment implements LoaderManager.Load
     BookAdapter books;
     SimpleCursorAdapter libraries;
 
-    @InjectView(R.id.BooksBrowser_spinner_library)
+    @InjectView(R.id.fragment_book_list__spinner)
     Spinner mSpinnerView;
 
     /**
@@ -362,7 +362,7 @@ public class BookListFragment extends ListFragment implements LoaderManager.Load
     @Override
     public void onItemSelected(AdapterView<?> adapter, View selected, int position, long id) {
         switch (adapter.getId()) {
-            case R.id.BooksBrowser_spinner_library:
+            case R.id.fragment_book_list__spinner:
                 Bundle args = new Bundle(1);
                 args.putLong(ARG_LOADER_LIBRARY_ID, id);
                 getLoaderManager().restartLoader(LOADER_BOOKS, args, this);

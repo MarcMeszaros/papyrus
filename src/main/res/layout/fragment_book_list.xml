@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_book_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <Spinner
-        android:id="@+id/BooksBrowser_spinner_library"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:id="@+id/fragment_book_list__spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp" />
 
     <ListView
         android:id="@id/android:list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@id/android:empty"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lineSpacingMultiplier="0.92"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
         android:paddingTop="10dip"
         android:text="@string/BooksBrowser_NoItems_noBooks"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        tools:visibility="gone" />
 
 </LinearLayout>
