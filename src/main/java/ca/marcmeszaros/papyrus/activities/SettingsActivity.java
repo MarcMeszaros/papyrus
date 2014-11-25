@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.marcmeszaros.papyrus;
+package ca.marcmeszaros.papyrus.activities;
 
+import ca.marcmeszaros.papyrus.BuildConfig;
+import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
 import android.content.ContentResolver;
@@ -23,7 +25,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 
-public class Settings extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity {
 
 	public static String KEY_DEFAULT_LIBRARY = "defaultLibrary";
 

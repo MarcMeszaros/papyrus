@@ -1,10 +1,10 @@
 package ca.marcmeszaros.papyrus.fragments;
 
 import ca.marcmeszaros.papyrus.R;
-import ca.marcmeszaros.papyrus.Settings;
-import ca.marcmeszaros.papyrus.browser.BookAdapter;
-import ca.marcmeszaros.papyrus.browser.LoanDetails;
-import ca.marcmeszaros.papyrus.database.AddLibrary;
+import ca.marcmeszaros.papyrus.activities.SettingsActivity;
+import ca.marcmeszaros.papyrus.adapters.BookAdapter;
+import ca.marcmeszaros.papyrus.activities.LoanDetailsActivity;
+import ca.marcmeszaros.papyrus.activities.AddLibraryActivity;
 import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.database.Loan;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
@@ -81,10 +81,10 @@ public class LoansListFragment extends ListFragment implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.LibrariesBrowser_menu_addLibrary:
-                startActivity(new Intent(getActivity(), AddLibrary.class));
+                startActivity(new Intent(getActivity(), AddLibraryActivity.class));
                 break;
             case R.id.BooksBrowser_Settings_menu:
-                startActivity(new Intent(getActivity(), Settings.class));
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
                 break;
         }
         return false;
@@ -184,7 +184,7 @@ public class LoansListFragment extends ListFragment implements LoaderManager.Loa
 		// close the no longer needed cursor
 		result.close();
 
-		Intent intent = new Intent(getActivity(), LoanDetails.class);
+		Intent intent = new Intent(getActivity(), LoanDetailsActivity.class);
 
 		intent.putExtra("book", book);
 		intent.putExtra("loan", loan);

@@ -1,11 +1,11 @@
-package ca.marcmeszaros.papyrus.browser;
+package ca.marcmeszaros.papyrus.activities;
 
 import ca.marcmeszaros.papyrus.R;
 
 import android.app.Activity;
 import android.os.Bundle;
 
-public class LoansBrowser extends Activity {
+public class LoansBrowserActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

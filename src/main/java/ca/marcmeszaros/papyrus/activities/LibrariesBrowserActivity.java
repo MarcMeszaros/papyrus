@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.marcmeszaros.papyrus.browser;
+package ca.marcmeszaros.papyrus.activities;
 
 import ca.marcmeszaros.papyrus.R;
-import ca.marcmeszaros.papyrus.Settings;
-import ca.marcmeszaros.papyrus.database.AddLibrary;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
 import android.app.AlertDialog;
@@ -42,7 +40,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-public class LibrariesBrowser extends ListActivity implements OnItemClickListener, OnItemLongClickListener,
+public class LibrariesBrowserActivity extends ListActivity implements OnItemClickListener, OnItemLongClickListener,
 		DialogInterface.OnClickListener {
 
 	private static final String TAG = "LibrariesBrowser";
@@ -175,10 +173,10 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 
 						// set the new default library if the one to be deleted is the default
 						SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-						String libID = pref.getString(Settings.KEY_DEFAULT_LIBRARY, "");
+						String libID = pref.getString(SettingsActivity.KEY_DEFAULT_LIBRARY, "");
 						if (!libID.equals("") && Long.parseLong(libID) == selectedLibraryID) {
 							SharedPreferences.Editor prefEditor = pref.edit();
-							prefEditor.putString(Settings.KEY_DEFAULT_LIBRARY, Long.toString(newLibraryId));
+							prefEditor.putString(SettingsActivity.KEY_DEFAULT_LIBRARY, Long.toString(newLibraryId));
 							prefEditor.commit();
 						}
 
@@ -223,10 +221,10 @@ public class LibrariesBrowser extends ListActivity implements OnItemClickListene
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.LibrariesBrowser_menu_addLibrary:
-			startActivity(new Intent(this, AddLibrary.class));
+			startActivity(new Intent(this, AddLibraryActivity.class));
 			break;
 		case R.id.LibrariesBrowser_Settings_menu:
-			startActivity(new Intent(this, Settings.class));
+			startActivity(new Intent(this, SettingsActivity.class));
 			break;
 		}
 		return false;

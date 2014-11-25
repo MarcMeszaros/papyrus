@@ -16,8 +16,8 @@
 package ca.marcmeszaros.papyrus.fragments;
 
 import ca.marcmeszaros.papyrus.R;
-import ca.marcmeszaros.papyrus.browser.BookAdapter;
-import ca.marcmeszaros.papyrus.browser.BookDetails;
+import ca.marcmeszaros.papyrus.adapters.BookAdapter;
+import ca.marcmeszaros.papyrus.activities.BookDetailsActivity;
 import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
@@ -174,7 +174,7 @@ public class BooksListFragment extends ListFragment implements LoaderCallbacks<C
 		bookCursor.close();
 		
 		// store the book as data to be passed
-		Intent intent = new Intent(getActivity(), BookDetails.class);
+		Intent intent = new Intent(getActivity(), BookDetailsActivity.class);
 		intent.putExtra("book", book);
 		startActivity(intent);
 	}

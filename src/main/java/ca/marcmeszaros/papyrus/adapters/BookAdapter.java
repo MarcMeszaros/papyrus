@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.marcmeszaros.papyrus.browser;
+package ca.marcmeszaros.papyrus.adapters;
 
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
-import ca.marcmeszaros.papyrus.tools.TNManager;
+import ca.marcmeszaros.papyrus.util.TNManager;
 
 import android.content.Context;
 import android.database.Cursor;

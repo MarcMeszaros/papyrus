@@ -16,9 +16,8 @@
 package ca.marcmeszaros.papyrus.remote;
 
 import ca.marcmeszaros.papyrus.BuildConfig;
-import ca.marcmeszaros.papyrus.Papyrus;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
-import ca.marcmeszaros.papyrus.tools.TNManager;
+import ca.marcmeszaros.papyrus.util.TNManager;
 
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;

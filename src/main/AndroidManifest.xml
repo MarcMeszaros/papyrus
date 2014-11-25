@@ -13,45 +13,45 @@
         android:name="Papyrus">
 
         <activity
-            android:name=".Settings"
+            android:name=".activities.SettingsActivity"
             android:label="@string/Settings_title" />
 
         <activity
-            android:name=".browser.BookDetails"
+            android:name=".activities.BookDetailsActivity"
             android:label="@string/BookDetails_title" />
 
         <activity
-            android:name=".browser.TabBrowser"
+            android:name=".activities.TabBrowserActivity"
             android:theme="@android:style/Theme.NoTitleBar" />
 
         <activity
-            android:name=".browser.BooksBrowser"
+            android:name=".activities.BooksBrowserActivity"
             android:label="@string/BooksBrowser_title" />
 
         <activity
-            android:name=".browser.LibrariesBrowser"
+            android:name=".activities.LibrariesBrowserActivity"
             android:label="@string/LibrariesBrowser_title" />
 
         <activity
-            android:name=".browser.LoanDetails"
+            android:name=".activities.LoanDetailsActivity"
             android:label="@string/LoanDetails_title" />
 
         <activity
-            android:name=".browser.LoansBrowser"
+            android:name=".activities.LoansBrowserActivity"
             android:label="@string/LoansBrowser_title" />
 
         <activity
-            android:name=".database.AddBook"
+            android:name=".activities.AddBookActivity"
             android:label="@string/AddBook_title" />
 
         <activity
-            android:name=".database.AddLibrary"
+            android:name=".activities.AddLibraryActivity"
             android:label="@string/AddLibrary_title" />
 
         <!-- Activity Aliases -->
         <activity-alias
             android:name=".activities.MainActivity"
-            android:targetActivity=".browser.TabBrowser">
+            android:targetActivity=".activities.TabBrowserActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -64,7 +64,7 @@
             android:authorities="${applicationId}.provider.PapyrusContentProvider"
             android:exported="false" />
 
-        <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".util.AlarmReceiver" />
     </application>
 
 </manifest>

@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.marcmeszaros.papyrus.database;
+package ca.marcmeszaros.papyrus.activities;
 
 import ca.marcmeszaros.papyrus.R;
-import ca.marcmeszaros.papyrus.Settings;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
 import android.app.Activity;
@@ -34,7 +33,7 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class AddLibrary extends Activity implements OnClickListener {
+public class AddLibraryActivity extends Activity implements OnClickListener {
 
 	private ContentResolver resolver;
 
@@ -107,7 +106,7 @@ public class AddLibrary extends Activity implements OnClickListener {
 		if (isFirstLibrary) {
 			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 			SharedPreferences.Editor prefEditor = pref.edit();
-			prefEditor.putString(Settings.KEY_DEFAULT_LIBRARY, Long.toString(ContentUris.parseId(newLibrary)));
+			prefEditor.putString(SettingsActivity.KEY_DEFAULT_LIBRARY, Long.toString(ContentUris.parseId(newLibrary)));
 			prefEditor.commit();
 		}
 

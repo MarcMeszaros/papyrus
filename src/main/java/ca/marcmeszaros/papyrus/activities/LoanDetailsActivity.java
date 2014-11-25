@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.marcmeszaros.papyrus.browser;
+package ca.marcmeszaros.papyrus.activities;
 
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.database.Loan;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
-import ca.marcmeszaros.papyrus.tools.TNManager;
+import ca.marcmeszaros.papyrus.util.TNManager;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -41,7 +41,7 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-public class LoanDetails extends Activity implements OnClickListener {
+public class LoanDetailsActivity extends Activity implements OnClickListener {
 
 	private Loan loan;
 

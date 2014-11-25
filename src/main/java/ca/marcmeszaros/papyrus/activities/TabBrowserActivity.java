@@ -13,16 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.marcmeszaros.papyrus.browser;
+package ca.marcmeszaros.papyrus.activities;
 
 import ca.marcmeszaros.papyrus.R;
+import ca.marcmeszaros.papyrus.activities.BooksBrowserActivity;
+import ca.marcmeszaros.papyrus.activities.LibrariesBrowserActivity;
+import ca.marcmeszaros.papyrus.activities.LoansBrowserActivity;
 
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TabHost;
 
-public class TabBrowser extends TabActivity {
+public class TabBrowserActivity extends TabActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
@@ -40,18 +43,18 @@ public class TabBrowser extends TabActivity {
 	    Intent intent;  // Reusable Intent for each tab
 
 	    // Create an Intent to launch an Activity for the tab (to be reused)
-	    intent = new Intent(this, BooksBrowser.class);
+	    intent = new Intent(this, BooksBrowserActivity.class);
 
 	    // Initialize a TabSpec for each tab and add it to the TabHost
 	    spec = tabHost.newTabSpec("books").setIndicator(getString(R.string.BooksBrowser_label)).setContent(intent);
 	    tabHost.addTab(spec);
 
 	    // Do the same for the other tabs
-	    intent = new Intent(this, LoansBrowser.class);
+	    intent = new Intent(this, LoansBrowserActivity.class);
 	    spec = tabHost.newTabSpec("loans").setIndicator(getString(R.string.LoansBrowser_label)).setContent(intent);
 	    tabHost.addTab(spec);
 
-	    intent = new Intent(this, LibrariesBrowser.class);
+	    intent = new Intent(this, LibrariesBrowserActivity.class);
 	    spec = tabHost.newTabSpec("libraries").setIndicator(getString(R.string.LibrariesBrowser_label)).setContent(intent);
 	    tabHost.addTab(spec);
 

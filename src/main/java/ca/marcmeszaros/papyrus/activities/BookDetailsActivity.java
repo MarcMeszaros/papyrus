@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.marcmeszaros.papyrus.browser;
+package ca.marcmeszaros.papyrus.activities;
 
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
-import ca.marcmeszaros.papyrus.tools.TNManager;
+import ca.marcmeszaros.papyrus.util.TNManager;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -36,7 +36,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class BookDetails extends Activity implements OnClickListener {
+public class BookDetailsActivity extends Activity implements OnClickListener {
 
 	private EditText quantity;
 	private Spinner library;

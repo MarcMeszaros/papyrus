@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.marcmeszaros.papyrus.database;
+package ca.marcmeszaros.papyrus.activities;
 
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
@@ -42,7 +42,7 @@ import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
-public class AddBook extends Activity implements OnClickListener, OnItemSelectedListener {
+public class AddBookActivity extends Activity implements OnClickListener, OnItemSelectedListener {
 
 	private PapyrusHunterHandler handler;
 	private int libraryId;

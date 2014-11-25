@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.marcmeszaros.papyrus;
+package ca.marcmeszaros.papyrus.util;
 
-import ca.marcmeszaros.papyrus.browser.TabBrowser;
+import ca.marcmeszaros.papyrus.R;
+import ca.marcmeszaros.papyrus.activities.TabBrowserActivity;
 import ca.marcmeszaros.papyrus.database.Loan;
 
 import android.app.Notification;
@@ -39,7 +40,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 		Notification notification = new Notification(R.drawable.icon, context.getString(R.string.Notification_teaser), System.currentTimeMillis());
 
-		Intent notificationIntent = new Intent(context, TabBrowser.class);
+		Intent notificationIntent = new Intent(context, TabBrowserActivity.class);
 		notificationIntent.putExtra("tab", 1);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, notificationIntent, 0);
 

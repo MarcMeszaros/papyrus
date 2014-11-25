@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.marcmeszaros.papyrus.browser;
+package ca.marcmeszaros.papyrus.activities;
 
-import ca.marcmeszaros.papyrus.AlarmReceiver;
+import ca.marcmeszaros.papyrus.util.AlarmReceiver;
 import ca.marcmeszaros.papyrus.R;
-import ca.marcmeszaros.papyrus.Settings;
-import ca.marcmeszaros.papyrus.database.AddBook;
-import ca.marcmeszaros.papyrus.database.AddLibrary;
+import ca.marcmeszaros.papyrus.adapters.BookAdapter;
 import ca.marcmeszaros.papyrus.database.Loan;
 import ca.marcmeszaros.papyrus.fragments.BooksListFragment;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
@@ -53,7 +51,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-public class BooksBrowser extends FragmentActivity implements OnItemSelectedListener, OnItemLongClickListener,
+public class BooksBrowserActivity extends FragmentActivity implements OnItemSelectedListener, OnItemLongClickListener,
 		DialogInterface.OnClickListener {
 
 	private static final String TAG = "BooksBrowser";
@@ -194,14 +192,14 @@ public class BooksBrowser extends FragmentActivity implements OnItemSelectedList
 		case R.id.BooksBrowser_menu_addBook:
 			Cursor result = resolver.query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null, null);
 			if (result.getCount() > 0) {
-				startActivity(new Intent(this, AddBook.class));
+				startActivity(new Intent(this, AddBookActivity.class));
 			} else {
-				startActivity(new Intent(this, AddLibrary.class));
+				startActivity(new Intent(this, AddLibraryActivity.class));
 			}
 			result.close();
 			break;
 		case R.id.BooksBrowser_Settings_menu:
-			startActivity(new Intent(this, Settings.class));
+			startActivity(new Intent(this, SettingsActivity.class));
 			break;
 		}
 		return false;
