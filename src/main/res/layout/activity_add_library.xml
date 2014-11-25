@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     Copyright 2011 Marc Meszaros
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +14,11 @@
     limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:id="@+id/activity_add_library"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="30dip" >
+    android:padding="30dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,15 +26,17 @@
         android:text="@string/AddLibrary_field_name_label" />
 
     <EditText
-        android:id="@+id/AddLibrary_field_name"
-        android:layout_width="fill_parent"
+        android:id="@+id/activity_add_library__name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/AddLibrary_field_name_hint" />
 
     <Button
-        android:id="@+id/AddLibrary_button_addLibrary"
+        android:id="@+id/activity_add_library__submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
         android:text="@string/AddLibrary_button_addLibrary_text" />
 
 </LinearLayout>

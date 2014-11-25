@@ -46,13 +46,13 @@ public class AddLibraryActivity extends Activity implements OnClickListener {
 		resolver = getContentResolver();
 
 		// set on click listeners
-		findViewById(R.id.AddLibrary_button_addLibrary).setOnClickListener(this);
+		findViewById(R.id.activity_add_library__submit_button).setOnClickListener(this);
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.AddLibrary_button_addLibrary:
+		case R.id.activity_add_library__submit_button:
 			if (addLibrary()) {
 				Toast.makeText(this, getString(R.string.AddLibrary_toast_libraryAdded), Toast.LENGTH_SHORT).show();
 				finish();
@@ -74,7 +74,7 @@ public class AddLibraryActivity extends Activity implements OnClickListener {
 		boolean isFirstLibrary = false;
 
 		// get the text field that has the name
-		EditText libraryName = (EditText) findViewById(R.id.AddLibrary_field_name);
+		EditText libraryName = (EditText) findViewById(R.id.activity_add_library__name);
 
 		// We need this because android 2.2 and earlier doesn't have java.lang.String.isEmpty()
 		// because pre Android 2.3 Android was built with JDK 1.5. Android 2.3+ is built with
