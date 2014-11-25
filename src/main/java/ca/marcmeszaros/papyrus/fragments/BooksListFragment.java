@@ -15,6 +15,8 @@
  */
 package ca.marcmeszaros.papyrus.fragments;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.activities.AddBookActivity;
 import ca.marcmeszaros.papyrus.activities.AddLibraryActivity;
@@ -73,16 +75,18 @@ public class BooksListFragment extends ListFragment implements LoaderManager.Loa
         OnItemLongClickListener,
         DialogInterface.OnClickListener {
 
-    private static final String TAG = "BooksListFragment";
-
-    private static final int BOOKS = 0x01;
-    private static final int LIBRARIES = 0x02;
+    private static final String ARG_LOADER_LIBRARY_ID = "arg.loader.library.id";
+    private static final int LOADER_BOOKS = 0x01;
+    private static final int LOADER_LIBRARIES = 0x02;
 
     // fragment variables
     private long selectedBookID;
     private Intent loanData;
     BookAdapter books;
     SimpleCursorAdapter libraries;
+
+    @InjectView(R.id.BooksBrowser_spinner_library)
+    Spinner mSpinnerView;
 
     /**
      * the callback received when the user "sets" the date in the dialog
@@ -94,17 +98,36 @@ public class BooksListFragment extends ListFragment implements LoaderManager.Loa
         }
     };
 
+    public static BooksListFragment getInstance() {
+        return new BooksListFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_books_browser, null);
+        ButterKnife.inject(this, view);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getListView().setOnItemClickListener(this);
+        getListView().setOnItemLongClickListener(this);
+        mSpinnerView.setOnItemSelectedListener(this);
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setHasOptionsMenu(true);
 
-        Spinner spinner = (Spinner) getView().findViewById(R.id.BooksBrowser_spinner_library);
-
-        getListView().setOnItemClickListener(this);
-        getListView().setOnItemLongClickListener(this);
-        spinner.setOnItemSelectedListener(this);
-
+        // setup the adapter
         books = new BookAdapter(getActivity(), null);
         setListAdapter(books);
 
@@ -113,17 +136,11 @@ public class BooksListFragment extends ListFragment implements LoaderManager.Loa
         int[] to = {android.R.id.text1};
         libraries = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_spinner_item, null, from, to);
         libraries.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(libraries);
+        mSpinnerView.setAdapter(libraries);
 
-        // Prepare the loader. Either re-connect with an existing one,
-        // or start a new one.
-        getLoaderManager().initLoader(BOOKS, null, this);
-        getLoaderManager().initLoader(LIBRARIES, null, this);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_books_browser, null);
+        // Prepare the loader. Either re-connect with an existing one, or start a new one.
+        getLoaderManager().initLoader(LOADER_BOOKS, null, this);
+        getLoaderManager().initLoader(LOADER_LIBRARIES, null, this);
     }
 
     @Override
@@ -179,58 +196,52 @@ public class BooksListFragment extends ListFragment implements LoaderManager.Loa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // This is called when a new Loader needs to be created.
-        // First, pick the base URI to use depending on whether we are
-        // currently filtering.
+        // First, pick the base URI to use depending on whether we are currently filtering.
         switch (id) {
-            case BOOKS:
-                return new CursorLoader(getActivity(), PapyrusContentProvider.Books.CONTENT_URI, null, null, null,
+            case LOADER_BOOKS:
+                if (args != null && args.containsKey(ARG_LOADER_LIBRARY_ID)) {
+                    String selection = PapyrusContentProvider.Books.FIELD_LIBRARY_ID + "=?";
+                    String[] selectionArgs = {Long.toString(id)};
+                    return new CursorLoader(getActivity(), PapyrusContentProvider.Books.CONTENT_URI, null, selection, selectionArgs,
+                            PapyrusContentProvider.Books.FIELD_TITLE);
+                } else {
+                    return new CursorLoader(getActivity(), PapyrusContentProvider.Books.CONTENT_URI, null, null, null,
                         PapyrusContentProvider.Books.FIELD_TITLE);
+                }
 
-            case LIBRARIES:
+            case LOADER_LIBRARIES:
                 return new CursorLoader(getActivity(), PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null,
                         PapyrusContentProvider.Libraries.FIELD_NAME);
-
-            default:
-                return null;
         }
+        return null;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // Swap the new cursor in. (The framework will take care of closing the
-        // old cursor once we return.)
+        // Swap the new cursor in. (The framework will take care of closing the old cursor once we return.)
         switch (loader.getId()) {
-            case BOOKS:
+            case LOADER_BOOKS:
                 books.changeCursor(data);
                 break;
-            case LIBRARIES:
+            case LOADER_LIBRARIES:
                 libraries.changeCursor(data);
                 break;
-
-            default:
-                break;
         }
-
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         // This is called when the last Cursor provided to onLoadFinished()
-        // above is about to be closed. We need to make sure we are no
-        // longer using it.
+        // above is about to be closed. We need to make sure we are no longer using it.
         switch (loader.getId()) {
-            case BOOKS:
+            case LOADER_BOOKS:
                 books.changeCursor(null);
                 break;
 
-            case LIBRARIES:
+            case LOADER_LIBRARIES:
                 libraries.changeCursor(null);
                 break;
-
-            default:
-                break;
         }
-
     }
 
     /**
@@ -353,11 +364,9 @@ public class BooksListFragment extends ListFragment implements LoaderManager.Loa
     public void onItemSelected(AdapterView<?> adapter, View selected, int position, long id) {
         switch (adapter.getId()) {
             case R.id.BooksBrowser_spinner_library:
-                String selection = PapyrusContentProvider.Books.FIELD_LIBRARY_ID + "=?";
-                String[] selectionArgs = {Long.toString(id)};
-                Cursor result = getActivity().getContentResolver().query(PapyrusContentProvider.Books.CONTENT_URI, null, selection, selectionArgs,
-                        PapyrusContentProvider.Books.FIELD_TITLE);
-                ((BookAdapter) ((ListView) getActivity().findViewById(android.R.id.list)).getAdapter()).changeCursor(result);
+                Bundle args = new Bundle(1);
+                args.putLong(ARG_LOADER_LIBRARY_ID, id);
+                getLoaderManager().restartLoader(LOADER_BOOKS, args, this);
                 break;
 
             default:

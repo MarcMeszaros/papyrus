@@ -23,7 +23,7 @@ public class MainActivityPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case POSITION_BOOKS:
-                return new BooksListFragment();
+                return BooksListFragment.getInstance();
             case POSITION_LOANS:
                 return new LoansListFragment();
             case POSITION_LIBRARIES:

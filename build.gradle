@@ -29,6 +29,8 @@ dependencies {
     compile 'com.google.apis:google-api-services-books:v1-rev49-1.18.0-rc'
     compile 'com.google.http-client:google-http-client-jackson2:1.18.0-rc'
 
+    // Injection Library
+    compile 'com.jakewharton:butterknife:6.0.0'
     // Debugging helper library
     compile 'com.jakewharton.timber:timber:2.4.1'
 }

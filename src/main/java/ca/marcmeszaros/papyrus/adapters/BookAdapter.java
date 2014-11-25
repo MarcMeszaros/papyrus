@@ -18,6 +18,7 @@ package ca.marcmeszaros.papyrus.adapters;
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 import ca.marcmeszaros.papyrus.util.TNManager;
+import timber.log.Timber;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -32,10 +33,8 @@ import android.widget.TextView;
 
 public class BookAdapter extends CursorAdapter {
 
-	private static final String TAG = "BookAdapter";
-
 	public BookAdapter(Context context, Cursor c) {
-		super(context, c);
+		super(context, c, false);
 	}
 
 	@Override
@@ -53,11 +52,11 @@ public class BookAdapter extends CursorAdapter {
 
 		// check if we got an isbn10 number from query and file exists
 		if (isbn10 != null && TNManager.getThumbnail(isbn10).exists()) {
-			Log.i(TAG, "Set cover image path (ISBN10)");
+			Timber.i("Set cover image path (ISBN10)");
 			cover.setImageURI(Uri.parse(TNManager.getThumbnail(isbn10).getAbsolutePath()));
 		} else if (isbn13 != null && TNManager.getThumbnail(isbn13).exists()) {
 			// check if we got an isbn13 number from query and file exists
-			Log.i(TAG, "Set cover image path (ISBN13)");
+			Timber.i("Set cover image path (ISBN13)");
 			cover.setImageURI(Uri.parse(TNManager.getThumbnail(isbn13).getAbsolutePath()));
 		}
 	}
