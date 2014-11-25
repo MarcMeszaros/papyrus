@@ -33,11 +33,16 @@ import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
+import ca.marcmeszaros.papyrus.BuildConfig;
+
 public class PapyrusContentProvider extends ContentProvider {
 
 	private static final String TAG = "PapyrusContentProvider";
 
-	public static final String AUTHORITY = "ca.marcmeszaros.papyrus.provider.PapyrusContentProvider";
+	public static final String AUTHORITY = (BuildConfig.DEBUG) ?
+            "ca.marcmeszaros.papyrus.debug.provider.PapyrusContentProvider" :
+            "ca.marcmeszaros.papyrus.provider.PapyrusContentProvider";
+
 
 	/**
 	 * A nested class defining various attributes of the "books" table.

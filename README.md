@@ -11,9 +11,7 @@ This feature gives the user finer grained control over how they manage their
 books.
 
 # Getting Started #
-1. Make sure to install the Android SDK r22+
-2. Install the Android 4.0.3+ (API 15) and Android Support Repository from the SDK tools
-3. Proceed with any of the setup instructions below
+1. Install the Android 4.0.3+ (API 15) and Android Support Repository from the SDK tools
 
 ## Gradle/CLI ##
 1. Done. Run some gradle commands. :)

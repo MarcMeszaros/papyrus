@@ -6,13 +6,13 @@ buildscript {
     }
     // build dependencies
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.10.+' // android build tools
+        classpath 'com.android.tools.build:gradle:0.14.+' // android build tools
     }
 }
 
 // build plugins
 apply from: 'git.gradle'
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 // application dependency repositories
 repositories {
@@ -23,7 +23,7 @@ repositories {
 // application dependencies
 dependencies {
     // support library
-    compile 'com.android.support:support-v4:19.1.+'
+    compile 'com.android.support:support-v4:21.0.+'
 
     // google books SDKs
     compile 'com.google.apis:google-api-services-books:v1-rev49-1.18.0-rc'
@@ -54,7 +54,7 @@ def getVersionName = { ->
     def versionTag = gitTag() ?: ''
 
     if (gitCurrentBranch() != 'master' || versionTag.length() < 1) {
-        return getVersionCode() + ' (' + gitCurrentBranch() + ') [' + gitHash() + gitDirty() + ']'
+        return gitHash() + gitDirty()
     } else {
         return versionTag
     }
@@ -63,7 +63,7 @@ def getVersionName = { ->
 // android build settings
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.1"
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
         versionCode = getVersionCode()
@@ -86,18 +86,15 @@ android {
     buildTypes {
         debug {
             debuggable true
-            runProguard false
+            minifyEnabled false
             proguardFile 'proguard-rules.txt'
+            applicationIdSuffix '.debug'
         }
         release {
             debuggable false
-            runProguard false
+            minifyEnabled false
             proguardFile 'proguard-rules.txt'
             signingConfig signingConfigs.release
         }
     }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.12'
 }

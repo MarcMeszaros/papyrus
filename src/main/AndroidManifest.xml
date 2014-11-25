@@ -61,7 +61,7 @@
         <!-- Content Providers -->
         <provider
             android:name=".provider.PapyrusContentProvider"
-            android:authorities="ca.marcmeszaros.papyrus.provider.PapyrusContentProvider"
+            android:authorities="${applicationId}.provider.PapyrusContentProvider"
             android:exported="false" />
 
         <receiver android:name=".AlarmReceiver" />
