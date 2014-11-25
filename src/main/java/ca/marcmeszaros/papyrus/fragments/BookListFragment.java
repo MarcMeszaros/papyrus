@@ -17,6 +17,7 @@ package ca.marcmeszaros.papyrus.fragments;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.activities.AddBookActivity;
 import ca.marcmeszaros.papyrus.activities.AddLibraryActivity;
@@ -343,15 +344,6 @@ public class BookListFragment extends ListFragment implements LoaderManager.Load
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.BooksBrowser_menu_addBook:
-                Cursor result = getActivity().getContentResolver().query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null, null);
-                if (result.getCount() > 0) {
-                    startActivity(new Intent(getActivity(), AddBookActivity.class));
-                } else {
-                    startActivity(new Intent(getActivity(), AddLibraryActivity.class));
-                }
-                result.close();
-                break;
             case R.id.BooksBrowser_Settings_menu:
                 startActivity(new Intent(getActivity(), SettingsActivity.class));
                 break;
@@ -376,6 +368,18 @@ public class BookListFragment extends ListFragment implements LoaderManager.Load
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
+    }
+
+    //==== OnClick ====\\
+    @OnClick(R.id.fragment_book_list__add_book_button)
+    public void onClickAddBookButton(View v) {
+        Cursor result = getActivity().getContentResolver().query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null, null);
+        if (result.getCount() > 0) {
+            startActivity(new Intent(getActivity(), AddBookActivity.class));
+        } else {
+            startActivity(new Intent(getActivity(), AddLibraryActivity.class));
+        }
+        result.close();
     }
 
     // helpers
