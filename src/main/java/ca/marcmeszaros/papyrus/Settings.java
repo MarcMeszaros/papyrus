@@ -63,7 +63,7 @@ public class Settings extends PreferenceActivity {
 		defaultLibrary.setEntryValues(entryValues);
 
 		// set the versionName
-		(this.getPreferenceScreen().findPreference("versionName")).setSummary(Papyrus.getVersionName());
+		(this.getPreferenceScreen().findPreference("versionName")).setSummary(BuildConfig.VERSION_NAME);
 
 		// close the cursor
 		result.close();
