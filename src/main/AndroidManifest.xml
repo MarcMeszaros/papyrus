@@ -25,20 +25,8 @@
             android:theme="@android:style/Theme.NoTitleBar" />
 
         <activity
-            android:name=".activities.BooksBrowserActivity"
-            android:label="@string/BooksBrowser_title" />
-
-        <activity
-            android:name=".activities.LibrariesBrowserActivity"
-            android:label="@string/LibrariesBrowser_title" />
-
-        <activity
             android:name=".activities.LoanDetailsActivity"
             android:label="@string/LoanDetails_title" />
-
-        <activity
-            android:name=".activities.LoansBrowserActivity"
-            android:label="@string/LoansBrowser_title" />
 
         <activity
             android:name=".activities.AddBookActivity"

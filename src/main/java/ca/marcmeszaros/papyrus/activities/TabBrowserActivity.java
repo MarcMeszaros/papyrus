@@ -16,48 +16,20 @@
 package ca.marcmeszaros.papyrus.activities;
 
 import ca.marcmeszaros.papyrus.R;
-import ca.marcmeszaros.papyrus.activities.BooksBrowserActivity;
-import ca.marcmeszaros.papyrus.activities.LibrariesBrowserActivity;
-import ca.marcmeszaros.papyrus.activities.LoansBrowserActivity;
+import ca.marcmeszaros.papyrus.adapters.MainActivityPagerAdapter;
 
-import android.app.TabActivity;
-import android.content.Intent;
+import android.app.ActionBar;
 import android.os.Bundle;
-import android.widget.TabHost;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 
-public class TabBrowserActivity extends TabActivity {
+public class TabBrowserActivity extends FragmentActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_tab_browser);
 
-	    // get the extras
-	    Bundle bundle = getIntent().getExtras();
-	    // if the tab browser was started from a notification, set the
-	    // default tab to the one specified by the intent
-	    int tab = (bundle == null) ? 0 : bundle.getInt("tab", 0);
-
-	    //Resources res = getResources(); // Resource object to get Drawables
-	    TabHost tabHost = getTabHost();  // The activity TabHost
-	    TabHost.TabSpec spec;  // Resusable TabSpec for each tab
-	    Intent intent;  // Reusable Intent for each tab
-
-	    // Create an Intent to launch an Activity for the tab (to be reused)
-	    intent = new Intent(this, BooksBrowserActivity.class);
-
-	    // Initialize a TabSpec for each tab and add it to the TabHost
-	    spec = tabHost.newTabSpec("books").setIndicator(getString(R.string.BooksBrowser_label)).setContent(intent);
-	    tabHost.addTab(spec);
-
-	    // Do the same for the other tabs
-	    intent = new Intent(this, LoansBrowserActivity.class);
-	    spec = tabHost.newTabSpec("loans").setIndicator(getString(R.string.LoansBrowser_label)).setContent(intent);
-	    tabHost.addTab(spec);
-
-	    intent = new Intent(this, LibrariesBrowserActivity.class);
-	    spec = tabHost.newTabSpec("libraries").setIndicator(getString(R.string.LibrariesBrowser_label)).setContent(intent);
-	    tabHost.addTab(spec);
-
-	    tabHost.setCurrentTab(tab);
+        MainActivityPagerAdapter mAdapter = new MainActivityPagerAdapter(getSupportFragmentManager());
+        ((ViewPager) findViewById(R.id.activity_tabs__pager)).setAdapter(mAdapter);
 	}
 }

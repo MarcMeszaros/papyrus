@@ -28,6 +28,9 @@ dependencies {
     // google books SDKs
     compile 'com.google.apis:google-api-services-books:v1-rev49-1.18.0-rc'
     compile 'com.google.http-client:google-http-client-jackson2:1.18.0-rc'
+
+    // Debugging helper library
+    compile 'com.jakewharton.timber:timber:2.4.1'
 }
 
 allprojects {
@@ -68,8 +71,8 @@ android {
     defaultConfig {
         versionCode = getVersionCode()
         versionName = getVersionName()
-        minSdkVersion 10
-        targetSdkVersion 10
+        minSdkVersion 15
+        targetSdkVersion 19
     }
 
     // singing

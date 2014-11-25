@@ -1,5 +1,26 @@
 package ca.marcmeszaros.papyrus.fragments;
 
+import android.app.AlertDialog;
+import android.content.ContentUris;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
+
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.activities.SettingsActivity;
 import ca.marcmeszaros.papyrus.adapters.BookAdapter;
@@ -9,33 +30,11 @@ import ca.marcmeszaros.papyrus.database.Book;
 import ca.marcmeszaros.papyrus.database.Loan;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 
-import android.app.AlertDialog;
-import android.app.ListFragment;
-import android.app.LoaderManager;
-import android.content.ContentUris;
-import android.content.CursorLoader;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
 
 /**
  * Manage the fragment lifecycle that lists all the books.
  */
-public class LoansListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener, OnItemLongClickListener, DialogInterface.OnClickListener {
+public class LoansListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, DialogInterface.OnClickListener {
 
 	private static final String TAG = "LoansListFragment";
 	
