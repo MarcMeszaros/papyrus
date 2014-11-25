@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     Copyright 2011 Marc Meszaros
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,134 +14,94 @@
     limitations under the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_loan_details"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:padding="10dp">
 
     <ImageView
-        android:id="@+id/LoanDetails_book_cover"
-        android:layout_width="60dip"
-        android:layout_height="60dip"
+        android:id="@+id/activity_loan_details__cover"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
         android:layout_alignParentTop="true"
         android:contentDescription="@string/LoanDetails_book_thumbnail_contentDescription"
-        android:padding="5dip"
+        android:padding="5dp"
         android:scaleType="fitCenter"
         android:src="@drawable/icon" />
 
     <TextView
-        android:id="@+id/LoanDetails_book_title"
-        android:layout_width="fill_parent"
+        android:id="@+id/activity_loan_details__title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@id/LoanDetails_book_cover"
-        android:textColor="#FFFFFFFF"
-        android:textStyle="bold" >
-    </TextView>
+        android:layout_alignTop="@id/activity_loan_details__cover"
+        android:layout_toEndOf="@id/activity_loan_details__cover"
+        android:layout_toRightOf="@id/activity_loan_details__cover"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Some Amazing Title" />
 
     <TextView
-        android:id="@+id/LoanDetails_book_author"
-        android:layout_width="fill_parent"
+        android:id="@+id/activity_loan_details__author"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/LoanDetails_book_title"
-        android:layout_toRightOf="@id/LoanDetails_book_cover"
+        android:layout_below="@id/activity_loan_details__title"
+        android:layout_toEndOf="@id/activity_loan_details__cover"
+        android:layout_toRightOf="@id/activity_loan_details__cover"
         android:ellipsize="marquee"
-        android:singleLine="true" >
-    </TextView>
+        android:singleLine="true"
+        tools:text="Some Amazing Author" />
 
     <TextView
-        android:id="@+id/LoanDetails_lendDate_label"
+        android:id="@+id/activity_loan_details__lend_date_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/LoanDetails_book_cover"
+        android:layout_below="@id/activity_loan_details__cover"
+        android:layout_marginTop="25sp"
         android:ellipsize="marquee"
-        android:paddingRight="5sp"
-        android:paddingTop="25sp"
-        android:singleLine="true"
-        android:text="@string/LoanDetails_lendDate_label" >
-    </TextView>
-    <!--
-	<TextView android:id="@+id/LoanDetails_lendDate"
-			  android:layout_width="fill_parent"
-			  android:layout_height="wrap_content"
-			  android:layout_below="@id/LoanDetails_book_cover"
-			  android:layout_toRightOf="@id/LoanDetails_lendDate_label"
-			  android:paddingTop="25sp"
-			  android:singleLine="true"
-			  android:ellipsize="marquee"
-			  android:text="unknown">
-	</TextView>
-    -->
+        android:text="@string/LoanDetails_lendDate_label" />
 
     <Button
-        android:id="@+id/LoanDetails_lendDate_button"
+        android:id="@+id/activity_loan_details__lend_date_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/LoanDetails_lendDate_label"
+        android:layout_below="@+id/activity_loan_details__lend_date_label"
         android:enabled="false"
-        android:text="unknown" >
-    </Button>
+        android:text="unknown" />
 
     <TextView
-        android:id="@+id/LoanDetails_dueDate_label"
+        android:id="@+id/activity_loan_details__due_date_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/LoanDetails_lendDate_button"
+        android:layout_below="@id/activity_loan_details__lend_date_button"
+        android:layout_marginTop="5dp"
         android:ellipsize="marquee"
-        android:paddingRight="5sp"
         android:singleLine="true"
-        android:text="@string/LoanDetails_dueDate_label" >
-    </TextView>
-    <!--
-	<TextView android:id="@+id/LoanDetails_dueDate"
-			  android:layout_width="fill_parent"
-			  android:layout_height="wrap_content"
-			  android:layout_below="@+id/LoanDetails_lendDate"
-			  android:layout_toRightOf="@id/LoanDetails_dueDate_label"
-			  android:singleLine="true"
-			  android:ellipsize="marquee"
-			  android:text="unknown">
-	</TextView>
-    -->
+        android:text="@string/LoanDetails_dueDate_label" />
 
     <Button
-        android:id="@+id/LoanDetails_dueDate_button"
+        android:id="@+id/activity_loan_details__due_date_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/LoanDetails_dueDate_label"
-        android:text="unknown" >
-    </Button>
+        android:layout_below="@+id/activity_loan_details__due_date_label"
+        android:text="unknown" />
 
     <TextView
-        android:id="@+id/LoanDetails_contact_label"
+        android:id="@+id/activity_loan_details__contact_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/LoanDetails_dueDate_button"
+        android:layout_below="@id/activity_loan_details__due_date_button"
+        android:layout_marginTop="5sp"
         android:ellipsize="marquee"
-        android:paddingRight="5sp"
         android:singleLine="true"
-        android:text="@string/LoanDetails_contact_label" >
-    </TextView>
-
-    <!--
-	<TextView android:id="@+id/LoanDetails_contact"
-			  android:layout_width="fill_parent"
-			  android:layout_height="wrap_content"
-			  android:layout_below="@id/LoanDetails_dueDate"
-			  android:layout_toRightOf="@id/LoanDetails_contact_label"
-			  android:singleLine="true"
-			  android:ellipsize="marquee"
-			  android:paddingTop="25sp"
-			  android:text="unknown">
-	</TextView>
-    -->
+        android:text="@string/LoanDetails_contact_label" />
 
     <Button
-        android:id="@+id/LoanDetails_button"
+        android:id="@+id/activity_loan_details__contact_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/LoanDetails_contact_label"
-        android:text="unknown" >
-    </Button>
+        android:layout_below="@id/activity_loan_details__contact_label"
+        android:text="unknown" />
 
 </RelativeLayout>

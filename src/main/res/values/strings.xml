@@ -67,7 +67,7 @@
     <string name="LoanDetails_title">Loan Details</string>
     <string name="LoanDetails_book_thumbnail_contentDescription">Cover art thumbnail.</string>
     <string name="LoanDetails_contact_label">Loaned To:</string>
-    <string name="LoanDetails_lendDate_label">Loan Date:</string>
+    <string name="LoanDetails_lendDate_label">Lend Date:</string>
     <string name="LoanDetails_dueDate_label">Due Date:</string>
 
     <!-- LibrariesBrowser activity -->

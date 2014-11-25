@@ -92,9 +92,9 @@ public class LoanDetailsActivity extends Activity implements OnClickListener {
 		/*
 		 * show book thumbnail, title, and author
 		 */
-		ImageView cover = (ImageView) findViewById(R.id.LoanDetails_book_cover);
-		TextView title = (TextView) findViewById(R.id.LoanDetails_book_title);
-		TextView author = (TextView) findViewById(R.id.LoanDetails_book_author);
+		ImageView cover = (ImageView) findViewById(R.id.activity_loan_details__cover);
+		TextView title = (TextView) findViewById(R.id.activity_loan_details__title);
+		TextView author = (TextView) findViewById(R.id.activity_loan_details__author);
 
 		title.setText(book.getTitle());
 		author.setText(book.getAuthor());
@@ -102,8 +102,8 @@ public class LoanDetailsActivity extends Activity implements OnClickListener {
 		/*
 		 * show loan date and due date
 		 */
-		Button lendDate = (Button) findViewById(R.id.LoanDetails_lendDate_button);
-		dueDate = (Button) findViewById(R.id.LoanDetails_dueDate_button);
+		Button lendDate = (Button) findViewById(R.id.activity_loan_details__lend_date_button);
+		dueDate = (Button) findViewById(R.id.activity_loan_details__due_date_button);
 		Calendar c = Calendar.getInstance();
 		dDate = loan.getDueDate(); // Used in editing the due
 													// date
@@ -122,7 +122,7 @@ public class LoanDetailsActivity extends Activity implements OnClickListener {
 		/*
 		 * show contact book is loaned to
 		 */
-		Button contact = (Button) findViewById(R.id.LoanDetails_button);
+		Button contact = (Button) findViewById(R.id.activity_loan_details__contact_button);
 		contact.setOnClickListener(this);
 		contact.setText(name);
 
@@ -137,7 +137,7 @@ public class LoanDetailsActivity extends Activity implements OnClickListener {
 	}
 
 	public void onClick(View v) {
-		if (v.getId() == R.id.LoanDetails_button) {
+		if (v.getId() == R.id.activity_loan_details__contact_button) {
 
 			// append the contact id to the end of the contact CONTENT_URI
 			Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, loan.getContactID());
@@ -147,7 +147,7 @@ public class LoanDetailsActivity extends Activity implements OnClickListener {
 			// start the activity
 			startActivity(intent);
 
-		} else if (v.getId() == R.id.LoanDetails_dueDate_button) {
+		} else if (v.getId() == R.id.activity_loan_details__due_date_button) {
 			final Calendar c = Calendar.getInstance();
 			c.setTimeInMillis(dDate);
 			int mYear = c.get(Calendar.YEAR);
@@ -189,7 +189,7 @@ public class LoanDetailsActivity extends Activity implements OnClickListener {
 				/*
 				 * Update due date label
 				 */
-				dueDate = (Button) findViewById(R.id.LoanDetails_dueDate_button);
+				dueDate = (Button) findViewById(R.id.activity_loan_details__due_date_button);
 				dueDate.setText(MONTH_ENUM[monthOfYear] + " " + dayOfMonth + ", " + year);
 
 				// create the update query
