@@ -17,11 +17,89 @@
 <resources>
 	<string name="app_name">Papyrus</string>
 
-	<!-- Error messages -->
-	<string name="error_bookNotFound">The book could not be found.</string>
-	<string name="error_bookTitleNotFound">The book\'s title could not be found.</string>
-	<string name="error_bookAuthorNotFound">The book\'s author(s) could not be found.</string>
-	<string name="error_connectionServer">Error establishing connection with server.</string>
-	<string name="error_server">The server could not process the request. Try again later.</string>
+    <!-- BooksBrowser activity -->
+    <string name="BooksBrowser_label">Books</string>
+    <string name="BooksBrowser_title">Books in Library</string>
+    <string name="BooksBrowser_LongClickDialog_title">Action</string>
+    <string name="BooksBrowser_LongClickDialog_edit">Edit</string>
+    <string name="BooksBrowser_LongClickDialog_delete">Delete</string>
+    <string name="BooksBrowser_LongClickDialog_lendTo">Lend Book To…</string>
+	<string name="BooksBrowser_NoItems_noBooks">"You don't have any books to display.
+		\nTo add books, press <font fgcolor="#ffffffff"><b>Menu</b></font> and select:\n
+			\n<li><font fgcolor="#ffffffff"><b>Add Book</b></font> to add a book\n</li>"
+	</string>
+    <string name="BooksBrowser_menu_addBook_text">Add Book</string>
+    <string name="BooksBrowser_toast_bookDeleted">Book deleted.</string>
+    <string name="BooksBrowser_toast_allCopiesLentOut">All copies are already lent out!</string>
+    <string name="BooksBrowser_toast_loanSuccessful">Loan successful.</string>
+
+    <!-- AddBook activity -->
+    <string name="AddBook_title">Add Book</string>
+    <string name="AddBook_field_isbn_label">ISBN</string>
+    <string name="AddBook_button_scan_text">Scan ISBN barcode</string>
+    <string name="AddBook_field_quantity_label">Number of copies</string>
+    <string name="AddBook_button_addBook_text">Add Book</string>
+    <string name="AddBook_toast_searchingForBook">Getting book information…</string>
+
+    <!-- BookDetails Activity -->
+    <string name="BookDetails_title">Book Details</string>
+    <string name="BookDetails_book_thumbnail_contentDescription">Cover art thumbnail.</string>
+    <string name="BookDetails_book_publisher_label">Publisher:</string>
+    <string name="BookDetails_book_isbn10_label">ISBN10:</string>
+    <string name="BookDetails_book_isbn13_label">ISBN13:</string>
+    <string name="BookDetails_book_quantity_label"># of copies:</string>
+    <string name="BookDetails_book_library_label">Library:</string>
+    <string name="BookDetails_book_update_button">Update</string>
+    <string name="BookDetails_book_update_toast">Book details have been updated.</string>
+
+    <!-- LoansBrowser activity -->
+    <string name="LoansBrowser_label">Loans</string>
+    <string name="LoansBrowser_title">Books on Loan</string>
+    <string name="LoansBrowser_LongClickDialog_title">Action</string>
+    <string name="LoansBrowser_LongClickDialog_returnBook">Return Book</string>
+	<string name="LoansBrowser_NoItems_noLoans">"You don't have any loans to display.
+		\nTo lend out a book, select the <font fgcolor="#ffffffff"><b>Books</b></font> tab and <font fgcolor="#ffffffff"><b>Long Press</b></font> the book you want to lend out.
+		\n\nTo return a book, <font fgcolor="#ffffffff"><b>Long Press</b></font> a book in the <font fgcolor="#ffffffff"><b>Loans</b></font> tab and select <font fgcolor="#ffffffff"><i>Return Book</i></font>."
+	</string>
+    <string name="LoansBrowser_toast_bookReturned">Book returned.</string>
+
+    <!-- LoanDetails -->
+    <string name="LoanDetails_title">Loan Details</string>
+    <string name="LoanDetails_book_thumbnail_contentDescription">Cover art thumbnail.</string>
+    <string name="LoanDetails_contact_label">Loaned To:</string>
+    <string name="LoanDetails_lendDate_label">Loan Date:</string>
+    <string name="LoanDetails_dueDate_label">Due Date:</string>
+
+    <!-- LibrariesBrowser activity -->
+    <string name="LibrariesBrowser_label">Libraries</string>
+    <string name="LibrariesBrowser_title">Libraries</string>
+    <string name="LibrariesBrowser_LongClickDialog_title">Action</string>
+    <string name="LibrariesBrowser_LongClickDialog_edit">Edit</string>
+    <string name="LibrariesBrowser_LongClickDialog_delete">Delete</string>
+    <string name="LibrariesBrowser_menu_addLibrary_text">Add Library</string>
+	<string name="LibrariesBrowser_NoItems_noLibraries">"You don't have any libraries to display.
+		\nTo add libraries, press <font fgcolor="#ffffffff"><b>Menu</b></font> and select:\n
+		\n<li><font fgcolor="#ffffffff"><b>Add Library</b></font> to add a library\n</li>"
+	</string>
+    <string name="LibrariesBrowser_alert_moveBooks_title">Move books to…</string>
+    <string name="LibrariesBrowser_toast_libraryDeleted">Library deleted.</string>
+    <string name="LibrariesBrowser_toast_cantDeleteOnlyLibrary">Cannot delete the only library.</string>
+
+    <!-- AddLibrary -->
+    <string name="AddLibrary_title">Add Library</string>
+    <string name="AddLibrary_field_name_label">Library Name</string>
+    <string name="AddLibrary_field_name_hint">Home</string>
+    <string name="AddLibrary_button_addLibrary_text">Add Library</string>
+    <string name="AddLibrary_toast_libraryAdded">Library added.</string>
+    <string name="AddLibrary_toast_libraryNameMissing">Library name is missing.</string>
+
+    <!-- Settings activity -->
+    <string name="Settings_label">Settings</string>
+    <string name="Settings_title">Settings</string>
+    <string name="Settings_Library">Libraries</string>
+    <string name="Settings_Library_defaultLibrary_title">Default Library</string>
+    <string name="Settings_Library_defaultLibrary_summary">The default library books are stored in</string>
+    <string name="Settings_Info">Application Information</string>
+    <string name="Settings_versionName_title">Version</string>
 
 </resources>
