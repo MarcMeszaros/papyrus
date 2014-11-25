@@ -23,7 +23,6 @@ import timber.log.Timber;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +38,9 @@ public class BookAdapter extends CursorAdapter {
 
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-		ImageView cover = (ImageView) view.findViewById(R.id.BookRow_book_cover);
-		TextView title = (TextView) view.findViewById(R.id.BookRow_book_title);
-		TextView author = (TextView) view.findViewById(R.id.BookRow_book_author);
+		ImageView cover = (ImageView) view.findViewById(R.id.list_item_book__cover);
+		TextView title = (TextView) view.findViewById(R.id.list_item_book__title);
+		TextView author = (TextView) view.findViewById(R.id.list_item_book__author);
 
 		title.setText(cursor.getString(cursor.getColumnIndex(PapyrusContentProvider.Books.FIELD_TITLE)));
 		author.setText(cursor.getString(cursor.getColumnIndex(PapyrusContentProvider.Books.FIELD_AUTHOR)));
@@ -64,7 +63,7 @@ public class BookAdapter extends CursorAdapter {
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		LayoutInflater inflater = LayoutInflater.from(context);
-		View v = inflater.inflate(R.layout.view_book_row, parent, false);
+		View v = inflater.inflate(R.layout.list_item_book, parent, false);
 		bindView(v, context, cursor);
 		return v;
 	}
