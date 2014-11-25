@@ -68,8 +68,8 @@ android {
     defaultConfig {
         versionCode = getVersionCode()
         versionName = getVersionName()
-        minSdkVersion 15
-        targetSdkVersion 19
+        minSdkVersion 10
+        targetSdkVersion 10
     }
 
     // singing
