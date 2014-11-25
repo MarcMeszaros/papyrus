@@ -5,9 +5,9 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v13.app.FragmentPagerAdapter;
 
-import ca.marcmeszaros.papyrus.fragments.BooksListFragment;
+import ca.marcmeszaros.papyrus.fragments.BookListFragment;
 import ca.marcmeszaros.papyrus.fragments.LibraryListFragment;
-import ca.marcmeszaros.papyrus.fragments.LoansListFragment;
+import ca.marcmeszaros.papyrus.fragments.LoanListFragment;
 
 public class MainActivityPagerAdapter extends FragmentPagerAdapter {
 
@@ -23,13 +23,13 @@ public class MainActivityPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case POSITION_BOOKS:
-                return BooksListFragment.getInstance();
+                return BookListFragment.getInstance();
             case POSITION_LOANS:
-                return new LoansListFragment();
+                return LoanListFragment.getInstance();
             case POSITION_LIBRARIES:
-                return new LibraryListFragment();
+                return LibraryListFragment.getInstance();
             default:
-                return new BooksListFragment();
+                return BookListFragment.getInstance();
         }
     }
 

@@ -7,7 +7,7 @@
 
 	<fragment
         android:id="@+id/activity_loans_browser__fragment_loans_list"
-        android:name="ca.marcmeszaros.papyrus.fragments.LoansListFragment"
+        android:name="ca.marcmeszaros.papyrus.fragments.LoanListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 			  

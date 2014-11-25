@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_books_list"
+    android:id="@+id/fragment_loan_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Spinner android:id="@+id/fragment_books_list__spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-
     <ListView android:id="@id/android:list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <TextView android:id="@id/android:empty"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/BooksBrowser_NoItems_noBooks"
+        android:text="@string/LoansBrowser_NoItems_noLoans"
         android:textSize="20sp"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"

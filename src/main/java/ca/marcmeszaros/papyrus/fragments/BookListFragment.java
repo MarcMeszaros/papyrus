@@ -56,7 +56,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemClickListener;
@@ -69,7 +68,7 @@ import java.util.Calendar;
 /**
  * Manage the fragment lifecycle that lists all the books.
  */
-public class BooksListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>,
+public class BookListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>,
         OnItemClickListener,
         OnItemSelectedListener,
         OnItemLongClickListener,
@@ -98,8 +97,8 @@ public class BooksListFragment extends ListFragment implements LoaderManager.Loa
         }
     };
 
-    public static BooksListFragment getInstance() {
-        return new BooksListFragment();
+    public static BookListFragment getInstance() {
+        return new BookListFragment();
     }
 
     @Override
@@ -110,7 +109,7 @@ public class BooksListFragment extends ListFragment implements LoaderManager.Loa
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_books_browser, null);
+        View view = inflater.inflate(R.layout.fragment_book_list, null);
         ButterKnife.inject(this, view);
         return view;
     }

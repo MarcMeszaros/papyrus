@@ -34,16 +34,17 @@ import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 /**
  * Manage the fragment lifecycle that lists all the books.
  */
-public class LoansListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, DialogInterface.OnClickListener {
+public class LoanListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, DialogInterface.OnClickListener {
 
-	private static final String TAG = "LoansListFragment";
-	
 	private static final int LOANS = 0x01;
 	
 	// fragment variables
     private long selectedLoanID;
 	private BookAdapter books;
-	private SimpleCursorAdapter libraries;
+
+    public static LoanListFragment getInstance() {
+        return new LoanListFragment();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class LoansListFragment extends ListFragment implements LoaderManager.Loa
 
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_loans_list, null);
+		return inflater.inflate(R.layout.fragment_loan_list, null);
 	}
 
     @Override

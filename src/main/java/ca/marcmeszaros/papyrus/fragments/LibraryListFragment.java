@@ -28,8 +28,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,17 +42,20 @@ import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.activities.AddLibraryActivity;
 import ca.marcmeszaros.papyrus.activities.SettingsActivity;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
+import timber.log.Timber;
 
 public class LibraryListFragment extends ListFragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
         DialogInterface.OnClickListener {
-
-    private static final String TAG = "LibraryListFragment";
 
     // class variables
     private SimpleCursorAdapter adapter;
     private Cursor result;
     private long selectedLibraryID;
     private ContentResolver resolver;
+
+    public static LibraryListFragment getInstance() {
+        return new LibraryListFragment();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,12 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_library_list, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // get the content resolver
         this.resolver = getActivity().getContentResolver();
@@ -125,7 +131,7 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
             case 0:
                 // setup the selection criteria
                 String selection = PapyrusContentProvider.Libraries.FIELD_ID + "<>" + selectedLibraryID;
-                String[] columns = { PapyrusContentProvider.Libraries.FIELD_ID, PapyrusContentProvider.Libraries.FIELD_NAME };
+                String[] columns = {PapyrusContentProvider.Libraries.FIELD_ID, PapyrusContentProvider.Libraries.FIELD_NAME};
 
                 // get all libraries
                 final Cursor otherLibraries = resolver.query(PapyrusContentProvider.Libraries.CONTENT_URI, columns,
@@ -148,7 +154,7 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
                     builder.setItems(libraries, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int item) {
                             // the columns to return for the books that need to updated
-                            String[] columns = { PapyrusContentProvider.Books.FIELD_ID };
+                            String[] columns = {PapyrusContentProvider.Books.FIELD_ID};
                             // the selectedLibraryID still points to the one we want to delete
                             String selection = PapyrusContentProvider.Books.FIELD_LIBRARY_ID + "=" + selectedLibraryID;
 
@@ -157,20 +163,20 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
                                     null, null);
                             getActivity().startManagingCursor(books);
 
-                            Log.i(TAG, "Move to the new library in the cursor");
+                            Timber.i("Move to the new library in the cursor");
                             // get the library id to move books to
                             otherLibraries.moveToPosition(item);
-                            Log.i(TAG, "Get the new library ID");
+                            Timber.i("Get the new library ID");
                             int newLibraryId = otherLibraries.getInt(otherLibraries
                                     .getColumnIndex(PapyrusContentProvider.Libraries.FIELD_ID));
 
-                            Log.i(TAG, "Setup update query");
+                            Timber.i("Setup update query");
                             // setup the update query
                             ContentValues values;
                             String whereClause = PapyrusContentProvider.Books.FIELD_ID + "=?";
                             String[] whereValues = new String[1];
 
-                            Log.i(TAG, "Start looping through the books");
+                            Timber.i("Start looping through the books");
                             // loop through and update all books
                             for (int i = 0; i < books.getCount(); i++) {
                                 books.moveToNext();
@@ -211,11 +217,6 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
                 }
                 break;
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_libraries_browser, container, false);
     }
 
     /**
