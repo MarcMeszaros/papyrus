@@ -4,6 +4,7 @@ build/
 # ingnore local build files
 /*.keystore
 /*.properties
+signing.gradle
 
 # ignore IDE project files
 .idea/

@@ -6,13 +6,18 @@ buildscript {
     }
     // build dependencies
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.14.+' // android build tools
+        classpath 'com.android.tools.build:gradle:1.0.1' // android build tools
     }
 }
 
 // build plugins
 apply from: 'git.gradle'
 apply plugin: 'com.android.application'
+
+// only import signing if available
+if (file('signing.gradle').exists()) {
+    apply from: 'signing.gradle'
+}
 
 // application dependency repositories
 repositories {
@@ -23,7 +28,7 @@ repositories {
 // application dependencies
 dependencies {
     // support library
-    compile 'com.android.support:support-v13:21.0.+'
+    compile 'com.android.support:support-v13:21.0.3'
 
     // google books SDKs
     compile 'com.google.apis:google-api-services-books:v1-rev49-1.18.0-rc'
@@ -32,32 +37,12 @@ dependencies {
     // Injection Library
     compile 'com.jakewharton:butterknife:6.0.0'
     // Debugging helper library
-    compile 'com.jakewharton.timber:timber:2.4.1'
+    compile 'com.jakewharton.timber:timber:2.5.1'
 }
 
-allprojects {
-    afterEvaluate { project ->
-        def propsFile = rootProject.file('signing.properties')
-        def configName = 'release'
-
-        if (propsFile.exists() && android.signingConfigs.hasProperty(configName)) {
-            def props = new Properties()
-            props.load(new FileInputStream(propsFile))
-            android.signingConfigs[configName].storeFile = file(props['sign.keystore'])
-            android.signingConfigs[configName].storePassword = props['sign.storepass']
-            android.signingConfigs[configName].keyAlias = props['sign.alias']
-            android.signingConfigs[configName].keyPassword = props['sign.keypass']
-        }
-    }
-}
-
-// android helpers
-def getVersionCode = { ->
-    return gitCommitCount()
-}
+// version name
 def getVersionName = { ->
     def versionTag = gitTag() ?: ''
-
     if (gitCurrentBranch() != 'master' || versionTag.length() < 1) {
         return gitHash() + gitDirty()
     } else {
@@ -67,24 +52,20 @@ def getVersionName = { ->
 
 // android build settings
 android {
-    compileSdkVersion 19
-    buildToolsVersion "21.1.1"
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
-        versionCode = getVersionCode()
-        versionName = getVersionName()
         minSdkVersion 15
-        targetSdkVersion 19
+        targetSdkVersion 21
+        versionCode = gitCommitCount()
+        versionName = getVersionName()
     }
 
-    // singing
-    signingConfigs {
-        release {
-            storeFile file("${project(':').projectDir}/release.properties")
-            storePassword "IN_PROPERTIES_FILE"
-            keyAlias "IN_PROPERTIES_FILE"
-            keyPassword "IN_PROPERTIES_FILE"
-        }
+    // http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Using-sourceCompatibility-1.7
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 
     // build types
