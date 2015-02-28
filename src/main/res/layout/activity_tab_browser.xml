@@ -17,7 +17,7 @@
             android:background="@color/material_accent"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:textColor="?android:textColorPrimary" />
+            android:textColor="?android:textColorPrimaryInverse" />
 
     </android.support.v4.view.ViewPager>
 

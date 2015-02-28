@@ -24,9 +24,8 @@
     <string name="BooksBrowser_LongClickDialog_edit">Edit</string>
     <string name="BooksBrowser_LongClickDialog_delete">Delete</string>
     <string name="BooksBrowser_LongClickDialog_lendTo">Lend Book To…</string>
-	<string name="BooksBrowser_NoItems_noBooks">"You don't have any books to display.
-		\nTo add books, press <font fgcolor="#ffffffff"><b>Menu</b></font> and select:\n
-			\n<li><font fgcolor="#ffffffff"><b>Add Book</b></font> to add a book\n</li>"
+	<string name="BooksBrowser_NoItems_noBooks">You don\'t have any books to display.
+		\nTo add books, press the button at the bottom of the screen.
 	</string>
     <string name="BooksBrowser_menu_addBook_text">Add Book</string>
     <string name="BooksBrowser_toast_bookDeleted">Book deleted.</string>
@@ -57,9 +56,9 @@
     <string name="LoansBrowser_title">Books on Loan</string>
     <string name="LoansBrowser_LongClickDialog_title">Action</string>
     <string name="LoansBrowser_LongClickDialog_returnBook">Return Book</string>
-	<string name="LoansBrowser_NoItems_noLoans">"You don't have any loans to display.
-		\nTo lend out a book, select the <font fgcolor="#ffffffff"><b>Books</b></font> tab and <font fgcolor="#ffffffff"><b>Long Press</b></font> the book you want to lend out.
-		\n\nTo return a book, <font fgcolor="#ffffffff"><b>Long Press</b></font> a book in the <font fgcolor="#ffffffff"><b>Loans</b></font> tab and select <font fgcolor="#ffffffff"><i>Return Book</i></font>."
+	<string name="LoansBrowser_NoItems_noLoans">You don\'t have any loans to display.
+		\nTo lend out a book, <b>Long Press</b> the book you want to lend out.
+		\n\nTo return a book, <b>Long Press</b> a book and select <i>Return Book</i>.
 	</string>
     <string name="LoansBrowser_toast_bookReturned">Book returned.</string>
 
@@ -77,9 +76,8 @@
     <string name="LibrariesBrowser_LongClickDialog_edit">Edit</string>
     <string name="LibrariesBrowser_LongClickDialog_delete">Delete</string>
     <string name="LibrariesBrowser_menu_addLibrary_text">Add Library</string>
-	<string name="LibrariesBrowser_NoItems_noLibraries">"You don't have any libraries to display.
-		\nTo add libraries, press <font fgcolor="#ffffffff"><b>Menu</b></font> and select:\n
-		\n<li><font fgcolor="#ffffffff"><b>Add Library</b></font> to add a library\n</li>"
+	<string name="LibrariesBrowser_NoItems_noLibraries">You don\'t have any libraries to display.
+		\nTo add libraries, press the button at the bottom of the screen.
 	</string>
     <string name="LibrariesBrowser_alert_moveBooks_title">Move books to…</string>
     <string name="LibrariesBrowser_toast_libraryDeleted">Library deleted.</string>
