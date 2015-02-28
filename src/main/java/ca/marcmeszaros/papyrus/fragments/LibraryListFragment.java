@@ -129,8 +129,7 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
                 String[] columns = {PapyrusContentProvider.Libraries.FIELD_ID, PapyrusContentProvider.Libraries.FIELD_NAME};
 
                 // get all libraries
-                final Cursor otherLibraries = resolver.query(PapyrusContentProvider.Libraries.CONTENT_URI, columns,
-                        selection, null, null);
+                final Cursor otherLibraries = resolver.query(PapyrusContentProvider.Libraries.CONTENT_URI, columns, selection, null, null);
                 getActivity().startManagingCursor(otherLibraries);
 
                 // make sure it is not the only library
@@ -140,8 +139,7 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
                     otherLibraries.move(-1);
                     for (int i = 0; i < otherLibraries.getCount(); i++) {
                         otherLibraries.moveToNext();
-                        libraries[i] = otherLibraries.getString(otherLibraries
-                                .getColumnIndex(PapyrusContentProvider.Libraries.FIELD_NAME));
+                        libraries[i] = otherLibraries.getString(otherLibraries.getColumnIndex(PapyrusContentProvider.Libraries.FIELD_NAME));
                     }
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -154,16 +152,14 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
                             String selection = PapyrusContentProvider.Books.FIELD_LIBRARY_ID + "=" + selectedLibraryID;
 
                             // get all the books from the library we are deleting
-                            Cursor books = resolver.query(PapyrusContentProvider.Books.CONTENT_URI, columns, selection,
-                                    null, null);
+                            Cursor books = resolver.query(PapyrusContentProvider.Books.CONTENT_URI, columns, selection, null, null);
                             getActivity().startManagingCursor(books);
 
                             Timber.i("Move to the new library in the cursor");
                             // get the library id to move books to
                             otherLibraries.moveToPosition(item);
                             Timber.i("Get the new library ID");
-                            int newLibraryId = otherLibraries.getInt(otherLibraries
-                                    .getColumnIndex(PapyrusContentProvider.Libraries.FIELD_ID));
+                            int newLibraryId = otherLibraries.getInt(otherLibraries.getColumnIndex(PapyrusContentProvider.Libraries.FIELD_ID));
 
                             Timber.i("Setup update query");
                             // setup the update query
@@ -183,11 +179,11 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
 
                             // set the new default library if the one to be deleted is the default
                             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                            String libID = pref.getString(SettingsActivity.KEY_DEFAULT_LIBRARY, "");
+                            String libID = pref.getString(SettingsFragment.DEFAULT_LIBRARY, "");
                             if (!libID.equals("") && Long.parseLong(libID) == selectedLibraryID) {
                                 SharedPreferences.Editor prefEditor = pref.edit();
-                                prefEditor.putString(SettingsActivity.KEY_DEFAULT_LIBRARY, Long.toString(newLibraryId));
-                                prefEditor.commit();
+                                prefEditor.putString(SettingsFragment.DEFAULT_LIBRARY, Long.toString(newLibraryId));
+                                prefEditor.apply();
                             }
 
                             // delete the old library entry in the database

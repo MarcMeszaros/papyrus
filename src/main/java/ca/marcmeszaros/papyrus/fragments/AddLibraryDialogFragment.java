@@ -95,7 +95,7 @@ public class AddLibraryDialogFragment extends DialogFragment {
         if (isFirstLibrary) {
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
             SharedPreferences.Editor prefEditor = pref.edit();
-            prefEditor.putString(SettingsActivity.KEY_DEFAULT_LIBRARY, Long.toString(ContentUris.parseId(newLibrary)));
+            prefEditor.putString(SettingsFragment.DEFAULT_LIBRARY, Long.toString(ContentUris.parseId(newLibrary)));
             prefEditor.commit();
         }
 

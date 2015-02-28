@@ -15,59 +15,22 @@
  */
 package ca.marcmeszaros.papyrus.activities;
 
-import ca.marcmeszaros.papyrus.BuildConfig;
-import ca.marcmeszaros.papyrus.R;
-import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
-
-import android.content.ContentResolver;
-import android.database.Cursor;
+import android.app.Activity;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.PreferenceActivity;
 
-public class SettingsActivity extends PreferenceActivity {
+import ca.marcmeszaros.papyrus.fragments.SettingsFragment;
 
-	public static String KEY_DEFAULT_LIBRARY = "defaultLibrary";
+public class SettingsActivity extends Activity {
 
-	private ContentResolver resolver;
 
-	/**
-	 * Called when the activity is first created.
-	 */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.settings);
-
-		// get the content resolver
-		resolver = getContentResolver();
-
-		// get all libraries
-		String[] columns = { PapyrusContentProvider.Libraries.FIELD_ID, PapyrusContentProvider.Libraries.FIELD_NAME };
-		Cursor result = resolver.query(PapyrusContentProvider.Libraries.CONTENT_URI, columns, null, null, PapyrusContentProvider.Libraries.FIELD_NAME);
-
-		// get the default library preference
-		ListPreference defaultLibrary = (ListPreference) findPreference(KEY_DEFAULT_LIBRARY);
-
-		// create the list arrays of the right size
-		CharSequence[] entries = new CharSequence[result.getCount()];
-		CharSequence[] entryValues = new CharSequence[result.getCount()];
-
-		// populate the spinner
-		for (int i = 0; i < result.getCount(); i++) {
-			result.moveToNext();
-			entries[i] = result.getString(result.getColumnIndex(PapyrusContentProvider.Libraries.FIELD_NAME));
-			entryValues[i] = result.getString(result.getColumnIndex(PapyrusContentProvider.Libraries.FIELD_ID));
-		}
-
-		// set the list and associated values
-		defaultLibrary.setEntries(entries);
-		defaultLibrary.setEntryValues(entryValues);
-
-		// set the versionName
-		(this.getPreferenceScreen().findPreference("versionName")).setSummary(BuildConfig.VERSION_NAME);
-
-		// close the cursor
-		result.close();
-	}
+    /**
+     * Called when the activity is first created.
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, SettingsFragment.getInstance())
+                .commit();
+    }
 }

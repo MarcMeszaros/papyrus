@@ -93,15 +93,6 @@
     <string name="AddLibrary_toast_libraryAdded">Library added.</string>
     <string name="AddLibrary_toast_libraryNameMissing">Library name is missing.</string>
 
-    <!-- Settings activity -->
-    <string name="Settings_label">Settings</string>
-    <string name="Settings_title">Settings</string>
-    <string name="Settings_Library">Libraries</string>
-    <string name="Settings_Library_defaultLibrary_title">Default Library</string>
-    <string name="Settings_Library_defaultLibrary_summary">The default library books are stored in</string>
-    <string name="Settings_Info">Application Information</string>
-    <string name="Settings_versionName_title">Version</string>
-
     <!-- AlarmReceiver -->
     <string name="Notification_teaser">Book to receive</string>
     <string name="Notification_title">Book Due</string>

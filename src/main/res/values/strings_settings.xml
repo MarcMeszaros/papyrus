@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Section Titles -->
+    <string name="settings_section__settings">Settings</string>
+    <string name="settings_section__info">Application Information</string>
+
+    <!-- Default Library -->
+    <string name="settings__default_library__title">Default Library</string>
+    <string name="settings__default_library__summary">The default library books are stored in</string>
+
+    <!-- Version -->
+    <string name="settings__version__title">Version</string>
+
+</resources>

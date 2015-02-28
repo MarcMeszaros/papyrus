@@ -14,7 +14,7 @@
 
         <activity
             android:name=".activities.SettingsActivity"
-            android:label="@string/Settings_title" />
+            android:label="@string/settings_section__settings" />
 
         <activity
             android:name=".activities.BookDetailsActivity"
