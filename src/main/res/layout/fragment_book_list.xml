@@ -44,6 +44,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="30dp"
-        android:background="@drawable/btn_content_add" />
+        android:background="@drawable/btn_content_add"
+        android:elevation="10dp" />
 
 </RelativeLayout>

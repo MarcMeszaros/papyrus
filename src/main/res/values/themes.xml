@@ -2,7 +2,7 @@
 <resources>
 
     <!--==== Base application theme. ====-->
-    <style name="Base" parent="android:Theme.Holo" />
+    <style name="Base" parent="android:Theme.Holo.Light" />
 
     <!--==== Theme used by activities. ====-->
     <style name="PapyrusTheme" parent="Base">

@@ -80,7 +80,9 @@ android {
             debuggable false
             minifyEnabled false
             proguardFile 'proguard-rules.txt'
-            signingConfig signingConfigs.release
+            if (file('signing.gradle').exists()) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }
