@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,15 +33,28 @@ import timber.log.Timber;
 
 public class LibraryAdapter extends CursorAdapter {
 
-	public LibraryAdapter(Context context, Cursor c) {
+    OnClickListener mOnClickListener;
+
+	public LibraryAdapter(Context context, Cursor c, OnClickListener clickListener) {
 		super(context, c, false);
+        mOnClickListener = clickListener;
 	}
 
 	@Override
-	public void bindView(View view, Context context, Cursor cursor) {
+	public void bindView(View view, Context context, final Cursor cursor) {
 		TextView name = (TextView) view.findViewById(R.id.name);
+        ImageButton delete = (ImageButton) view.findViewById(R.id.btn_delete);
 
 		name.setText(cursor.getString(cursor.getColumnIndex(PapyrusContentProvider.Libraries.FIELD_NAME)));
+        delete.setTag(cursor.getLong(cursor.getColumnIndex(PapyrusContentProvider.Libraries.FIELD_ID)));
+
+        if (mOnClickListener != null)
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnClickListener.onClick(v, (long) v.getTag());
+                }
+            });
 	}
 
 	@Override
@@ -50,5 +64,9 @@ public class LibraryAdapter extends CursorAdapter {
 		bindView(v, context, cursor);
 		return v;
 	}
+
+    public interface OnClickListener {
+        public void onClick(View v, long libraryId);
+    }
 
 }

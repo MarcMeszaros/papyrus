@@ -49,12 +49,10 @@ import ca.marcmeszaros.papyrus.loaders.LibrariesLoader;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 import timber.log.Timber;
 
-public class LibraryListFragment extends ListFragment implements AdapterView.OnItemLongClickListener,
-        DialogInterface.OnClickListener {
+public class LibraryListFragment extends ListFragment {
 
     // class variables
     private LibraryAdapter mAdapter;
-    private long selectedLibraryID;
     private ContentResolver resolver;
 
     public static LibraryListFragment getInstance() {
@@ -80,48 +78,12 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
         // get the content resolver
         this.resolver = getActivity().getContentResolver();
 
-        // set listeners for list clicks and long clicks to this activity
-        getListView().setOnItemLongClickListener(this);
-
         // set the mAdapter to the ListView to display the books
-        mAdapter = new LibraryAdapter(getActivity(), null);
-        setListAdapter(mAdapter);
-
-        getLoaderManager().initLoader(0, null, cursorLoaderCallbacks);
-    }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> arg0, View arg1, final int position, final long id) {
-        // set the item id to a class variable
-        this.selectedLibraryID = id;
-
-        // setup the dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(getString(R.string.LibrariesBrowser_LongClickDialog_title));
-
-        // create the dialog items
-        final CharSequence[] items = {getString(R.string.LibrariesBrowser_LongClickDialog_delete)};
-
-        // handle a click in the dialog
-        builder.setItems(items, this);
-
-        // create the dialog box and show it
-        AlertDialog alert = builder.create();
-        alert.show();
-
-        return true;
-    }
-
-    /**
-     * Handles a click event from the LongClickDialog.
-     */
-    @Override
-    public void onClick(DialogInterface dialog, int position) {
-        switch (position) {
-            // delete
-            case 0:
+        mAdapter = new LibraryAdapter(getActivity(), null, new LibraryAdapter.OnClickListener() {
+            @Override
+            public void onClick(View v, final long libraryId) {
                 // setup the selection criteria
-                String selection = PapyrusContentProvider.Libraries.FIELD_ID + "<>" + selectedLibraryID;
+                String selection = PapyrusContentProvider.Libraries.FIELD_ID + "<>" + libraryId;
                 String[] columns = {PapyrusContentProvider.Libraries.FIELD_ID, PapyrusContentProvider.Libraries.FIELD_NAME};
 
                 // get all libraries
@@ -145,7 +107,7 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
                             // the columns to return for the books that need to updated
                             String[] columns = {PapyrusContentProvider.Books.FIELD_ID};
                             // the selectedLibraryID still points to the one we want to delete
-                            String selection = PapyrusContentProvider.Books.FIELD_LIBRARY_ID + "=" + selectedLibraryID;
+                            String selection = PapyrusContentProvider.Books.FIELD_LIBRARY_ID + "=" + libraryId;
 
                             // get all the books from the library we are deleting
                             Cursor books = resolver.query(PapyrusContentProvider.Books.CONTENT_URI, columns, selection, null, null);
@@ -176,14 +138,14 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
                             // set the new default library if the one to be deleted is the default
                             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
                             String libID = pref.getString(SettingsFragment.DEFAULT_LIBRARY, "");
-                            if (!libID.equals("") && Long.parseLong(libID) == selectedLibraryID) {
+                            if (!libID.equals("") && Long.parseLong(libID) == libraryId) {
                                 SharedPreferences.Editor prefEditor = pref.edit();
                                 prefEditor.putString(SettingsFragment.DEFAULT_LIBRARY, Long.toString(newLibraryId));
                                 prefEditor.apply();
                             }
 
                             // delete the old library entry in the database
-                            Uri libraryToDelete = ContentUris.withAppendedId(PapyrusContentProvider.Libraries.CONTENT_URI, selectedLibraryID);
+                            Uri libraryToDelete = ContentUris.withAppendedId(PapyrusContentProvider.Libraries.CONTENT_URI, libraryId);
                             resolver.delete(libraryToDelete, null, null);
 
                             // tell the list we have new data
@@ -199,8 +161,11 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
                     Toast.makeText(getActivity(),
                             getString(R.string.LibrariesBrowser_toast_cantDeleteOnlyLibrary), Toast.LENGTH_SHORT).show();
                 }
-                break;
-        }
+            }
+        });
+        setListAdapter(mAdapter);
+
+        getLoaderManager().initLoader(0, null, cursorLoaderCallbacks);
     }
 
     private LoaderManager.LoaderCallbacks<Cursor> cursorLoaderCallbacks = new LoaderManager.LoaderCallbacks<Cursor>() {
