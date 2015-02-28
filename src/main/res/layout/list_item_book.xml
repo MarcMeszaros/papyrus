@@ -3,13 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list_item_book"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingEnd="?android:listPreferredItemPaddingEnd"
+    android:paddingLeft="?android:listPreferredItemPaddingLeft"
+    android:paddingRight="?android:listPreferredItemPaddingRight"
+    android:paddingStart="?android:listPreferredItemPaddingStart">
 
     <ImageView
         android:id="@+id/list_item_book__cover"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:layout_margin="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         tools:src="@drawable/icon" />
 
@@ -20,6 +26,7 @@
         android:layout_alignTop="@id/list_item_book__cover"
         android:layout_toEndOf="@id/list_item_book__cover"
         android:layout_toRightOf="@id/list_item_book__cover"
+        android:ellipsize="end"
         android:maxLines="2"
         android:textColor="?android:textColorPrimary"
         android:textSize="16sp"
@@ -34,8 +41,8 @@
         android:layout_toEndOf="@id/list_item_book__cover"
         android:layout_toRightOf="@id/list_item_book__cover"
         android:ellipsize="marquee"
+        android:lines="1"
         android:maxLines="2"
-        android:singleLine="true"
         tools:text="Amazing Author" />
 
 </RelativeLayout>
