@@ -18,11 +18,13 @@ package ca.marcmeszaros.papyrus.fragments;
 
 import android.app.AlertDialog;
 import android.app.ListFragment;
+import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -42,6 +44,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ca.marcmeszaros.papyrus.R;
 import ca.marcmeszaros.papyrus.activities.SettingsActivity;
+import ca.marcmeszaros.papyrus.adapters.LibraryAdapter;
+import ca.marcmeszaros.papyrus.loaders.LibrariesLoader;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 import timber.log.Timber;
 
@@ -49,8 +53,7 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
         DialogInterface.OnClickListener {
 
     // class variables
-    private SimpleCursorAdapter adapter;
-    private Cursor result;
+    private LibraryAdapter mAdapter;
     private long selectedLibraryID;
     private ContentResolver resolver;
 
@@ -80,18 +83,11 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
         // set listeners for list clicks and long clicks to this activity
         getListView().setOnItemLongClickListener(this);
 
-        // run a query on the DB and get a Cursor (aka result)
-        this.result = resolver.query(PapyrusContentProvider.Libraries.CONTENT_URI, null, null, null,
-                PapyrusContentProvider.Libraries.FIELD_NAME);
+        // set the mAdapter to the ListView to display the books
+        mAdapter = new LibraryAdapter(getActivity(), null);
+        setListAdapter(mAdapter);
 
-        // specify what fields to map to what views
-        String[] from = {PapyrusContentProvider.Libraries.FIELD_NAME};
-        int[] to = {android.R.id.text1};
-
-        adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, result, from, to);
-
-        // set the adapter to the ListView to display the books
-        setListAdapter(adapter);
+        getLoaderManager().initLoader(0, null, cursorLoaderCallbacks);
     }
 
     @Override
@@ -190,11 +186,8 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
                             Uri libraryToDelete = ContentUris.withAppendedId(PapyrusContentProvider.Libraries.CONTENT_URI, selectedLibraryID);
                             resolver.delete(libraryToDelete, null, null);
 
-                            // requery the database
-                            result.requery();
-
                             // tell the list we have new data
-                            adapter.notifyDataSetChanged();
+                            mAdapter.notifyDataSetChanged();
                             Toast.makeText(getActivity(),
                                     getString(R.string.LibrariesBrowser_toast_libraryDeleted), Toast.LENGTH_SHORT).show();
                         }
@@ -209,6 +202,23 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
                 break;
         }
     }
+
+    private LoaderManager.LoaderCallbacks<Cursor> cursorLoaderCallbacks = new LoaderManager.LoaderCallbacks<Cursor>() {
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            return new LibrariesLoader(getActivity());
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            mAdapter.changeCursor(data);
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+            mAdapter.changeCursor(null);
+        }
+    };
 
     /**
      * Creates the menu when the "menu" button is pressed.
