@@ -38,13 +38,14 @@ import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ca.marcmeszaros.papyrus.R;
-import ca.marcmeszaros.papyrus.activities.AddLibraryActivity;
 import ca.marcmeszaros.papyrus.activities.SettingsActivity;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 import timber.log.Timber;
 
-public class LibraryListFragment extends ListFragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
+public class LibraryListFragment extends ListFragment implements AdapterView.OnItemLongClickListener,
         DialogInterface.OnClickListener {
 
     // class variables
@@ -65,7 +66,9 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_library_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_library_list, container, false);
+        ButterKnife.inject(this, view);
+        return view;
     }
 
     @Override
@@ -75,7 +78,6 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
         this.resolver = getActivity().getContentResolver();
 
         // set listeners for list clicks and long clicks to this activity
-        getListView().setOnItemClickListener(this);
         getListView().setOnItemLongClickListener(this);
 
         // run a query on the DB and get a Cursor (aka result)
@@ -83,20 +85,13 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
                 PapyrusContentProvider.Libraries.FIELD_NAME);
 
         // specify what fields to map to what views
-        String[] from = { PapyrusContentProvider.Libraries.FIELD_NAME };
-        int[] to = { android.R.id.text1 };
+        String[] from = {PapyrusContentProvider.Libraries.FIELD_NAME};
+        int[] to = {android.R.id.text1};
 
-        adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, result, from,
-                to);
+        adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, result, from, to);
 
         // set the adapter to the ListView to display the books
         setListAdapter(adapter);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
-        // TODO Auto-generated method stub
-        // Toast.makeText(this, "Library details not implemented yet.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -109,7 +104,7 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
         builder.setTitle(getString(R.string.LibrariesBrowser_LongClickDialog_title));
 
         // create the dialog items
-        final CharSequence[] items = { getString(R.string.LibrariesBrowser_LongClickDialog_delete) };
+        final CharSequence[] items = {getString(R.string.LibrariesBrowser_LongClickDialog_delete)};
 
         // handle a click in the dialog
         builder.setItems(items, this);
@@ -234,14 +229,16 @@ public class LibraryListFragment extends ListFragment implements AdapterView.OnI
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.LibrariesBrowser_menu_addLibrary:
-                startActivity(new Intent(getActivity(), AddLibraryActivity.class));
-                break;
             case R.id.LibrariesBrowser_Settings_menu:
                 startActivity(new Intent(getActivity(), SettingsActivity.class));
                 break;
         }
         return false;
+    }
+
+    @OnClick(R.id.fragment_library_list__add_button)
+    public void onClickAddLibrary(View v) {
+        AddLibraryDialogFragment.getInstance().show(getFragmentManager(), AddLibraryDialogFragment.class.getCanonicalName());
     }
 
 }

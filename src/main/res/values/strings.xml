@@ -70,6 +70,8 @@
     <string name="LoanDetails_dueDate_label">Due Date:</string>
 
     <!-- LibrariesBrowser activity -->
+    <string name="fragment_add_library_dialog__title">Create Library</string>
+    <string name="fragment_add_library_dialog__name_too_short">Library name is too short</string>
     <string name="LibrariesBrowser_label">Libraries</string>
     <string name="LibrariesBrowser_title">Libraries</string>
     <string name="LibrariesBrowser_LongClickDialog_title">Action</string>
@@ -99,5 +101,10 @@
     <string name="Settings_Library_defaultLibrary_summary">The default library books are stored in</string>
     <string name="Settings_Info">Application Information</string>
     <string name="Settings_versionName_title">Version</string>
+
+    <!-- AlarmReceiver -->
+    <string name="Notification_teaser">Book to receive</string>
+    <string name="Notification_title">Book Due</string>
+    <string name="Notification_content">Book is due from %1$s.</string>
 
 </resources>

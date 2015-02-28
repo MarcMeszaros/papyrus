@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     Copyright 2011 Marc Meszaros
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<menu
-  xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<item android:id="@+id/LibrariesBrowser_menu_addLibrary" 
-		  android:title="@string/LibrariesBrowser_menu_addLibrary_text"
-		  android:icon="@android:drawable/ic_menu_add">
-	</item>
-	
-	<item android:id="@+id/LibrariesBrowser_Settings_menu" 
-		  android:title="@string/Settings_label" 
-		  android:icon="@android:drawable/ic_menu_preferences">
-	</item>
+    <item
+        android:id="@+id/LibrariesBrowser_Settings_menu"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/Settings_label" />
 
 </menu>

@@ -35,10 +35,6 @@
                 android:value=".activities.TabBrowserActivity" />
         </activity>
 
-        <activity
-            android:name=".activities.AddLibraryActivity"
-            android:label="@string/AddLibrary_title" />
-
         <!-- Activity Aliases -->
         <activity-alias
             android:name=".activities.MainActivity"

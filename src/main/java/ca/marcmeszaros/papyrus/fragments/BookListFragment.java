@@ -15,20 +15,6 @@
  */
 package ca.marcmeszaros.papyrus.fragments;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
-import ca.marcmeszaros.papyrus.R;
-import ca.marcmeszaros.papyrus.activities.AddBookActivity;
-import ca.marcmeszaros.papyrus.activities.AddLibraryActivity;
-import ca.marcmeszaros.papyrus.activities.SettingsActivity;
-import ca.marcmeszaros.papyrus.adapters.BookAdapter;
-import ca.marcmeszaros.papyrus.activities.BookDetailsActivity;
-import ca.marcmeszaros.papyrus.database.Book;
-import ca.marcmeszaros.papyrus.database.Loan;
-import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
-import ca.marcmeszaros.papyrus.util.AlarmReceiver;
-
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -54,17 +40,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+import ca.marcmeszaros.papyrus.R;
+import ca.marcmeszaros.papyrus.activities.AddBookActivity;
+import ca.marcmeszaros.papyrus.activities.BookDetailsActivity;
+import ca.marcmeszaros.papyrus.activities.SettingsActivity;
+import ca.marcmeszaros.papyrus.adapters.BookAdapter;
+import ca.marcmeszaros.papyrus.database.Book;
+import ca.marcmeszaros.papyrus.database.Loan;
+import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
+import ca.marcmeszaros.papyrus.util.AlarmReceiver;
 
 /**
  * Manage the fragment lifecycle that lists all the books.
@@ -206,7 +205,7 @@ public class BookListFragment extends ListFragment implements LoaderManager.Load
                             PapyrusContentProvider.Books.FIELD_TITLE);
                 } else {
                     return new CursorLoader(getActivity(), PapyrusContentProvider.Books.CONTENT_URI, null, null, null,
-                        PapyrusContentProvider.Books.FIELD_TITLE);
+                            PapyrusContentProvider.Books.FIELD_TITLE);
                 }
 
             case LOADER_LIBRARIES:
@@ -377,7 +376,7 @@ public class BookListFragment extends ListFragment implements LoaderManager.Load
         if (result.getCount() > 0) {
             startActivity(new Intent(getActivity(), AddBookActivity.class));
         } else {
-            startActivity(new Intent(getActivity(), AddLibraryActivity.class));
+            AddLibraryDialogFragment.getInstance().show(getFragmentManager(), AddLibraryDialogFragment.class.getCanonicalName());
         }
         result.close();
     }
