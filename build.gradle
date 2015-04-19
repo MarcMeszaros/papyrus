@@ -6,7 +6,7 @@ buildscript {
     }
     // build dependencies
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.1' // android build tools
+        classpath 'com.android.tools.build:gradle:1.1.3' // android build tools
     }
 }
 
@@ -56,7 +56,7 @@ def getVersionName = { ->
 // android build settings
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
         minSdkVersion 15
