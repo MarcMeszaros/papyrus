@@ -18,6 +18,7 @@ package ca.marcmeszaros.papyrus.remote;
 import ca.marcmeszaros.papyrus.BuildConfig;
 import ca.marcmeszaros.papyrus.provider.PapyrusContentProvider;
 import ca.marcmeszaros.papyrus.util.TNManager;
+import timber.log.Timber;
 
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -33,6 +34,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.IOException;
@@ -42,8 +44,6 @@ import java.util.LinkedList;
 import java.util.concurrent.ExecutionException;
 
 public class PapyrusHunter implements Runnable {
-
-	private static final String TAG = "PapyrusHunter";
 
 	// class variables
 	private Context context;
@@ -66,8 +66,9 @@ public class PapyrusHunter implements Runnable {
 		Message msg = new Message();
 
 		try {
+            ContentValues values = new ContentValues();
 
-			// create the JsonFactory and the booksrequest builder
+			// create the JsonFactory and the books request builder
 			JsonFactory jsonFactory = new JacksonFactory();
 			Books.Builder booksBuilder = new Books.Builder(new NetHttpTransport(), jsonFactory, null);
 
@@ -88,7 +89,7 @@ public class PapyrusHunter implements Runnable {
 			// parse some results... if we have some of course...
 			if (volumes.getTotalItems() > 0 && volumes.getItems() != null) {
 				for (Volume volume : volumes.getItems()) {
-					Log.i("PapyrusHunter", "Got book: " + volume.getVolumeInfo().getTitle());
+					Timber.i("Got book: %s", volume.getVolumeInfo().getTitle());
 				}
 
 				// get the first entry
@@ -107,65 +108,47 @@ public class PapyrusHunter implements Runnable {
 						isbn13 = identifier.getIdentifier();
 					}
 				}
-				Log.d(TAG, "isbn10: " + isbn10);
-				Log.d(TAG, "isbn13: " + isbn13);
+				Timber.d("isbn10: %s", isbn10);
+				Timber.d("isbn13: %s", isbn13);
 
 				// get the title
-				String title = volInfo.getTitle();
+                values.put(PapyrusContentProvider.Books.FIELD_TITLE, volInfo.getTitle());
 
 				// get the authors
-				String authors = "";
-				for (String author : volInfo.getAuthors()) {
-					authors += author + ", ";
-				}
-				// fix the last ', '
-				if (authors.length() > 0) {
-					authors = authors.substring(0, authors.length() - 2);
-				}
+				if (volInfo.getAuthors() != null) {
+                    values.put(PapyrusContentProvider.Books.FIELD_AUTHOR, TextUtils.join(", ", volInfo.getAuthors()));
+                }
 
 				// get other data
-				String publishers = volInfo.getPublisher();
-				String date = volInfo.getPublishedDate();
+                values.put(PapyrusContentProvider.Books.FIELD_PUBLISHER, volInfo.getPublisher());
+                values.put(PapyrusContentProvider.Books.FIELD_PUBLICATION_DATE, volInfo.getPublishedDate());
 
-				// the thumbnail url
-				String rawThumbnailUrl = null;
-				if (volInfo.getImageLinks() != null) {
-					rawThumbnailUrl = volInfo.getImageLinks().getSmallThumbnail();
-				}
-				URL thumbnail = null;
-				if (rawThumbnailUrl != null) {
-					Log.d(TAG, "thumbnail url: " + rawThumbnailUrl);
-					thumbnail = new URL(rawThumbnailUrl);
-				}
+                // the thumbnail url
+                URL thumbnail = null;
+                if (volInfo.getImageLinks() != null) {
+                    thumbnail = new URL(volInfo.getImageLinks().getSmallThumbnail());
+                }
 
-				Log.i(TAG, "Start saving book");
-
-				// create the query
-				ContentValues values = new ContentValues();
-				values.put(PapyrusContentProvider.Books.FIELD_TITLE, title);
-				values.put(PapyrusContentProvider.Books.FIELD_AUTHOR, authors);
-				values.put(PapyrusContentProvider.Books.FIELD_ISBN10, isbn10);
-				values.put(PapyrusContentProvider.Books.FIELD_ISBN13, isbn13);
-				values.put(PapyrusContentProvider.Books.FIELD_PUBLISHER, publishers);
-				values.put(PapyrusContentProvider.Books.FIELD_PUBLICATION_DATE, date);
+                // create the query
+                values.put(PapyrusContentProvider.Books.FIELD_ISBN10, isbn10);
+                values.put(PapyrusContentProvider.Books.FIELD_ISBN13, isbn13);
 				values.put(PapyrusContentProvider.Books.FIELD_LIBRARY_ID, libraryID);
 				values.put(PapyrusContentProvider.Books.FIELD_QUANTITY, quantity);
 
 				// insert the book
 				context.getContentResolver().insert(PapyrusContentProvider.Books.CONTENT_URI, values);
-				Log.d(TAG, "Saving book complete");
 
 				// get the thumbnail and save it
 				// check if we got an isbn10 number from query and file exists
-				if (isbn10 != "" && thumbnail != null) {
+				if (!TextUtils.isEmpty(isbn10) && thumbnail != null) {
 					DownloadThumbnails download = new DownloadThumbnails();
 
 					download.execute(thumbnail);
 					LinkedList<Bitmap> images = download.get();
 
 					TNManager.saveThumbnail(images.getFirst(), isbn10);
-					Log.d(TAG, "Got thumbnail asynctask");
-				} else if (isbn13 != "" && thumbnail != null) {
+					Timber.d("Got thumbnail asynctask");
+				} else if (!TextUtils.isEmpty(isbn13) && thumbnail != null) {
 					// check if we got an isbn13 number from query and file exists
 					DownloadThumbnails download = new DownloadThumbnails();
 
@@ -173,12 +156,12 @@ public class PapyrusHunter implements Runnable {
 					LinkedList<Bitmap> images = download.get();
 
 					TNManager.saveThumbnail(images.getFirst(), isbn13);
-					Log.d(TAG, "Got thumbnail");
+					Timber.d("Got thumbnail");
 				}
 
 				// send message that we saved the book
 				msg.what = -1;
-				msg.obj = title;
+				msg.obj = volInfo.getTitle();
 				messageHandler.sendMessage(msg);
 
 			} else {
@@ -188,14 +171,14 @@ public class PapyrusHunter implements Runnable {
 
 		} catch (MalformedURLException e) {
 			messageHandler.sendEmptyMessage(0);
-			Log.e(TAG, "Malformed URL Exception.", e);
+			Timber.e(e, "Malformed URL Exception.");
 		} catch (IOException e) {
 			messageHandler.sendEmptyMessage(0);
-			Log.e(TAG, "Couldn't connect to the server.", e);
+			Timber.e(e, "Couldn't connect to the server.");
 		} catch (InterruptedException e) {
-			Log.e(TAG, "The task was interuppted.", e);
+			Timber.e(e, "The task was interrupted.");
 		} catch (ExecutionException e) {
-			Log.e(TAG, "The thread crashed.", e);
+			Timber.e(e, "The thread crashed.");
 		}
 	}
 }

@@ -33,14 +33,14 @@ dependencies {
     compile 'com.android.support:support-v13:22.1.0'
 
     // google books SDKs
-    compile 'com.google.apis:google-api-services-books:v1-rev49-1.18.0-rc'
-    compile 'com.google.http-client:google-http-client-jackson2:1.18.0-rc'
+    compile 'com.google.apis:google-api-services-books:v1-rev70-1.20.0'
+    compile 'com.google.http-client:google-http-client-jackson2:1.20.0'
 
     // Injection Library
-    compile 'com.jakewharton:butterknife:6.0.0'
+    compile 'com.jakewharton:butterknife:6.1.0'
 
     // Debugging helper library
-    compile 'com.jakewharton.timber:timber:2.5.1'
+    compile 'com.jakewharton.timber:timber:3.0.1'
 }
 
 // version name
